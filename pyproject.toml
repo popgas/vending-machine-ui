@@ -1,0 +1,4 @@
+[project]
+name = "vending-machine-popgas"
+version = "0.1"
+license = { file = "MIT" }
