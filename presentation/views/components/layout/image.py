@@ -4,12 +4,17 @@ from PyQt6.QtCore import Qt
 
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
 
-class LogoWidget(BuildableWidget):
+class ImageFromAssets(BuildableWidget):
+    def __init__(self, path, size=80):
+        self.path = path
+        self.size = size
+
     def build(self, parent=None):
         label = QLabel(parent)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        label.setFixedWidth(80)
-        pixmap = QPixmap("./images/colored-logo.svg")
-        scaled_pixmap = pixmap.scaledToWidth(80, Qt.TransformationMode.SmoothTransformation)
+        label.setFixedWidth(self.size)
+        pixmap = QPixmap(self.path)
+        scaled_pixmap = pixmap.scaledToWidth(self.size, Qt.TransformationMode.SmoothTransformation)
         label.setPixmap(scaled_pixmap)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         return label

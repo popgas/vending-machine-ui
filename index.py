@@ -6,9 +6,9 @@ from router import Router
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    router = Router()
+    router = Router(app)
 
     # Start by pushing the welcome screen.
     router.push(WelcomeScreen(router))
-    router.showFullScreen()  # Display in fullscreen mode.
+    router.showFullScreen()
     sys.exit(app.exec())

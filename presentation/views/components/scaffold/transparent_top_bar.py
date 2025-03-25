@@ -2,15 +2,14 @@ from PyQt6.QtCore import Qt
 
 from presentation.config.color_palette import ColorPalette
 from presentation.views.components.dialogs.info_dialog import InfoDialog
-from presentation.views.components.layout.button import Button
 from presentation.views.components.layout.column import Column
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
 from presentation.views.components.layout.icon import Icon
+from presentation.views.components.layout.image import ImageFromAssets
 from presentation.views.components.layout.row import Row
 from presentation.views.components.layout.text import Text
-from presentation.views.components.logo import LogoWidget
 from router import Router
-import qtawesome as qta
+
 
 class TransparentTopBar(BuildableWidget):
     def __init__(self, router: Router, can_pop=False):
@@ -36,7 +35,10 @@ class TransparentTopBar(BuildableWidget):
                 ),
                 Row(
                     children=[
-                        LogoWidget(),
+                        ImageFromAssets(
+                            path="./assets/images/colored-logo.svg",
+                            size=80,
+                        ),
                     ],
                     alignment=Qt.AlignmentFlag.AlignCenter,
                 ),

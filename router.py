@@ -1,13 +1,16 @@
+from PyQt6.QtCore import QThreadPool
 from PyQt6.QtWidgets import QMainWindow, QStackedWidget, QWidget
 
 class Router(QMainWindow):
-    def __init__(self):
+    def __init__(self, application):
         super().__init__()
+        self.application = application
         self.setWindowTitle("Navigation Stack Example")
 
         self.stack = QStackedWidget()
         self.setCentralWidget(self.stack)
         self.setContentsMargins(0,0,0,0)
+        self.threadpool = QThreadPool()
 
         # Navigation stack: list of widgets.
         self.nav_stack = []
@@ -49,7 +52,7 @@ class Router(QMainWindow):
         self.setStyleSheet("""
             QMainWindow {
                 background-color: #ECEFF1;
-                background-image: url(./images/botijao_bg.png);
+                background-image: url(./images/botijao_bg2.png);
                 background-repeat: no-repeat;
                 background-position: right bottom;
             }
@@ -62,6 +65,5 @@ class Router(QMainWindow):
                 background-image: none;
                 background-repeat: no-repeat;
                 background-position: right bottom;
-                background-size: contain;
             }
         """)

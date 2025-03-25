@@ -114,7 +114,7 @@ def camera_process(conn):
     # Define persistent camera device paths
     camera_device_paths = ["/dev/video0", "/dev/video4", "/dev/video2"]
     # Fixed images for comparison
-    fixed_image_paths = glob.glob("./Fotos_PB/*.png")
+    fixed_image_paths = glob.glob("assets/images/security-camera-images/*.png")
     print(fixed_image_paths)
 
     # Maximum captures for each camera device
@@ -136,7 +136,7 @@ class Camera:
         self.camera_atual = 0
         self.initialize_camera()
     
-    def load_fixed_images(self, pasta="Fotos_PB"):
+    def load_fixed_images(self, pasta="security-camera-images"):
         logging.info("Camera - Load Fixed Images")
         images = []
         try:

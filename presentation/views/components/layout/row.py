@@ -13,6 +13,8 @@ class Row(BuildableWidget):
                  border="transparent",
                  flex=None,
                  on_click=None,
+                 width=None,
+                 height=None,
                  background_color="transparent",
                  alignment=Qt.AlignmentFlag.AlignLeft):
         self.children = children or []
@@ -23,6 +25,8 @@ class Row(BuildableWidget):
         self.border_radius = border_radius
         self.background_color = background_color
         self.flex=flex
+        self.width = width
+        self.height = height
         self.name=str(uuid.uuid4().hex)
 
     def build(self, parent=None):
@@ -31,6 +35,11 @@ class Row(BuildableWidget):
         if self.on_click:
             widget = ClickableWidget(parent=parent)
             widget.clicked.connect(self.on_click)
+
+        if self.width is not None:
+            widget.setFixedWidth(self.width)
+        if self.height is not None:
+            widget.setFixedHeight(self.height)
 
         layout = QHBoxLayout()
         layout.setAlignment(self.alignment)

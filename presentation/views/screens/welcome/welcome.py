@@ -29,7 +29,7 @@ class WelcomeScreen(QWidget):
                             Text("Bem-vindo", font_size=40, color=ColorPalette.blue3),
                             Text("Máquina de Auto Atendimento", font_size=40, padding="15px 0",
                                  color=ColorPalette.blue3),
-                            Text("24h", font_size=60, color=ColorPalette.blue3)
+                            Text("24h", font_size=60, color=ColorPalette.blue3),
                         ],
                         alignment=Qt.AlignmentFlag.AlignCenter
                     ),

@@ -1,31 +1,33 @@
-import pathlib
+import os
 
-import pygame
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QWidget, QVBoxLayout
+from PyQt6.QtWidgets import QWidget
 
+from infrastructure.hardware.audio import AudioWorker
 from infrastructure.http.popgas_api import PopGasApi
+from presentation.abstractions.new_order_intent import NewOrderIntent
 from presentation.config.color_palette import ColorPalette
 from presentation.views.components.layout.column import Column
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
+from presentation.views.components.layout.image import ImageFromAssets
 from presentation.views.components.layout.row import Row
 from presentation.views.components.layout.sized_box import SizedBox
-from presentation.views.components.layout.spacer import SpacerHorizontal
 from presentation.views.components.layout.text import Text
 from presentation.views.components.scaffold.scaffold import Scaffold
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
 from router import Router
-import os
+from utils.file import FileUtils
 
-from utils.formatter import Formatter
 
 class PaymentSelection(QWidget):
-    def __init__(self, router: Router):
+    def __init__(self, router: Router, order_intent: NewOrderIntent):
         super().__init__()
         router.show_bg()
+        self.order_intent = order_intent
         self.router = router
+        self.curr_dir = FileUtils.dir(__file__)
 
-        prices = self.get_prices()
+        button_width = int(self.router.application.primaryScreen().availableSize().width() * 0.7)
 
         Scaffold(
             parent=self,
@@ -36,32 +38,47 @@ class PaymentSelection(QWidget):
                     Column(
                         flex=1,
                         children=[
-                            Text("Selecione o produto", font_size=50, color=ColorPalette.blue3),
+                            Text("Selecione a forma de pagamento", font_size=50, color=ColorPalette.blue3),
+                            SizedBox(height=100),
+                            Column(
+                                width=button_width,
+                                children=[
+                                    self.payment_button(
+                                        image=ImageFromAssets(
+                                            path=f"{self.curr_dir}/assets/cartao.png",
+                                            size=50,
+                                        ),
+                                        title="Cartão de Débito",
+                                        onclick=lambda: self.go_to_place_container_screen()
+                                    ),
+                                    SizedBox(height=30),
+                                    self.payment_button(
+                                        image=ImageFromAssets(
+                                            path=f"{self.curr_dir}/assets/cartao.png",
+                                            size=50,
+                                        ),
+                                        title="Cartão de Crédito",
+                                        onclick=lambda: self.go_to_payment_selection_screen()
+                                    ),
+                                    SizedBox(height=30),
+                                    self.payment_button(
+                                        image=ImageFromAssets(
+                                            path=f"{self.curr_dir}/assets/pix.png",
+                                            size=50,
+                                        ),
+                                        title="PIX",
+                                        onclick=lambda: self.go_to_payment_selection_screen()
+                                    ),
+                                ]
+                            )
                         ],
                         alignment=Qt.AlignmentFlag.AlignCenter
                     ),
-                    Column(
-                        children=[
-                            self.product_button(
-                                "Recarga 13kg",
-                                "eu trouxe o vasilhame vazio para troca",
-                                Formatter.currency(prices['gas_refill_price']),
-                                lambda: self.go_to_place_container_screen()
-                            ),
-                            SizedBox(height=20),
-                            self.product_button(
-                                "Gás 13kg + Vasilhame 13kg",
-                                "não tenho vasilhame e quero comprar",
-                                Formatter.currency(prices['container_price'] + prices['gas_refill_price']),
-                                lambda: self.go_to_payment_selection_screen()
-                            ),
-                        ]
-                    )
                 ]
             )
         )
 
-        self.play_audio()
+        AudioWorker.play(f"{self.curr_dir}/assets/audio.mp3")
 
     def go_to_place_container_screen(self):
         return
@@ -69,38 +86,25 @@ class PaymentSelection(QWidget):
     def go_to_payment_selection_screen(self):
         return
 
-    def product_button(self, title, caption, price, onclick) -> BuildableWidget:
+    def payment_button(self, image, title, onclick) -> BuildableWidget:
         return Row(
             children=[
+                SizedBox(width=12),
+                image,
                 Column(
                     children=[
                         Text(title,
                              font_size=30,
                              alignment=Qt.AlignmentFlag.AlignLeft,
-                             color=ColorPalette.blue3),
-                        SizedBox(height=5),
-                        Text(caption,
-                             color=ColorPalette.neutralPrimary,
-                             font_size=25),
+                             color="#fff"),
                     ],
                 ),
-                SpacerHorizontal(),
-                Text(price,
-                     color=ColorPalette.blue3,
-                     font_size=40),
-                SizedBox(width=10),
             ],
-            background_color="#fff",
-            border_radius=5,
+            background_color=ColorPalette.blue3,
+            border_radius=8,
             border="1px solid #ccc",
             on_click=onclick
         )
-
-    def play_audio(self):
-        pygame.mixer.init()
-        curr_dir = pathlib.Path(__file__).parent.resolve()
-        pygame.mixer.music.load(f"{curr_dir}/audio.mp3")
-        pygame.mixer.music.play()
 
     def get_prices(self):
         vm_id = os.environ['VENDING_MACHINE_ID']
