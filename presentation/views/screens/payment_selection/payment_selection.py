@@ -3,6 +3,7 @@ import os
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QWidget
 
+from domains.enums.order_product_selected import OrderProductSelected
 from infrastructure.hardware.audio import AudioWorker
 from infrastructure.http.popgas_api import PopGasApi
 from presentation.abstractions.new_order_intent import NewOrderIntent
@@ -19,7 +20,7 @@ from router import Router
 from utils.file import FileUtils
 
 
-class PaymentSelection(QWidget):
+class PaymentSelectionScreen(QWidget):
     def __init__(self, router: Router, order_intent: NewOrderIntent):
         super().__init__()
         router.show_bg()
@@ -28,13 +29,18 @@ class PaymentSelection(QWidget):
         self.curr_dir = FileUtils.dir(__file__)
 
         button_width = int(self.router.application.primaryScreen().availableSize().width() * 0.7)
+        can_pop = order_intent.productSelected == OrderProductSelected.gasWithContainer
+        print(order_intent.productSelected)
+        print(OrderProductSelected.gasWithContainer)
+        print(can_pop)
 
         Scaffold(
             parent=self,
             child=Column(
                 flex=1,
+                content_margin=30,
                 children=[
-                    TransparentTopBar(router, can_pop=True),
+                    TransparentTopBar(router, can_pop=can_pop),
                     Column(
                         flex=1,
                         children=[
@@ -49,7 +55,7 @@ class PaymentSelection(QWidget):
                                             size=50,
                                         ),
                                         title="Cartão de Débito",
-                                        onclick=lambda: self.go_to_place_container_screen()
+                                        onclick=lambda: self.debit_card()
                                     ),
                                     SizedBox(height=30),
                                     self.payment_button(
@@ -58,7 +64,7 @@ class PaymentSelection(QWidget):
                                             size=50,
                                         ),
                                         title="Cartão de Crédito",
-                                        onclick=lambda: self.go_to_payment_selection_screen()
+                                        onclick=lambda: self.credit_card()
                                     ),
                                     SizedBox(height=30),
                                     self.payment_button(
@@ -67,7 +73,7 @@ class PaymentSelection(QWidget):
                                             size=50,
                                         ),
                                         title="PIX",
-                                        onclick=lambda: self.go_to_payment_selection_screen()
+                                        onclick=lambda: self.pix_machine()
                                     ),
                                 ]
                             )
@@ -80,32 +86,43 @@ class PaymentSelection(QWidget):
 
         AudioWorker.play(f"{self.curr_dir}/assets/audio.mp3")
 
-    def go_to_place_container_screen(self):
-        return
-
-    def go_to_payment_selection_screen(self):
-        return
-
     def payment_button(self, image, title, onclick) -> BuildableWidget:
         return Row(
+            content_margin=20,
             children=[
-                SizedBox(width=12),
                 image,
+                SizedBox(width=10),
                 Column(
+                    content_margin=(0, 5, 0, 0),
                     children=[
                         Text(title,
                              font_size=30,
                              alignment=Qt.AlignmentFlag.AlignLeft,
                              color="#fff"),
-                    ],
-                ),
+                    ]
+                )
             ],
             background_color=ColorPalette.blue3,
             border_radius=8,
             border="1px solid #ccc",
-            on_click=onclick
+            on_click=onclick,
+            alignment=Qt.AlignmentFlag.AlignVCenter,
         )
 
-    def get_prices(self):
-        vm_id = os.environ['VENDING_MACHINE_ID']
-        return PopGasApi.request("GET", f"/vending-machine-orders/{vm_id}/prices").json()
+    def debit_card(self):
+        AudioWorker.stop()
+        self.router.push('card_machine', self.order_intent.copy_with(
+            paymentMethodId=2
+        ))
+
+    def credit_card(self):
+        AudioWorker.stop()
+        self.router.push('card_machine', self.order_intent.copy_with(
+            paymentMethodId=3
+        ))
+
+    def pix_machine(self):
+        AudioWorker.stop()
+        self.router.push('card_machine', self.order_intent.copy_with(
+            paymentMethodId=5
+        ))

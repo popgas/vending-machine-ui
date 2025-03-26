@@ -1,5 +1,5 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QWidget, QVBoxLayout
+from PyQt6.QtWidgets import QWidget
 
 from presentation.config.color_palette import ColorPalette
 from presentation.views.components.buttons.blue_button import BlueButton
@@ -7,7 +7,6 @@ from presentation.views.components.layout.column import Column
 from presentation.views.components.layout.text import Text
 from presentation.views.components.scaffold.scaffold import Scaffold
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
-from presentation.views.screens.product_selected.product_selected import ProductSelection
 from router import Router
 
 
@@ -15,12 +14,14 @@ class WelcomeScreen(QWidget):
     def __init__(self, router: Router):
         super().__init__()
         router.show_bg()
+
         self.router = router
 
         Scaffold(
             parent=self,
             child=Column(
                 flex=1,
+                content_margin=30,
                 children=[
                     TransparentTopBar(router),
                     Column(
@@ -35,7 +36,7 @@ class WelcomeScreen(QWidget):
                     ),
                     BlueButton(
                         label="Toque para Iniciar",
-                        on_click=lambda: router.push(ProductSelection(router))
+                        on_click=lambda: router.push('product_selection'),
                     ),
                 ]
             )

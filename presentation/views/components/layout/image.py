@@ -1,11 +1,11 @@
-from PyQt6.QtWidgets import QLabel
+from PyQt6.QtWidgets import QLabel, QSizePolicy
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
 
 class ImageFromAssets(BuildableWidget):
-    def __init__(self, path, size=80):
+    def __init__(self, path, size=None):
         self.path = path
         self.size = size
 
@@ -17,4 +17,6 @@ class ImageFromAssets(BuildableWidget):
         scaled_pixmap = pixmap.scaledToWidth(self.size, Qt.TransformationMode.SmoothTransformation)
         label.setPixmap(scaled_pixmap)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+
         return label

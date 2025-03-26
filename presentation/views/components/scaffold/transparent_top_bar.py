@@ -1,4 +1,5 @@
 from PyQt6.QtCore import Qt
+from pygments.styles.dracula import background
 
 from presentation.config.color_palette import ColorPalette
 from presentation.views.components.dialogs.info_dialog import InfoDialog
@@ -58,7 +59,6 @@ class TransparentTopBar(BuildableWidget):
                     alignment=Qt.AlignmentFlag.AlignRight,
                 ),
             ],
-            alignment=Qt.AlignmentFlag.AlignHCenter
         )
 
         return row.build(parent=parent)

@@ -1,8 +1,7 @@
-import pathlib
+import os
 
-import pygame
-from PyQt6.QtCore import Qt, QTimer
-from PyQt6.QtWidgets import QWidget, QVBoxLayout
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QWidget
 
 from domains.enums.order_product_selected import OrderProductSelected
 from infrastructure.hardware.audio import AudioWorker
@@ -17,16 +16,12 @@ from presentation.views.components.layout.spacer import SpacerHorizontal
 from presentation.views.components.layout.text import Text
 from presentation.views.components.scaffold.scaffold import Scaffold
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
-from presentation.views.screens.payment_selection.payment_selection import PaymentSelection
-from presentation.views.screens.place_empty_container.place_empty_container import PlaceEmptyContainer
 from router import Router
-import os
-
 from utils.file import FileUtils
 from utils.formatter import Formatter
 
 
-class ProductSelection(QWidget):
+class ProductSelectionScreen(QWidget):
     def __init__(self, router: Router):
         super().__init__()
         router.show_bg()
@@ -41,6 +36,7 @@ class ProductSelection(QWidget):
             parent=self,
             child=Column(
                 flex=1,
+                content_margin=30,
                 children=[
                     TransparentTopBar(router, can_pop=True),
                     Column(
@@ -75,26 +71,27 @@ class ProductSelection(QWidget):
 
     def go_to_place_container_screen(self):
         order_intent = NewOrderIntent(
-            productSelected=OrderProductSelected.gasWithContainer,
+            productSelected=OrderProductSelected.onlyGasRefill,
             productPrice=self.container_with_gas_price,
             stockCount=int(self.prices['container_full_stock_count']),
         )
 
-        self.router.push(PlaceEmptyContainer(self.router, order_intent))
+        self.router.push('place_empty_container', order_intent)
         return
 
     def go_to_payment_selection_screen(self):
         order_intent = NewOrderIntent(
-            productSelected=OrderProductSelected.onlyGasRefill,
+            productSelected=OrderProductSelected.gasWithContainer,
             productPrice=self.gas_refill_price,
             stockCount=int(self.prices['container_full_stock_count']),
         )
 
-        self.router.push(PaymentSelection(self.router, order_intent))
+        self.router.push('payment_selection', order_intent)
         return
 
     def product_button(self, title, caption, price, onclick) -> BuildableWidget:
         return Row(
+            content_margin=20,
             children=[
                 Column(
                     children=[
@@ -112,7 +109,6 @@ class ProductSelection(QWidget):
                 Text(price,
                      color=ColorPalette.blue3,
                      font_size=40),
-                SizedBox(width=10),
             ],
             background_color="#fff",
             border_radius=5,

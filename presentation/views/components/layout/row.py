@@ -9,6 +9,7 @@ class Row(BuildableWidget):
     def __init__(self,
                  children: list[BuildableWidget] = None,
                  padding="0",
+                 content_margin=0,
                  border_radius=0,
                  border="transparent",
                  flex=None,
@@ -29,6 +30,11 @@ class Row(BuildableWidget):
         self.height = height
         self.name=str(uuid.uuid4().hex)
 
+        if isinstance(content_margin, int):
+            content_margin=(content_margin, content_margin, content_margin, content_margin)
+
+        self.content_margin = content_margin
+
     def build(self, parent=None):
         widget = QWidget(parent)
 
@@ -43,6 +49,7 @@ class Row(BuildableWidget):
 
         layout = QHBoxLayout()
         layout.setAlignment(self.alignment)
+        layout.setContentsMargins(*self.content_margin)
 
         widget.setLayout(layout)
         widget.setObjectName(self.name)

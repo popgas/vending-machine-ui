@@ -4,7 +4,6 @@ from PyQt6.QtWidgets import QVBoxLayout
 
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
 from presentation.views.core.state_notifier import StateNotifier
-from utils.layout import LayoutUtils
 
 
 class Scaffold:

@@ -1,22 +1,31 @@
 from PyQt6.QtCore import QThreadPool
-from PyQt6.QtWidgets import QMainWindow, QStackedWidget, QWidget
+from PyQt6.QtWidgets import QMainWindow, QStackedWidget, QVBoxLayout
+
 
 class Router(QMainWindow):
-    def __init__(self, application):
+    def __init__(self, application, routes: dict[str, callable]):
         super().__init__()
         self.application = application
         self.setWindowTitle("Navigation Stack Example")
 
         self.stack = QStackedWidget()
+
+        layout = QVBoxLayout(self.stack)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+
         self.setCentralWidget(self.stack)
+
         self.setContentsMargins(0,0,0,0)
         self.threadpool = QThreadPool()
 
         # Navigation stack: list of widgets.
         self.nav_stack = []
+        self.routes = routes
 
-    def push(self, widget: QWidget):
+    def push(self, name: str, *args):
         """Push a new widget (screen) onto the navigation stack."""
+        widget = self.routes[name](self, *args)
         self.nav_stack.append(widget)
         self.stack.addWidget(widget)
         self.stack.setCurrentWidget(widget)
@@ -28,7 +37,13 @@ class Router(QMainWindow):
             return
 
         current_widget = self.nav_stack.pop()
-        self.stack.setCurrentWidget(self.nav_stack[-1])
+        previous = self.nav_stack[-1]
+
+        self.stack.setCurrentWidget(previous)
+
+        if hasattr(previous, 'on_route_popped') and callable(previous.on_route_popped):
+            self.nav_stack[-1].on_route_popped()
+
         self.stack.removeWidget(current_widget)
         current_widget.deleteLater()  # Clean up the widget.
 
@@ -40,19 +55,20 @@ class Router(QMainWindow):
             widget.deleteLater()
         print("Navigation stack cleared.")
 
-    def off_all(self, widget: QWidget):
+    def off_all(self, name: str):
         """
         Remove all screens from the navigation stack and push a new one.
         Similar to Flutter's Get.offAll(() => WelcomeScreen()).
         """
         self.clear_stack()
-        self.push(widget)
+        self.push(name)
 
     def show_bg(self):
         self.setStyleSheet("""
             QMainWindow {
+                padding: 0px;
                 background-color: #ECEFF1;
-                background-image: url(./images/botijao_bg2.png);
+                background-image: url(./assets/images/botijao_bg2.png);
                 background-repeat: no-repeat;
                 background-position: right bottom;
             }
@@ -61,6 +77,7 @@ class Router(QMainWindow):
     def hide_bg(self):
         self.setStyleSheet("""
             QMainWindow {
+                padding: 0px;
                 background-color: #ECEFF1;
                 background-image: none;
                 background-repeat: no-repeat;

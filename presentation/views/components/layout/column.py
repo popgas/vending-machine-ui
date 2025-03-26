@@ -18,6 +18,7 @@ class Column(BuildableWidget):
                  width=None,
                  height=None,
                  padding="0",
+                 content_margin=0,
                  border_radius=0,
                  border="transparent",
                  alignment=Qt.AlignmentFlag.AlignTop):
@@ -35,6 +36,11 @@ class Column(BuildableWidget):
         self.background_color = background_color
         self.name = str(uuid.uuid4().hex)
 
+        if isinstance(content_margin, int):
+            content_margin=(content_margin, content_margin, content_margin, content_margin)
+
+        self.content_margin = content_margin
+
     def build(self, parent=None):
         widget = QWidget(parent)
 
@@ -51,6 +57,7 @@ class Column(BuildableWidget):
         layout.setSpacing(self.spacing)
         layout.setAlignment(self.alignment)
         widget.setLayout(layout)
+        layout.setContentsMargins(*self.content_margin)
 
         if self.flex:
             widget.flex = self.flex

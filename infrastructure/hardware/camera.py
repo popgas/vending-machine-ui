@@ -1,16 +1,16 @@
 import glob
 
 import cv2
-from PyQt6.QtCore import QRunnable, pyqtSlot
+from PyQt6.QtCore import QRunnable, pyqtSlot, pyqtSignal, QObject
 
 from infrastructure.observability.logger import Logger
 
 
 class CameraWorker(QRunnable):
-    def __init__(self, callback):
+    def __init__(self):
         super().__init__()
         self.logger = Logger.get_logger()
-        self.callback = callback
+        self.signals = CameraSignals()
 
     @pyqtSlot()
     def run(self):
@@ -20,11 +20,11 @@ class CameraWorker(QRunnable):
 
             is_eligible = self.is_eligible(photo, security_images)
 
-            self.callback(is_eligible)
+            self.signals.result.emit(is_eligible)
 
         except Exception as e:
             print(e)
-            self.callback(False)
+            self.signals.result.emit(False)
 
     def is_eligible(self, photo, security_images):
         best_score = 0
@@ -32,14 +32,14 @@ class CameraWorker(QRunnable):
         for idx, fixed_image in enumerate(security_images):
             score = self.compare_images(photo, fixed_image)
 
-            print(f"score: {score}, image={fixed_image}")
+            print(f"score: {score}")
 
             if score > best_score:
                 best_score = score
 
         print(f"final score: {best_score}")
 
-        return best_score >= 40
+        return best_score >= 50
 
     def to_gray(self, image):
         # Check if the image is already grayscale
@@ -109,3 +109,7 @@ class CameraWorker(QRunnable):
             self.logger.warning("Nenhuma imagem válida foi encontrada na pasta.")
 
         return images
+
+
+class CameraSignals(QObject):
+    result = pyqtSignal(bool)
