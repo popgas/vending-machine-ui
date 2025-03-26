@@ -28,9 +28,9 @@ class Router(QMainWindow):
             return
 
         current_widget = self.nav_stack.pop()
+        self.stack.setCurrentWidget(self.nav_stack[-1])
         self.stack.removeWidget(current_widget)
         current_widget.deleteLater()  # Clean up the widget.
-        self.stack.setCurrentWidget(self.nav_stack[-1])
 
     def clear_stack(self):
         """Remove all screens from the navigation stack."""

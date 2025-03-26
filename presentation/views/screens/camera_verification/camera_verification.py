@@ -1,8 +1,11 @@
+import time
+
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtWidgets import QWidget
 
 from infrastructure.hardware.audio import AudioWorker
 from infrastructure.hardware.camera import CameraWorker
+from infrastructure.hardware.gpio import GpioWorker
 from presentation.abstractions.new_order_intent import NewOrderIntent
 from presentation.config.color_palette import ColorPalette
 from presentation.views.components.layout.column import Column
@@ -28,7 +31,7 @@ class CameraVerification(QWidget):
             parent=self,
             child=Column(
                 children=[
-                    TransparentTopBar(router, can_pop=True),
+                    TransparentTopBar(router, can_pop=False),
                     Column(
                         flex=1,
                         children=[
@@ -62,8 +65,10 @@ class CameraVerification(QWidget):
         print(f"camera result {passed}")
 
         if not passed:
-            print(1234)
             AudioWorker.play(f"{self.curr_dir}/assets/security_check_failed.mp3")
+            GpioWorker.activate(self.order_intent.get_open_door_pin())
+            time.sleep(10)
+            self.router.pop()
 
 
     def go_to_camera_verification(self):

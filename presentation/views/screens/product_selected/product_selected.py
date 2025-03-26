@@ -1,7 +1,7 @@
 import pathlib
 
 import pygame
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 
 from domains.enums.order_product_selected import OrderProductSelected
@@ -71,7 +71,7 @@ class ProductSelection(QWidget):
             ),
         )
 
-        AudioWorker.play(f"{FileUtils.dir(__file__)}/assets/audio.mp3")
+        AudioWorker.delayed(f"{FileUtils.dir(__file__)}/assets/audio.mp3")
 
     def go_to_place_container_screen(self):
         order_intent = NewOrderIntent(

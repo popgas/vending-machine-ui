@@ -80,7 +80,11 @@ class PlaceEmptyContainer(QWidget):
     def go_to_camera_verification_part2(self):
         self.play_audio2()
         GpioWorker.activate(self.order_intent.get_close_door_pin())
-        QTimer.singleShot(10 * 1000, lambda: self.router.push(CameraVerification(self.router, self.order_intent)))
+        QTimer.singleShot(10 * 1000, self.go_to_camera_verification_part3)
+
+    def go_to_camera_verification_part3(self):
+        self.state.update(closing_door=False)
+        self.router.push(CameraVerification(self.router, self.order_intent))
 
     def play_audio(self):
         pygame.mixer.init()
