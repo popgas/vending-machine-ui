@@ -1,37 +1,38 @@
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import QLabel
+import tkinter as tk
+from presentation.config.color_palette import ColorPalette  # Assumes ColorPalette.textColor is defined.
+from presentation.views.components.layout.padding import Padding
 
-from presentation.config.color_palette import ColorPalette
-from presentation.config.font import GeistFont
-from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
 
-class Text(BuildableWidget):
+class Text:
     def __init__(self,
                  label="Label",
-                 alignment=Qt.AlignmentFlag.AlignCenter,
+                 alignment="center",  # Default to "center". Qt's AlignCenter is replaced with "center".
                  color=None,
                  font_family=None,
-                 padding="0px",
+                 padding: Padding = None,
+                 side=tk.TOP,
+                 anchor=tk.CENTER,
                  font_size=13):
         self.label = label
-        self.color = color or ColorPalette.textColor
+        self.color = color or ColorPalette.textColor  # Use default text color.
         self.alignment = alignment
         self.font_size = font_size
-        self.font_family = font_family or GeistFont.light()
-        self.padding = padding
+        self.font_family = font_family or "Helvetica"
+        self.padding = padding or Padding.zero()
+        self.side = side
+        self.anchor = anchor
 
     def build(self, parent=None):
-        label = QLabel(self.label)
-        label.setAlignment(self.alignment)
-        label.setStyleSheet(f"""
-            color: {self.color};
-            padding: {self.padding};
-            font-weight: normal;
-        """)
+        label = tk.Label(parent,
+                         bg=parent["bg"],
+                         fg=self.color,
+                         text=self.label,
+                         font=("Helvetica", self.font_size))
+        label.pack(
+            side=self.side or parent['side'],
+            anchor=self.anchor or parent['anchor'],
+            pady=self.padding.pady,
+            padx=self.padding.padx,
+        )
 
-        font = QFont(self.font_family, self.font_size)
-        label.setFont(font)
-
-        label.setFont(font)
         return label

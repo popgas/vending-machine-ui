@@ -1,43 +1,51 @@
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QWidget
-
+import tkinter as tk
 from presentation.config.color_palette import ColorPalette
-from presentation.views.components.buttons.blue_button import BlueButton
+from presentation.views.components.layout.button import Button
 from presentation.views.components.layout.column import Column
+from presentation.views.components.layout.padding import Padding
+from presentation.views.components.layout.spacer import SpacerVertical
 from presentation.views.components.layout.text import Text
 from presentation.views.components.scaffold.scaffold import Scaffold
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
 from router import Router
 
-
-class WelcomeScreen(QWidget):
+class WelcomeScreen(tk.Frame):
     def __init__(self, router: Router):
-        super().__init__()
-        router.show_bg()
-
+        super().__init__(router.container, bg="#ECEFF1")
         self.router = router
 
         Scaffold(
             parent=self,
             child=Column(
-                flex=1,
-                content_margin=30,
+                expand=True,
+                anchor=tk.CENTER,
                 children=[
                     TransparentTopBar(router),
                     Column(
-                        flex=1,
+                        expand=True,
                         children=[
+                            SpacerVertical(),
                             Text("Bem-vindo", font_size=40, color=ColorPalette.blue3),
-                            Text("Máquina de Auto Atendimento", font_size=40, padding="15px 0",
+                            Text("Máquina de Auto Atendimento",
+                                 font_size=40,
+                                 padding=Padding.vertical(15),
                                  color=ColorPalette.blue3),
                             Text("24h", font_size=60, color=ColorPalette.blue3),
+                            SpacerVertical(),
                         ],
-                        alignment=Qt.AlignmentFlag.AlignCenter
+                        anchor=tk.CENTER,
                     ),
-                    BlueButton(
+                    Button(
                         label="Toque para Iniciar",
                         on_click=lambda: router.push('product_selection'),
+                        background_color=ColorPalette.blue3,
+                        pressed_background_color=ColorPalette.blue2,
+                        pressed_color="#fff",
+                        font_size=30,
+                        ipadx=20,
+                        ipady=20,
+                        padding=Padding.all(20),
                     ),
-                ]
+                ],
             )
         )

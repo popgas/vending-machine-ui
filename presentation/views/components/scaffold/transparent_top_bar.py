@@ -1,15 +1,16 @@
-from PyQt6.QtCore import Qt
-from pygments.styles.dracula import background
-
 from presentation.config.color_palette import ColorPalette
 from presentation.views.components.dialogs.info_dialog import InfoDialog
 from presentation.views.components.layout.column import Column
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
 from presentation.views.components.layout.icon import Icon
 from presentation.views.components.layout.image import ImageFromAssets
+from presentation.views.components.layout.padding import Padding
 from presentation.views.components.layout.row import Row
 from presentation.views.components.layout.text import Text
 from router import Router
+from utils.file import FileUtils
+import tkinter as tk
+from tkinter.messagebox import showinfo
 
 
 class TransparentTopBar(BuildableWidget):
@@ -20,53 +21,50 @@ class TransparentTopBar(BuildableWidget):
     def build(self, parent=None):
         trailing = []
 
-        if self.can_pop:
-            trailing.append(
-                Icon("fa6s.arrow-left",
-                     color=ColorPalette.blue3,
-                     size=30)
-            )
+        # if self.can_pop:
+        #     trailing.append(
+        #         Icon("fa6s.arrow-left",
+        #              color=ColorPalette.blue3,
+        #              size=30)
+        #     )
 
-        row = Row(
+        row = Column(
+            padding=Padding.all(20),
             children=[
                 Row(
+                    anchor=tk.W,
                     children=[
-                        Column(children=trailing, on_click=lambda: self.pop_route())
-                    ]
-                ),
-                Row(
-                    children=[
-                        ImageFromAssets(
-                            path="./assets/images/colored-logo.svg",
-                            size=80,
+                        Row(
+                            children=[
+                                ImageFromAssets(
+                                    path=f"{FileUtils.root()}/assets/images/colored-logo.png",
+                                    size=80,
+                                    anchor=tk.CENTER,
+                                    padding=Padding(left=80)
+                                ),
+                            ]
                         ),
-                    ],
-                    alignment=Qt.AlignmentFlag.AlignCenter,
-                ),
-                Row(
-                    children=[
                         Column(
                             children=[
-                                Icon("fa6s.phone",
-                                     alignment = Qt.AlignmentFlag.AlignCenter,
-                                     size=23,
-                                     color=ColorPalette.blue3),
+                                Icon("phone", anchor=tk.CENTER),
                                 Text("Suporte")
                             ],
-                            on_click=lambda: self.on_click()
+                            on_click=lambda: self.on_click(),
+                            side=tk.RIGHT,
+                            anchor=tk.NE,
                         )
                     ],
-                    alignment=Qt.AlignmentFlag.AlignRight,
-                ),
-            ],
+                )
+            ]
         )
 
         return row.build(parent=parent)
 
     def on_click(self):
-        modal = InfoDialog("Suporte Técnico", "Para entrar em contato conosco:\n\nTelefone ou Whatsapp:\n0800 740 7070")
-        modal.exec()  # This call is blocking and modal
-        return
+        showinfo(
+            title='Suporte Técnico',
+            message="Para entrar em contato conosco:\n\nTelefone ou Whatsapp:\n0800 740 7070"
+        )
 
     def pop_route(self):
         self.router.pop()

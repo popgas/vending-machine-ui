@@ -1,73 +1,63 @@
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QHBoxLayout, QWidget, QSizePolicy
+import tkinter as tk
+import uuid
 
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
-from presentation.views.components.layout.events.clickable import ClickableWidget
-import uuid
+from presentation.views.components.layout.padding import Padding
+
+
+class RowAlignment:
+    center="w"
 
 class Row(BuildableWidget):
     def __init__(self,
-                 children: list[BuildableWidget] = None,
-                 padding="0",
+                 children: list = None,
+                 padding: Padding = None,
                  content_margin=0,
-                 border_radius=0,
-                 border="transparent",
+                 border_radius=0,   # Not directly supported in Tkinter.
+                 border="transparent",  # We'll simulate a border if needed.
                  flex=None,
                  on_click=None,
                  width=None,
                  height=None,
-                 background_color="transparent",
-                 alignment=Qt.AlignmentFlag.AlignLeft):
+                 expand=True,
+                 background_color=None,
+                 side=tk.LEFT,
+                 anchor=tk.N):  # Using Tkinter anchor strings: "w", "center", "e", etc.
         self.children = children or []
-        self.alignment = alignment
         self.on_click = on_click
-        self.padding = padding
+        self.padding = padding or Padding.zero()
         self.border = border
+        self.expand = expand
         self.border_radius = border_radius
         self.background_color = background_color
-        self.flex=flex
+        self.flex = flex
         self.width = width
         self.height = height
-        self.name=str(uuid.uuid4().hex)
+        self.side = side
+        self.anchor = anchor
+        self.name = str(uuid.uuid4().hex)
 
         if isinstance(content_margin, int):
-            content_margin=(content_margin, content_margin, content_margin, content_margin)
-
-        self.content_margin = content_margin
+            # Convert a single int into a tuple: (left, top, right, bottom)
+            self.content_margin = (content_margin, content_margin, content_margin, content_margin)
+        else:
+            self.content_margin = content_margin
 
     def build(self, parent=None):
-        widget = QWidget(parent)
-
-        if self.on_click:
-            widget = ClickableWidget(parent=parent)
-            widget.clicked.connect(self.on_click)
-
-        if self.width is not None:
-            widget.setFixedWidth(self.width)
-        if self.height is not None:
-            widget.setFixedHeight(self.height)
-
-        layout = QHBoxLayout()
-        layout.setAlignment(self.alignment)
-        layout.setContentsMargins(*self.content_margin)
-
-        widget.setLayout(layout)
-        widget.setObjectName(self.name)
-        widget.setStyleSheet(f"""
-            #{self.name} {{
-                border-radius: {self.border_radius}px;
-                border: {self.border};
-                background-color: {self.background_color};
-                padding: {self.padding};
-            }}
-        """)
-
-        widget.setSizePolicy(QSizePolicy.Policy.Expanding, widget.sizePolicy().verticalPolicy())
-
-        if self.flex:
-            widget.flex = self.flex
+        bg =self.background_color or parent["bg"]
+        widget = tk.Frame(parent, bg=bg)
+        widget.pack(
+            fill="x",
+            expand=self.expand,
+            side=self.side,
+            anchor=self.anchor,
+            padx=self.padding.padx,
+            pady=self.padding.pady,
+        )
 
         for child in self.children:
-            layout.addWidget(child.build(parent=widget))
+            child.build(widget)
 
+        # If expanded or flex is specified, the parent should handle layout with expand=True.
+        # Here we simply return the widget.
         return widget

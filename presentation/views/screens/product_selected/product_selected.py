@@ -1,8 +1,6 @@
 import os
 
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QWidget
-
+import tkinter as tk
 from domains.enums.order_product_selected import OrderProductSelected
 from infrastructure.hardware.audio import AudioWorker
 from infrastructure.http.popgas_api import PopGasApi
@@ -10,9 +8,10 @@ from presentation.abstractions.new_order_intent import NewOrderIntent
 from presentation.config.color_palette import ColorPalette
 from presentation.views.components.layout.column import Column
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
+from presentation.views.components.layout.padding import Padding
 from presentation.views.components.layout.row import Row
 from presentation.views.components.layout.sized_box import SizedBox
-from presentation.views.components.layout.spacer import SpacerHorizontal
+from presentation.views.components.layout.spacer import SpacerHorizontal, SpacerVertical
 from presentation.views.components.layout.text import Text
 from presentation.views.components.scaffold.scaffold import Scaffold
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
@@ -21,10 +20,9 @@ from utils.file import FileUtils
 from utils.formatter import Formatter
 
 
-class ProductSelectionScreen(QWidget):
+class ProductSelectionScreen(tk.Frame):
     def __init__(self, router: Router):
-        super().__init__()
-        router.show_bg()
+        super().__init__(router.container, bg="#ECEFF1")
         self.router = router
 
         self.prices = self.get_prices()
@@ -35,39 +33,34 @@ class ProductSelectionScreen(QWidget):
         Scaffold(
             parent=self,
             child=Column(
-                flex=1,
-                content_margin=30,
+                expand=True,
                 children=[
                     TransparentTopBar(router, can_pop=True),
                     Column(
-                        flex=1,
+                        expand=True,
                         children=[
+                            SpacerVertical(),
                             Text("Selecione o produto", font_size=50, color=ColorPalette.blue3),
-                        ],
-                        alignment=Qt.AlignmentFlag.AlignCenter
-                    ),
-                    Column(
-                        children=[
+                            SpacerVertical(),
                             self.product_button(
                                 title="Recarga 13kg",
                                 caption="eu trouxe o vasilhame vazio para troca",
                                 price=Formatter.currency(self.gas_refill_price),
                                 onclick=self.go_to_place_container_screen,
                             ),
-                            SizedBox(height=20),
                             self.product_button(
                                 title="Gás 13kg + Vasilhame 13kg",
                                 caption="não tenho vasilhame e quero comprar",
                                 price=Formatter.currency(self.container_with_gas_price),
                                 onclick=self.go_to_payment_selection_screen
                             ),
-                        ]
-                    )
+                        ],
+                    ),
                 ]
             ),
         )
 
-        AudioWorker.delayed(f"{FileUtils.dir(__file__)}/assets/audio.mp3")
+        AudioWorker.play(f"{FileUtils.dir(__file__)}/assets/audio.mp3")
 
     def go_to_place_container_screen(self):
         order_intent = NewOrderIntent(
@@ -90,30 +83,38 @@ class ProductSelectionScreen(QWidget):
         return
 
     def product_button(self, title, caption, price, onclick) -> BuildableWidget:
-        return Row(
-            content_margin=20,
-            children=[
-                Column(
-                    children=[
-                        Text(title,
-                             font_size=30,
-                             alignment=Qt.AlignmentFlag.AlignLeft,
-                             color=ColorPalette.blue3),
-                        SizedBox(height=5),
-                        Text(caption,
-                             color=ColorPalette.neutralPrimary,
-                             font_size=25),
-                    ],
-                ),
-                SpacerHorizontal(),
-                Text(price,
-                     color=ColorPalette.blue3,
-                     font_size=40),
-            ],
+        return Column(
             background_color="#fff",
             border_radius=5,
-            border="1px solid #ccc",
-            on_click=onclick
+            border_color="#ccc",
+            on_click=onclick,
+            padding=Padding(left=20, right=20, bottom=20),
+            children=[
+                Row(
+                    padding=Padding.all(20),
+                    children=[
+                        Column(
+                            children=[
+                                Text(title,
+                                     font_size=30,
+                                     anchor=tk.W,
+                                     color=ColorPalette.blue3),
+                                SizedBox(height=5),
+                                Text(caption,
+                                     color=ColorPalette.neutralPrimary,
+                                     font_size=25),
+                            ],
+                            side=tk.LEFT,
+                        ),
+                        SpacerHorizontal(),
+                        Text(price,
+                             color=ColorPalette.blue3,
+                             anchor=tk.NE,
+                             padding=Padding(bottom=15),
+                             font_size=40),
+                    ]
+                )
+            ]
         )
 
     def get_prices(self):

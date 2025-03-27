@@ -1,7 +1,8 @@
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QPushButton
+import tkinter as tk
 
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
+from presentation.views.components.layout.padding import Padding
+
 
 class Button(BuildableWidget):
     def __init__(self,
@@ -9,52 +10,49 @@ class Button(BuildableWidget):
                  border_radius=0,
                  color="#fff",
                  pressed_color="blue",
-                 padding="10px 0",
+                 padding: Padding = None,
+                 ipadx=10,
+                 ipady=10,
                  font_size=13,
                  letter_spacing=1,
                  icon=None,
                  on_click=None,
                  pressed_background_color="#fff",
                  background_color="blue"):
-        self.icon = icon
         self.label = label
-        self.padding = padding
-        self.font_size = font_size
         self.border_radius = border_radius
-        self.letter_spacing = letter_spacing
         self.color = color
-        self.on_click = on_click
-        self.background_color = background_color
         self.pressed_color = pressed_color
+        self.padding = padding or Padding.zero()
+        self.font_size = font_size
+        self.letter_spacing = letter_spacing
+        self.icon = icon
+        self.on_click = on_click
         self.pressed_background_color = pressed_background_color
+        self.background_color = background_color
+        self.ipadx = ipadx
+        self.ipady = ipady
 
     def build(self, parent=None):
-        button = QPushButton(self.label)
+        btn = tk.Label(parent,
+                        text=self.label,
+                        bg=self.background_color,
+                        fg=self.color,
+                        font=("Helvetica", self.font_size),
+                        borderwidth=0)
+        btn.pack(
+            fill=tk.X,
+            padx=self.padding.padx,
+            pady=self.padding.pady,
+            ipadx=self.ipadx,
+            ipady=self.ipady,
+        )
 
-        if self.icon:
-            button=QPushButton(self.icon, self.label)
+        if self.on_click is not None:
+            btn.bind("<ButtonPress>", lambda x: self.on_click())
 
-        button.setStyleSheet(f"""
-            QPushButton {{
-                background-color: {self.background_color};
-                border-radius: {self.border_radius}px;
-                font-size: {self.font_size}pt;
-                color: {self.color};
-                padding: {self.padding};
-                letter-spacing: {self.letter_spacing}px;
-            }}
-            QPushButton:hover {{
-                background-color: {self.pressed_background_color};
-                color: {self.pressed_color};
-            }}
-            QPushButton:pressed {{
-                background-color: {self.pressed_background_color};
-                color: {self.pressed_color};
-            }}
-        """)
+        # Set the on_click callback if provided.
+        # if self.on_click:
+        #     btn.configure(command=self.on_click)
 
-        if self.on_click:
-            button.setCursor(Qt.CursorShape.PointingHandCursor)
-            button.clicked.connect(self.on_click)
-
-        return button
+        return btn

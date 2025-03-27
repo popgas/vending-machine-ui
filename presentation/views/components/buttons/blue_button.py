@@ -8,7 +8,6 @@ class BlueButton(Button):
             label=label,
             font_size=font_size,
             border_radius=5,
-            padding="30px 0",
             color="#fff",
             on_click=on_click,
             background_color=ColorPalette.blue3,

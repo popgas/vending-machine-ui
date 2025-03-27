@@ -2,6 +2,7 @@
 cd ~
 wget https://download.qt.io/official_releases/qt/6.8/6.8.3/single/qt-everywhere-src-6.8.3.tar.xz
 tar xf qt-everywhere-src-6.8.3.tar.xz
+rm qt-everywhere-src-6.8.3.tar.xz
 mkdir qt-everywhere-src-6.8.3/build
 cd qt-everywhere-src-6.8.3/build
 

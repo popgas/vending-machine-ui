@@ -1,8 +1,5 @@
 import pathlib
 
-from PyQt6.QtGui import QFontDatabase
-
-
 class GeistFont:
     @staticmethod
     def regular():
@@ -43,6 +40,8 @@ class GeistFont:
     @staticmethod
     def load(name):
         curr_dir = pathlib.Path().parent.resolve()
-        print(curr_dir)
-        font_id = QFontDatabase.addApplicationFont(f"{curr_dir}/assets/fonts/non.geist/{name}.ttf")
-        return QFontDatabase.applicationFontFamilies(font_id)[0]
+        print("Current directory:", curr_dir)
+        # In PyQt6, you might load a TTF file dynamically. Tkinter cannot do that directly.
+        # Instead, the font must be installed on your system.
+        # For this example, we assume that the custom Geist font is installed and its family name is the same as `name`.
+        return name

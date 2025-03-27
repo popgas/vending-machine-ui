@@ -1,13 +1,16 @@
 from collections.abc import Callable
 
-from PyQt6.QtWidgets import QVBoxLayout
-
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
-from presentation.views.core.state_notifier import StateNotifier
 
 
 class Scaffold:
-    def __init__(self, parent, child: BuildableWidget | Callable[[], BuildableWidget], state:StateNotifier=None):
+    def __init__(self, parent, child: BuildableWidget | Callable[[], BuildableWidget], state=None):
+        """
+        :param parent: The parent Tkinter widget.
+        :param child: A buildable widget or a callable returning one.
+        :param state: Optional state notifier with a subscribe(callback) method.
+        """
+        # Ensure child is callable.
         self.child = child if callable(child) else lambda: child
         self.parent = parent
         self.state = state
@@ -17,19 +20,4 @@ class Scaffold:
             self.state.subscribe(lambda: self.build())
 
     def build(self):
-        layout = self.parent.layout()
-
-        # LayoutUtils.clear_layout(layout)
-        widget = self.child().build(parent=self.parent)
-
-        if layout is None:
-            layout = QVBoxLayout(self.parent)
-            layout.setContentsMargins(0, 0, 0, 0)
-            layout.setSpacing(0)
-            self.parent.setLayout(layout)
-            layout.addWidget(widget)
-        else:
-            curr_widget = layout.takeAt(0).widget()
-            layout.addWidget(widget)
-            layout.removeWidget(curr_widget)
-            curr_widget.deleteLater()
+        self.child().build(parent=self.parent)

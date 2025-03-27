@@ -1,81 +1,66 @@
 import uuid
 
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy
+import tkinter as tk
 
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
-from presentation.views.components.layout.events.clickable import ClickableWidget
+from presentation.views.components.layout.padding import Padding
 
 
 class Column(BuildableWidget):
     def __init__(self,
-                 children: list[BuildableWidget],
+                 children: list,
                  background_color=None,
                  spacing=0,
                  on_click=None,
-                 expanded=False,
+                 expand=False,
                  flex=None,
                  width=None,
                  height=None,
-                 padding="0",
-                 content_margin=0,
+                 padding: Padding = None,
                  border_radius=0,
-                 border="transparent",
-                 alignment=Qt.AlignmentFlag.AlignTop):
+                 side=tk.TOP,
+                 anchor=tk.N,
+                 border_color=None,
+                 border_width=1,
+                 alignment="n"):  # "n" for top alignment in Tkinter.
         self.children = children or []
         self.spacing = spacing
         self.flex = flex
         self.on_click = on_click
         self.alignment = alignment
-        self.expanded = expanded
+        self.expand = expand
         self.width = width
         self.height = height
-        self.padding = padding
-        self.border = border
-        self.border_radius = border_radius
+        self.padding = padding or Padding.zero()
+        self.border_color = border_color
+        self.border_width = border_width
+        self.border_radius = border_radius  # Not supported in Tkinter.
         self.background_color = background_color
-        self.name = str(uuid.uuid4().hex)
-
-        if isinstance(content_margin, int):
-            content_margin=(content_margin, content_margin, content_margin, content_margin)
-
-        self.content_margin = content_margin
+        self.side = side
+        self.anchor = anchor
+        self.name = uuid.uuid4().hex
 
     def build(self, parent=None):
-        widget = QWidget(parent)
+        bg = self.background_color or parent["bg"]
+        widget = tk.Frame(parent, bg=bg)
+        widget.pack(
+            fill="both",
+            expand=self.expand,
+            side=self.side,
+            anchor=self.anchor,
+            padx=self.padding.padx,
+            pady=self.padding.pady,
+        )
 
-        if self.on_click:
-            widget = ClickableWidget(parent)
-            widget.clicked.connect(self.on_click)
+        if self.border_color is not None:
+            widget.config(highlightbackground=self.border_color, highlightthickness=self.border_width)
 
-        if self.width is not None:
-            widget.setFixedWidth(self.width)
-        if self.height is not None:
-            widget.setFixedHeight(self.height)
-
-        layout = QVBoxLayout()
-        layout.setSpacing(self.spacing)
-        layout.setAlignment(self.alignment)
-        widget.setLayout(layout)
-        layout.setContentsMargins(*self.content_margin)
-
-        if self.flex:
-            widget.flex = self.flex
-            widget.setSizePolicy(widget.sizePolicy().horizontalPolicy(), QSizePolicy.Policy.Expanding)
-        elif self.expanded:
-            widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Ignored)
-
-        widget.setObjectName(self.name)
-        widget.setStyleSheet(f"""
-            #{self.name} {{
-                border-radius: {self.border_radius}px;
-                border: {self.border};
-                background-color: {self.background_color};
-                padding: {self.padding};
-            }}
-        """)
+        if self.on_click is not None:
+            widget.bind_all("<ButtonPress>", lambda x: self.on_click())
 
         for child in self.children:
-            layout.addWidget(child.build(parent=widget))
+            child.build(widget)
 
+        # If expanded or flex is specified, the parent should handle layout with expand=True.
+        # Here we simply return the widget.
         return widget
