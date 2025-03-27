@@ -55,11 +55,14 @@ class Column(BuildableWidget):
         if self.border_color is not None:
             widget.config(highlightbackground=self.border_color, highlightthickness=self.border_width)
 
-        if self.on_click is not None:
-            widget.bind_all("<ButtonPress>", lambda x: self.on_click())
-
         for child in self.children:
             child.build(widget)
+
+        if self.on_click is not None:
+            widget.bind("<ButtonPress>", lambda x: self.on_click())
+
+            for child in widget.winfo_children():
+                child.bind("<ButtonPress>", lambda x: self.on_click())
 
         # If expanded or flex is specified, the parent should handle layout with expand=True.
         # Here we simply return the widget.
