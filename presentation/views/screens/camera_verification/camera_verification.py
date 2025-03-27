@@ -18,12 +18,12 @@ from presentation.views.components.layout.text import Text
 from presentation.views.components.scaffold.scaffold import Scaffold
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
 from presentation.views.screens.camera_verification.camera_verification_state import CameraVerificationState
-from router import Router
+from application import Application
 from utils.file import FileUtils
 
 
 class CameraVerificationScreen(QWidget):
-    def __init__(self, router: Router, order_intent: NewOrderIntent):
+    def __init__(self, router: Application, order_intent: NewOrderIntent):
         super().__init__()
         router.hide_bg()
         self.router = router
@@ -45,7 +45,7 @@ class CameraVerificationScreen(QWidget):
                     self.get_screen_content(),
                     ImageFromAssets(
                         path=f"./assets/images/fila_botijoes.png",
-                        size=self.router.application.primaryScreen().availableSize().width()
+                        width=self.router.application.primaryScreen().availableSize().width()
                     ),
                 ]
             ),
@@ -60,9 +60,9 @@ class CameraVerificationScreen(QWidget):
                 flex=1,
                 children=[
                     Icon("fa6s.circle-exclamation",
-                         size=70,
+                         width=70,
                          color="#cd5c5c"
-                     ),
+                         ),
                     SizedBox(height=20),
                     Text("Botião Reprovado", font_size=50, color=ColorPalette.blue3),
                     SizedBox(height=20),
@@ -91,7 +91,7 @@ class CameraVerificationScreen(QWidget):
         worker = CameraWorker( )
         worker.signals.result.connect(lambda x: self.handle_camera_callback(x))
 
-        self.router.threadpool.start(worker)
+        self.app.threadpool.start(worker)
 
     def handle_camera_callback(self, passed):
         print(f"camera result {passed}")

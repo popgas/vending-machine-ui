@@ -21,13 +21,11 @@ class Column(BuildableWidget):
                  side=tk.TOP,
                  anchor=tk.N,
                  border_color=None,
-                 border_width=1,
-                 alignment="n"):  # "n" for top alignment in Tkinter.
+                 border_width=1):  # "n" for top alignment in Tkinter.
         self.children = children or []
         self.spacing = spacing
         self.flex = flex
         self.on_click = on_click
-        self.alignment = alignment
         self.expand = expand
         self.width = width
         self.height = height
@@ -42,7 +40,10 @@ class Column(BuildableWidget):
 
     def build(self, parent=None):
         bg = self.background_color or parent["bg"]
-        widget = tk.Frame(parent, bg=bg)
+        widget = tk.Frame(parent,
+                          width=self.width,
+                          height=self.height,
+                          bg=bg)
         widget.pack(
             fill="both",
             expand=self.expand,
@@ -64,6 +65,4 @@ class Column(BuildableWidget):
             for child in widget.winfo_children():
                 child.bind("<ButtonPress>", lambda x: self.on_click())
 
-        # If expanded or flex is specified, the parent should handle layout with expand=True.
-        # Here we simply return the widget.
         return widget

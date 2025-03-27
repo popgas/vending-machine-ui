@@ -2,56 +2,74 @@ from presentation.config.color_palette import ColorPalette
 from presentation.views.components.dialogs.info_dialog import InfoDialog
 from presentation.views.components.layout.column import Column
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
+from presentation.views.components.layout.enums.alignment import Anchor, Side
 from presentation.views.components.layout.icon import Icon
 from presentation.views.components.layout.image import ImageFromAssets
 from presentation.views.components.layout.padding import Padding
 from presentation.views.components.layout.row import Row
+from presentation.views.components.layout.sized_box import SizedBox
 from presentation.views.components.layout.text import Text
-from router import Router
+from application import Application
 from utils.file import FileUtils
 import tkinter as tk
 from tkinter.messagebox import showinfo
 
 
 class TransparentTopBar(BuildableWidget):
-    def __init__(self, router: Router, can_pop=False):
-        self.router = router
+    def __init__(self, app: Application, can_pop=False):
+        self.app = app
         self.can_pop = can_pop
 
     def build(self, parent=None):
         trailing = []
 
-        # if self.can_pop:
-        #     trailing.append(
-        #         Icon("fa6s.arrow-left",
-        #              color=ColorPalette.blue3,
-        #              size=30)
-        #     )
+        if self.can_pop:
+            trailing.append(
+                Icon(
+                    "arrow-left",
+                    anchor=Anchor.LEFT,
+                    width=30,
+                    height=34
+                ),
+            )
+        else:
+            trailing.append(
+                SizedBox(width=30)
+            )
 
         row = Column(
             padding=Padding.all(20),
             children=[
                 Row(
-                    anchor=tk.W,
+                    anchor=Anchor.LEFT,
                     children=[
+                        Row(
+                            children=trailing,
+                            on_click=self.app.pop,
+                            anchor=Anchor.LEFT
+                        ),
                         Row(
                             children=[
                                 ImageFromAssets(
                                     path=f"{FileUtils.root()}/assets/images/colored-logo.png",
-                                    size=80,
-                                    anchor=tk.CENTER,
-                                    padding=Padding(left=80)
+                                    width=80,
+                                    height=45,
+                                    anchor=Anchor.CENTER,
                                 ),
                             ]
                         ),
-                        Column(
+                        Row(
                             children=[
-                                Icon("phone", anchor=tk.CENTER),
-                                Text("Suporte")
-                            ],
-                            on_click=lambda: self.on_click(),
-                            side=tk.RIGHT,
-                            anchor=tk.NE,
+                                Column(
+                                    children=[
+                                        Icon("phone", anchor=tk.CENTER, width=30, height=30),
+                                        Text("Suporte")
+                                    ],
+                                    on_click=lambda: self.on_click(),
+                                    side=Side.RIGHT,
+                                    anchor=Anchor.TOP_RIGHT,
+                                )
+                            ]
                         )
                     ],
                 )
@@ -67,4 +85,4 @@ class TransparentTopBar(BuildableWidget):
         )
 
     def pop_route(self):
-        self.router.pop()
+        self.app.pop()

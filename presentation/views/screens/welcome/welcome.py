@@ -2,25 +2,25 @@ import tkinter as tk
 from presentation.config.color_palette import ColorPalette
 from presentation.views.components.layout.button import Button
 from presentation.views.components.layout.column import Column
+from presentation.views.components.layout.enums.alignment import Anchor
 from presentation.views.components.layout.padding import Padding
 from presentation.views.components.layout.spacer import SpacerVertical
 from presentation.views.components.layout.text import Text
 from presentation.views.components.scaffold.scaffold import Scaffold
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
-from router import Router
+from application import Application
 
 class WelcomeScreen(tk.Frame):
-    def __init__(self, router: Router):
-        super().__init__(router.container, bg="#ECEFF1")
-        self.router = router
+    def __init__(self, app: Application):
+        super().__init__(app.container, bg="#ECEFF1")
 
         Scaffold(
             parent=self,
             child=Column(
                 expand=True,
-                anchor=tk.CENTER,
+                anchor=Anchor.CENTER,
                 children=[
-                    TransparentTopBar(router),
+                    TransparentTopBar(app),
                     Column(
                         expand=True,
                         children=[
@@ -33,11 +33,11 @@ class WelcomeScreen(tk.Frame):
                             Text("24h", font_size=60, color=ColorPalette.blue3),
                             SpacerVertical(),
                         ],
-                        anchor=tk.CENTER,
+                        anchor=Anchor.CENTER,
                     ),
                     Button(
                         label="Toque para Iniciar",
-                        on_click=lambda: router.push('product_selection'),
+                        on_click=lambda: app.push('product_selection'),
                         background_color=ColorPalette.blue3,
                         pressed_background_color=ColorPalette.blue2,
                         pressed_color="#fff",

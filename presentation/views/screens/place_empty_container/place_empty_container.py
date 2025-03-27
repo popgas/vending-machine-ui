@@ -1,136 +1,129 @@
-from PyQt6.QtCore import Qt, QTimer
-from PyQt6.QtWidgets import QWidget
+import tkinter as tk
 
+from application import Application
 from infrastructure.hardware.audio import AudioWorker
 from infrastructure.hardware.gpio import GpioWorker
 from presentation.abstractions.new_order_intent import NewOrderIntent
 from presentation.config.color_palette import ColorPalette
 from presentation.views.components.layout.column import Column
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
-from presentation.views.components.layout.icon import Icon
+from presentation.views.components.layout.enums.alignment import Fill
 from presentation.views.components.layout.image import ImageFromAssets
+from presentation.views.components.layout.padding import Padding
 from presentation.views.components.layout.row import Row
 from presentation.views.components.layout.sized_box import SizedBox
-from presentation.views.components.layout.spacer import SpacerHorizontal
-from presentation.views.components.layout.spinner import Spinner
+from presentation.views.components.layout.spacer import SpacerVertical
 from presentation.views.components.layout.text import Text
 from presentation.views.components.scaffold.scaffold import Scaffold
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
 from presentation.views.screens.place_empty_container.place_empty_container_state import PlaceEmptyContainerState
-from router import Router
 from utils.file import FileUtils
 
 
-class PlaceEmptyContainerScreen(QWidget):
-    def __init__(self, router: Router, order_intent: NewOrderIntent):
-        super().__init__()
-        router.hide_bg()
-        self.router = router
+class PlaceEmptyContainerScreen(tk.Frame):
+    def __init__(self, app: Application, order_intent: NewOrderIntent):
+        super().__init__(app.container, bg="#ECEFF1")
+        self.app = app
         self.order_intent = order_intent
         self.curr_dir = FileUtils.dir(__file__)
         self.state = PlaceEmptyContainerState()
-        self.timer = QTimer()
-        self.timer.setInterval(1000)
-        self.timer.timeout.connect(self.handle_timer)
-        self.timer.start()
+        self.app.after(1000, self.handle_timer)
+        # self.timer = QTimer()
+        # self.timer.setInterval(1000)
+        # self.timer.timeout.connect(self.handle_timer)
+        # self.timer.start()
 
         Scaffold(
             parent=self,
             state=self.state,
             child=lambda: Column(
-                content_margin=30,
+                padding=Padding.all(30),
+                expand=True,
                 children=[
-                    TransparentTopBar(router, can_pop=False),
+                    TransparentTopBar(app, can_pop=False),
                     Column(
-                        flex=1,
+                        expand=True,
                         children=[
+                            SpacerVertical(),
                             Text("Insira seu botijão vazio", font_size=50, color=ColorPalette.blue3),
                             SizedBox(height=20),
-                            Text("Coloque seu botijão vazio na porta que se abriu e afaste-se", font_size=30,
-                                 alignment=Qt.AlignmentFlag.AlignCenter),
+                            Text("Coloque seu botijão vazio na porta que se abriu e afaste-se", font_size=30),
                             *self.get_timer_text(),
                             SizedBox(height=40),
-                            Row(
+                            Column(
+                                expand=True,
                                 children=[
-                                    Column(
-                                        content_margin=30,
-                                        background_color="#ffffff",
-                                        border_radius=10,
-                                        border="1px solid #ccc",
+                                    Row(
                                         children=[
                                             ImageFromAssets(
                                                 path=f"{self.curr_dir}/assets/instrucoes_colocar_botijao.png",
-                                                size=300,
+                                                width=int(252 * 1.3),
+                                                height=int(310 * 1.3),
+                                                padding=Padding.all(30),
                                             ),
-                                        ]
+                                        ],
+                                        background_color="#ffffff",
+                                        border_radius=10,
+                                        border_color="#ccc",
+                                        fill=Fill.NONE,
                                     )
-                                ],
-                                alignment=Qt.AlignmentFlag.AlignCenter,
+                                ]
                             ),
                             SizedBox(height=40),
                             self.get_button_or_closing_door_spinner(),
                         ],
-                        alignment=Qt.AlignmentFlag.AlignCenter
+                        # alignment=Qt.AlignmentFlag.AlignCenter
                     ),
                 ]
             ),
         )
 
-        AudioWorker.delayed(f"{self.curr_dir}/assets/audio.mp3")
-        QTimer.singleShot(150, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
+        AudioWorker.play(f"{self.curr_dir}/assets/audio.mp3")
+        self.app.after(150, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
 
     def go_to_camera_verification_part1(self):
         self.state.update(closing_door=True, timer_reached_zero=True)
-        self.timer.stop()
-        QTimer.singleShot(150, self.go_to_camera_verification_part2)
+        self.app.after(150, self.go_to_camera_verification_part2)
 
     def go_to_camera_verification_part2(self):
-        AudioWorker.delayed(f"{self.curr_dir}/assets/door_will_close.mp3")
-        QTimer.singleShot(5 * 1000, lambda: GpioWorker.activate(self.order_intent.get_close_door_pin()))
-        QTimer.singleShot(10 * 1000, self.go_to_camera_verification_part3)
+        AudioWorker.play(f"{self.curr_dir}/assets/door_will_close.mp3")
+        self.app.after(5 * 1000, lambda: GpioWorker.activate(self.order_intent.get_close_door_pin()))
+        self.app.after(10 * 1000, self.go_to_camera_verification_part3)
 
     def go_to_camera_verification_part3(self):
         self.state.update(closing_door=False)
-        self.router.push('camera_verification', self.order_intent)
+        self.app.push('camera_verification', self.order_intent)
 
     def get_button_or_closing_door_spinner(self):
         if self.state.closing_door:
             return Column(
                 children=[
-                    Spinner(size=70),
+                    # Spinner(size=70),
                     Text("Fechando porta, afaste-se por favor!",
                          font_size=30,
-                         alignment=Qt.AlignmentFlag.AlignCenter,
+                         # alignment=Qt.AlignmentFlag.AlignCenter,
                          color="#333"),
                 ]
             )
 
-        return Row(
+        return Column(
             children=[
                 Row(
                     children=[
-                        SizedBox(width=10),
                         Text("Pronto. Já coloquei meu botijão",
                              font_size=30,
-                             alignment=Qt.AlignmentFlag.AlignLeft,
+                             padding=Padding.all(30),
                              color="#fff"),
-                        SpacerHorizontal(),
-                        Icon("fa6s.arrow-right",
-                             alignment=Qt.AlignmentFlag.AlignCenter,
-                             size=40,
-                             color="#fff"),
-                        SizedBox(width=10),
                     ],
                     width=600,
                     height=100,
                     background_color=ColorPalette.blue3,
                     border_radius=5,
-                    border="1px solid #ccc",
+                    border_color="#ccc",
+                    fill=Fill.NONE,
                     on_click=self.go_to_camera_verification_part1,
-                    alignment=Qt.AlignmentFlag.AlignCenter,
                 )
             ],
-            alignment=Qt.AlignmentFlag.AlignCenter,
         )
 
     def on_route_popped(self):
@@ -139,20 +132,24 @@ class PlaceEmptyContainerScreen(QWidget):
             timer_reached_zero=False,
             time_to_close_door_automatically=120
         )
-        self.timer.start()
+        self.handle_timer()
 
     def handle_timer(self):
+        if self.state.timer_reached_zero:
+            return
+
         if self.state.time_to_close_door_automatically == 1:
-            self.timer.stop()
             self.state.update(timer_reached_zero=True)
-            AudioWorker.delayed(f"{self.curr_dir}/assets/door_open_idle.mp3")
-            QTimer.singleShot(5 * 1000, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
-            QTimer.singleShot(10 * 1000, lambda: self.router.off_all("welcome"))
+            AudioWorker.play(f"{self.curr_dir}/assets/door_open_idle.mp3")
+            self.app.after(5* 1000, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
+            # QTimer.singleShot(5 * 1000, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
+            self.app.after(10 * 1000, lambda: self.app.off_all("welcome"))
             return
 
         self.state.update(
             time_to_close_door_automatically=self.state.time_to_close_door_automatically - 1
         )
+        self.app.after(1000, self.handle_timer)
 
     def get_timer_text(self) -> list[BuildableWidget]:
         if self.state.timer_reached_zero:

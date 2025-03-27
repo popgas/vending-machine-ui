@@ -16,12 +16,12 @@ from presentation.views.components.layout.sized_box import SizedBox
 from presentation.views.components.layout.text import Text
 from presentation.views.components.scaffold.scaffold import Scaffold
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
-from router import Router
+from application import Application
 from utils.file import FileUtils
 
 
 class PaymentSelectionScreen(QWidget):
-    def __init__(self, router: Router, order_intent: NewOrderIntent):
+    def __init__(self, router: Application, order_intent: NewOrderIntent):
         super().__init__()
         router.show_bg()
         self.order_intent = order_intent
@@ -52,7 +52,7 @@ class PaymentSelectionScreen(QWidget):
                                     self.payment_button(
                                         image=ImageFromAssets(
                                             path=f"{self.curr_dir}/assets/cartao.png",
-                                            size=50,
+                                            width=50,
                                         ),
                                         title="Cartão de Débito",
                                         onclick=lambda: self.debit_card()
@@ -61,7 +61,7 @@ class PaymentSelectionScreen(QWidget):
                                     self.payment_button(
                                         image=ImageFromAssets(
                                             path=f"{self.curr_dir}/assets/cartao.png",
-                                            size=50,
+                                            width=50,
                                         ),
                                         title="Cartão de Crédito",
                                         onclick=lambda: self.credit_card()
@@ -70,7 +70,7 @@ class PaymentSelectionScreen(QWidget):
                                     self.payment_button(
                                         image=ImageFromAssets(
                                             path=f"{self.curr_dir}/assets/pix.png",
-                                            size=50,
+                                            width=50,
                                         ),
                                         title="PIX",
                                         onclick=lambda: self.pix_machine()

@@ -14,12 +14,12 @@ from presentation.views.components.layout.spinner import Spinner
 from presentation.views.components.layout.text import Text
 from presentation.views.components.scaffold.scaffold import Scaffold
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
-from router import Router
+from application import Application
 from utils.file import FileUtils
 
 
 class PreparingOrderScreen(QWidget):
-    def __init__(self, router: Router, order_intent: NewOrderIntent):
+    def __init__(self, router: Application, order_intent: NewOrderIntent):
         super().__init__()
         self.router = router
         self.curr_dir = FileUtils.dir(__file__)
@@ -44,7 +44,7 @@ class PreparingOrderScreen(QWidget):
                     SizedBox(height=40),
                     ImageFromAssets(
                         path=f"./assets/images/fila_botijoes.png",
-                        size=self.router.application.primaryScreen().availableSize().width()
+                        width=self.router.application.primaryScreen().availableSize().width()
                     ),
                 ]
             ),

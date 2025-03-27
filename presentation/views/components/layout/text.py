@@ -6,7 +6,6 @@ from presentation.views.components.layout.padding import Padding
 class Text:
     def __init__(self,
                  label="Label",
-                 alignment="center",  # Default to "center". Qt's AlignCenter is replaced with "center".
                  color=None,
                  font_family=None,
                  padding: Padding = None,
@@ -15,7 +14,6 @@ class Text:
                  font_size=13):
         self.label = label
         self.color = color or ColorPalette.textColor  # Use default text color.
-        self.alignment = alignment
         self.font_size = font_size
         self.font_family = font_family or "Helvetica"
         self.padding = padding or Padding.zero()

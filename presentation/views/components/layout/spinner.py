@@ -1,5 +1,5 @@
-from PyQt6.QtCore import Qt, QSize
-import qtawesome as qta
+# from PyQt6.QtCore import Qt, QSize
+# import qtawesome as qta
 
 from presentation.config.color_palette import ColorPalette
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget

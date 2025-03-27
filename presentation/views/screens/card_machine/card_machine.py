@@ -21,12 +21,12 @@ from presentation.views.components.layout.text import Text
 from presentation.views.components.scaffold.scaffold import Scaffold
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
 from presentation.views.screens.card_machine.card_machine_state import CardMachineState
-from router import Router
+from application import Application
 from utils.file import FileUtils
 
 
 class CardMachineScreen(QWidget):
-    def __init__(self, router: Router, order_intent: NewOrderIntent):
+    def __init__(self, router: Application, order_intent: NewOrderIntent):
         super().__init__()
         router.hide_bg()
         self.curr_dir = FileUtils.dir(__file__)
@@ -57,7 +57,7 @@ class CardMachineScreen(QWidget):
                             SizedBox(height=40),
                             ImageFromAssets(
                                 path=f"./assets/images/fila_botijoes.png",
-                                size=self.router.application.primaryScreen().availableSize().width()
+                                width=self.router.application.primaryScreen().availableSize().width()
                             ),
                         ],
                         alignment=Qt.AlignmentFlag.AlignCenter
@@ -83,7 +83,7 @@ class CardMachineScreen(QWidget):
     def get_content(self) -> list[BuildableWidget]:
         if self.state.rejected:
             return [
-                Icon("fa6s.circle-exclamation", size=70, color="#cd5c5c"),
+                Icon("fa6s.circle-exclamation", width=70, color="#cd5c5c"),
                 SizedBox(height=20),
                 Text("Pagamento Recusado", font_size=50, color=ColorPalette.blue3),
                 SizedBox(height=20),

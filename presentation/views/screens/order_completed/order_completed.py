@@ -19,12 +19,12 @@ from presentation.views.components.layout.text import Text
 from presentation.views.components.scaffold.scaffold import Scaffold
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
 from presentation.views.screens.order_completed.order_completed_state import OrderCompletedState
-from router import Router
+from application import Application
 from utils.file import FileUtils
 
 
 class OrderCompletedScreen(QWidget):
-    def __init__(self, router: Router, order_intent: NewOrderIntent):
+    def __init__(self, router: Application, order_intent: NewOrderIntent):
         super().__init__()
         router.show_bg()
         self.router = router
@@ -46,7 +46,7 @@ class OrderCompletedScreen(QWidget):
                                 children=[
                                     ImageFromAssets(
                                         path=f"{self.curr_dir}/assets/confetti.png",
-                                        size=130,
+                                        width=130,
                                     ),
                                 ],
                                 alignment=Qt.AlignmentFlag.AlignCenter
@@ -115,7 +115,7 @@ class OrderCompletedScreen(QWidget):
                                     Text("Seu feedback foi enviado, muito obrigado!", font_size=35,
                                          color=ColorPalette.blue3),
                                     SizedBox(height=35),
-                                    Icon("fa6s.circle-check", color=ColorPalette.green1, size=70),
+                                    Icon("fa6s.circle-check", color=ColorPalette.green1, width=70),
                                 ],
                             )
                         ],
@@ -135,7 +135,7 @@ class OrderCompletedScreen(QWidget):
                     children=[
                         ImageFromAssets(
                             path=f"{self.curr_dir}/assets/{image}",
-                            size=40,
+                            width=40,
                         ),
                     ],
                     alignment=Qt.AlignmentFlag.AlignCenter

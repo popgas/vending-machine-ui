@@ -14,10 +14,14 @@ class Scaffold:
         self.child = child if callable(child) else lambda: child
         self.parent = parent
         self.state = state
+        self.widget = None
         self.build()
 
         if self.state is not None:
             self.state.subscribe(lambda: self.build())
 
     def build(self):
-        self.child().build(parent=self.parent)
+        if self.widget is not None:
+            self.widget.destroy()
+
+        self.widget = self.child().build(parent=self.parent)

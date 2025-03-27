@@ -1,9 +1,7 @@
 import tkinter as tk
 
-from PIL.ImageOps import expand
 
-
-class Router(tk.Tk):
+class Application(tk.Tk):
     def __init__(self, routes: dict[str, callable]):
         super().__init__()
         self.title("Navigation Stack Example")

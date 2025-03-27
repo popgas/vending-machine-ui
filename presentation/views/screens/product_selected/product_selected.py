@@ -8,6 +8,7 @@ from presentation.abstractions.new_order_intent import NewOrderIntent
 from presentation.config.color_palette import ColorPalette
 from presentation.views.components.layout.column import Column
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
+from presentation.views.components.layout.enums.alignment import Side, Anchor
 from presentation.views.components.layout.padding import Padding
 from presentation.views.components.layout.row import Row
 from presentation.views.components.layout.sized_box import SizedBox
@@ -15,13 +16,13 @@ from presentation.views.components.layout.spacer import SpacerHorizontal, Spacer
 from presentation.views.components.layout.text import Text
 from presentation.views.components.scaffold.scaffold import Scaffold
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
-from router import Router
+from application import Application
 from utils.file import FileUtils
 from utils.formatter import Formatter
 
 
 class ProductSelectionScreen(tk.Frame):
-    def __init__(self, router: Router):
+    def __init__(self, router: Application):
         super().__init__(router.container, bg="#ECEFF1")
         self.router = router
 
@@ -97,19 +98,19 @@ class ProductSelectionScreen(tk.Frame):
                             children=[
                                 Text(title,
                                      font_size=30,
-                                     anchor=tk.W,
+                                     anchor=Anchor.LEFT,
                                      color=ColorPalette.blue3),
                                 SizedBox(height=5),
                                 Text(caption,
                                      color=ColorPalette.neutralPrimary,
                                      font_size=25),
                             ],
-                            side=tk.LEFT,
+                            side=Side.LEFT,
                         ),
                         SpacerHorizontal(),
                         Text(price,
                              color=ColorPalette.blue3,
-                             anchor=tk.NE,
+                             anchor=Anchor.TOP_RIGHT,
                              padding=Padding(bottom=15),
                              font_size=40),
                     ]
