@@ -7,8 +7,9 @@ from presentation.abstractions.new_order_intent import NewOrderIntent
 from presentation.config.color_palette import ColorPalette
 from presentation.views.components.layout.column import Column
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
-from presentation.views.components.layout.enums.alignment import Fill
-from presentation.views.components.layout.image import ImageFromAssets
+from presentation.views.components.layout.enums.alignment import Fill, Anchor, Side
+from presentation.views.components.layout.icon import Icon
+from presentation.views.components.layout.image import ImageFromAssets, CircularSpinner
 from presentation.views.components.layout.padding import Padding
 from presentation.views.components.layout.row import Row
 from presentation.views.components.layout.sized_box import SizedBox
@@ -45,11 +46,11 @@ class PlaceEmptyContainerScreen(tk.Frame):
                         expand=True,
                         children=[
                             SpacerVertical(),
-                            Text("Insira seu botijão vazio", font_size=50, color=ColorPalette.blue3),
+                            Text("Insira seu botijão vazio", font_size=40, color=ColorPalette.blue3),
                             SizedBox(height=20),
-                            Text("Coloque seu botijão vazio na porta que se abriu e afaste-se", font_size=30),
+                            Text("Coloque seu botijão vazio na porta que se abriu e afaste-se", font_size=25),
                             *self.get_timer_text(),
-                            SizedBox(height=40),
+                            SizedBox(height=30),
                             Column(
                                 expand=True,
                                 children=[
@@ -57,8 +58,8 @@ class PlaceEmptyContainerScreen(tk.Frame):
                                         children=[
                                             ImageFromAssets(
                                                 path=f"{self.curr_dir}/assets/instrucoes_colocar_botijao.png",
-                                                width=int(252 * 1.3),
-                                                height=int(310 * 1.3),
+                                                width=int(252 * 1.1),
+                                                height=int(310 * 1.1),
                                                 padding=Padding.all(30),
                                             ),
                                         ],
@@ -79,7 +80,7 @@ class PlaceEmptyContainerScreen(tk.Frame):
         )
 
         AudioWorker.play(f"{self.curr_dir}/assets/audio.mp3")
-        self.app.after(150, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
+        GpioWorker.activate(self.order_intent.get_open_door_pin())
 
     def go_to_camera_verification_part1(self):
         self.state.update(closing_door=True, timer_reached_zero=True)
@@ -97,8 +98,10 @@ class PlaceEmptyContainerScreen(tk.Frame):
     def get_button_or_closing_door_spinner(self):
         if self.state.closing_door:
             return Column(
+                padding=Padding(bottom=30),
                 children=[
-                    # Spinner(size=70),
+                    CircularSpinner(root=self.app, side=Side.TOP, anchor=Anchor.CENTER),
+                    SizedBox(height=20),
                     Text("Fechando porta, afaste-se por favor!",
                          font_size=30,
                          # alignment=Qt.AlignmentFlag.AlignCenter,
@@ -111,12 +114,13 @@ class PlaceEmptyContainerScreen(tk.Frame):
                 Row(
                     children=[
                         Text("Pronto. Já coloquei meu botijão",
-                             font_size=30,
+                             font_size=20,
                              padding=Padding.all(30),
+                             side=Side.LEFT,
+                             anchor=Anchor.LEFT,
                              color="#fff"),
+                        Icon("arrow-right-white", anchor=Anchor.RIGHT, width=30, height=34, padding=Padding.all(30)),
                     ],
-                    width=600,
-                    height=100,
                     background_color=ColorPalette.blue3,
                     border_radius=5,
                     border_color="#ccc",
@@ -141,7 +145,7 @@ class PlaceEmptyContainerScreen(tk.Frame):
         if self.state.time_to_close_door_automatically == 1:
             self.state.update(timer_reached_zero=True)
             AudioWorker.play(f"{self.curr_dir}/assets/door_open_idle.mp3")
-            self.app.after(5* 1000, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
+            self.app.after(5 * 1000, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
             # QTimer.singleShot(5 * 1000, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
             self.app.after(10 * 1000, lambda: self.app.off_all("welcome"))
             return
@@ -158,6 +162,6 @@ class PlaceEmptyContainerScreen(tk.Frame):
         return [
             SizedBox(height=20),
             Text(f"A porta irá fechar automaticamente em {self.state.time_to_close_door_automatically} segundo(s)...",
-                 font_size=18),
+                 font_size=15),
         ]
 

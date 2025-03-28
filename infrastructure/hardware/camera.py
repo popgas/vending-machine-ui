@@ -1,45 +1,69 @@
 import glob
+from typing import Callable
 
 import cv2
-from PyQt6.QtCore import QRunnable, pyqtSlot, pyqtSignal, QObject
+import rx
+from rx.core.typing import Observer, T_in
+from rx.scheduler import ThreadPoolScheduler
 
 from infrastructure.observability.logger import Logger
 
+class CameraResult:
+    def __init__(self, best_score=0, best_score_image=None):
+        self.best_score = best_score
+        self.best_score_image = best_score_image
 
-class CameraWorker(QRunnable):
-    def __init__(self):
+class CameraWorker(Observer):
+    pool_scheduler = ThreadPoolScheduler(1)
+
+    def __init__(self, on_completed):
         super().__init__()
+        self.on_completed = on_completed
+        self.result = CameraResult()
         self.logger = Logger.get_logger()
-        self.signals = CameraSignals()
 
-    @pyqtSlot()
-    def run(self):
+    def on_next(self, value: T_in) -> None:
         try:
             security_images = self.load_security_images()
             photo = self.take_photo()
 
-            is_eligible = self.is_eligible(photo, security_images)
-
-            self.signals.result.emit(is_eligible)
+            self.result = self.is_eligible(photo, security_images)
 
         except Exception as e:
             print(e)
-            self.signals.result.emit(False)
 
-    def is_eligible(self, photo, security_images):
-        best_score = 0
+    def on_error(self, error: Exception) -> None:
+        print(error)
+
+    def on_completed(self) -> None:
+        self.on_completed(self.result)
+
+    @staticmethod
+    def start(on_completed: Callable[[CameraResult], None]):
+        camera = CameraWorker(on_completed=on_completed)
+
+        rx.just(scheduler=CameraWorker.pool_scheduler).subscribe(camera)
+
+    def is_eligible(self, photo, security_images) -> CameraResult:
+        result = CameraResult(
+            best_score=0,
+            best_score_image=None,
+        )
 
         for idx, fixed_image in enumerate(security_images):
             score = self.compare_images(photo, fixed_image)
 
             print(f"score: {score}")
 
-            if score > best_score:
-                best_score = score
+            if score > result.best_score:
+                result = CameraResult(
+                    best_score=score,
+                    best_score_image=fixed_image,
+                )
 
-        print(f"final score: {best_score}")
+        print(f"final score: {result.best_score}")
 
-        return best_score >= 50
+        return result
 
     def to_gray(self, image):
         # Check if the image is already grayscale
@@ -109,7 +133,3 @@ class CameraWorker(QRunnable):
             self.logger.warning("Nenhuma imagem válida foi encontrada na pasta.")
 
         return images
-
-
-class CameraSignals(QObject):
-    result = pyqtSignal(bool)

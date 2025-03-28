@@ -22,9 +22,9 @@ from utils.formatter import Formatter
 
 
 class ProductSelectionScreen(tk.Frame):
-    def __init__(self, router: Application):
-        super().__init__(router.container, bg="#ECEFF1")
-        self.router = router
+    def __init__(self, app: Application):
+        super().__init__(app.container, bg="#ECEFF1")
+        self.app = app
 
         self.prices = self.get_prices()
 
@@ -36,7 +36,7 @@ class ProductSelectionScreen(tk.Frame):
             child=Column(
                 expand=True,
                 children=[
-                    TransparentTopBar(router, can_pop=True),
+                    TransparentTopBar(app, can_pop=True),
                     Column(
                         expand=True,
                         children=[
@@ -61,6 +61,7 @@ class ProductSelectionScreen(tk.Frame):
             ),
         )
 
+
         AudioWorker.play(f"{FileUtils.dir(__file__)}/assets/audio.mp3")
 
     def go_to_place_container_screen(self):
@@ -70,7 +71,7 @@ class ProductSelectionScreen(tk.Frame):
             stockCount=int(self.prices['container_full_stock_count']),
         )
 
-        self.router.push('place_empty_container', order_intent)
+        self.app.push('place_empty_container', order_intent)
         return
 
     def go_to_payment_selection_screen(self):
@@ -80,7 +81,7 @@ class ProductSelectionScreen(tk.Frame):
             stockCount=int(self.prices['container_full_stock_count']),
         )
 
-        self.router.push('payment_selection', order_intent)
+        self.app.push('payment_selection', order_intent)
         return
 
     def product_button(self, title, caption, price, onclick) -> BuildableWidget:

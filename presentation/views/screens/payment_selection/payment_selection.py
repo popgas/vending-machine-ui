@@ -1,18 +1,17 @@
-import os
-
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QWidget
+import tkinter as tk
 
 from domains.enums.order_product_selected import OrderProductSelected
 from infrastructure.hardware.audio import AudioWorker
-from infrastructure.http.popgas_api import PopGasApi
 from presentation.abstractions.new_order_intent import NewOrderIntent
 from presentation.config.color_palette import ColorPalette
 from presentation.views.components.layout.column import Column
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
+from presentation.views.components.layout.enums.alignment import Side, Anchor, Fill
 from presentation.views.components.layout.image import ImageFromAssets
+from presentation.views.components.layout.padding import Padding
 from presentation.views.components.layout.row import Row
 from presentation.views.components.layout.sized_box import SizedBox
+from presentation.views.components.layout.spacer import SpacerVertical
 from presentation.views.components.layout.text import Text
 from presentation.views.components.scaffold.scaffold import Scaffold
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
@@ -20,65 +19,64 @@ from application import Application
 from utils.file import FileUtils
 
 
-class PaymentSelectionScreen(QWidget):
-    def __init__(self, router: Application, order_intent: NewOrderIntent):
-        super().__init__()
-        router.show_bg()
+class PaymentSelectionScreen(tk.Frame):
+    def __init__(self, app: Application, order_intent: NewOrderIntent):
+        super().__init__(app.container, bg="#ECEFF1")
         self.order_intent = order_intent
-        self.router = router
+        self.app = app
         self.curr_dir = FileUtils.dir(__file__)
 
-        button_width = int(self.router.application.primaryScreen().availableSize().width() * 0.7)
         can_pop = order_intent.productSelected == OrderProductSelected.gasWithContainer
-        print(order_intent.productSelected)
-        print(OrderProductSelected.gasWithContainer)
-        print(can_pop)
 
         Scaffold(
             parent=self,
             child=Column(
-                flex=1,
-                content_margin=30,
+                expand=True,
+                padding=Padding.all(30),
                 children=[
-                    TransparentTopBar(router, can_pop=can_pop),
+                    TransparentTopBar(app, can_pop=can_pop),
                     Column(
-                        flex=1,
+                        expand=True,
                         children=[
-                            Text("Selecione a forma de pagamento", font_size=50, color=ColorPalette.blue3),
+                            SpacerVertical(),
+                            Text("Selecione a forma de pagamento", font_size=40, color=ColorPalette.blue3),
                             SizedBox(height=100),
                             Column(
-                                width=button_width,
+                                expand=True,
                                 children=[
                                     self.payment_button(
                                         image=ImageFromAssets(
                                             path=f"{self.curr_dir}/assets/cartao.png",
-                                            width=50,
+                                            width=58,
+                                            height=57,
                                         ),
                                         title="Cartão de Débito",
                                         onclick=lambda: self.debit_card()
                                     ),
-                                    SizedBox(height=30),
+                                    SizedBox(height=10),
                                     self.payment_button(
                                         image=ImageFromAssets(
                                             path=f"{self.curr_dir}/assets/cartao.png",
-                                            width=50,
+                                            width=58,
+                                            height=57,
                                         ),
                                         title="Cartão de Crédito",
                                         onclick=lambda: self.credit_card()
                                     ),
-                                    SizedBox(height=30),
+                                    SizedBox(height=10),
                                     self.payment_button(
                                         image=ImageFromAssets(
                                             path=f"{self.curr_dir}/assets/pix.png",
-                                            width=50,
+                                            width=58,
+                                            height=57,
                                         ),
                                         title="PIX",
                                         onclick=lambda: self.pix_machine()
                                     ),
-                                ]
-                            )
+                                ],
+                            ),
+                            SpacerVertical(),
                         ],
-                        alignment=Qt.AlignmentFlag.AlignCenter
                     ),
                 ]
             )
@@ -88,41 +86,46 @@ class PaymentSelectionScreen(QWidget):
 
     def payment_button(self, image, title, onclick) -> BuildableWidget:
         return Row(
-            content_margin=20,
+            expand=True,
+            side=Side.TOP,
+            fill=Fill.NONE,
             children=[
-                image,
-                SizedBox(width=10),
-                Column(
-                    content_margin=(0, 5, 0, 0),
+                Row(
+                    width=600,
+                    height=100,
                     children=[
+                        SizedBox(width=30),
+                        image,
+                        SizedBox(width=20),
                         Text(title,
-                             font_size=30,
-                             alignment=Qt.AlignmentFlag.AlignLeft,
+                             font_size=24,
+                             side=Side.LEFT,
+                             anchor=Anchor.RIGHT,
                              color="#fff"),
-                    ]
+                    ],
+                    background_color=ColorPalette.blue3,
+                    border_radius=8,
+                    fill=Fill.X,
+                    border_color="#ccc",
+                    on_click=onclick,
                 )
-            ],
-            background_color=ColorPalette.blue3,
-            border_radius=8,
-            border="1px solid #ccc",
-            on_click=onclick,
-            alignment=Qt.AlignmentFlag.AlignVCenter,
+            ]
         )
 
     def debit_card(self):
         AudioWorker.stop()
-        self.router.push('card_machine', self.order_intent.copy_with(
+        self.app.push('card_machine', self.order_intent.copy_with(
             paymentMethodId=2
         ))
 
     def credit_card(self):
         AudioWorker.stop()
-        self.router.push('card_machine', self.order_intent.copy_with(
+        self.app.push('card_machine', self.order_intent.copy_with(
             paymentMethodId=3
         ))
 
     def pix_machine(self):
         AudioWorker.stop()
-        self.router.push('card_machine', self.order_intent.copy_with(
+        self.app.push('card_machine', self.order_intent.copy_with(
             paymentMethodId=5
         ))

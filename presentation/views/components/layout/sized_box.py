@@ -1,5 +1,6 @@
 import tkinter as tk
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
+from presentation.views.components.layout.enums.alignment import Side
 
 
 class SizedBox(BuildableWidget):
@@ -11,6 +12,7 @@ class SizedBox(BuildableWidget):
         widget = tk.Frame(parent, bg=parent["bg"], width=self.width, height=self.height)
         widget.pack(
             fill="both",
+            side=Side.LEFT if self.width > 0 else Side.TOP,
         )
 
         return widget

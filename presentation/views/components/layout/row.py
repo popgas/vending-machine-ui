@@ -13,8 +13,8 @@ class Row(BuildableWidget):
                  border_radius=0,
                  flex=None,
                  on_click=None,
-                 width=None,
-                 height=None,
+                 width=0,
+                 height=0,
                  expand=True,
                  background_color=None,
                  border_color=None,
@@ -52,6 +52,9 @@ class Row(BuildableWidget):
             padx=self.padding.padx,
             pady=self.padding.pady,
         )
+
+        if self.width > 0 or self.height > 0:
+            widget.pack_propagate(0)
 
         if self.border_color is not None:
             widget.config(highlightbackground=self.border_color, highlightthickness=self.border_width)

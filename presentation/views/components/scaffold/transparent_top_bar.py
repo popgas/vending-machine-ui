@@ -54,7 +54,9 @@ class TransparentTopBar(BuildableWidget):
                                     path=f"{FileUtils.root()}/assets/images/colored-logo.png",
                                     width=80,
                                     height=45,
+                                    side=Side.TOP,
                                     anchor=Anchor.CENTER,
+                                    padding=Padding(left=30),
                                 ),
                             ]
                         ),
@@ -62,7 +64,7 @@ class TransparentTopBar(BuildableWidget):
                             children=[
                                 Column(
                                     children=[
-                                        Icon("phone", anchor=tk.CENTER, width=30, height=30),
+                                        Icon("phone", anchor=tk.CENTER, width=30, height=30, side=Side.TOP),
                                         Text("Suporte")
                                     ],
                                     on_click=lambda: self.on_click(),

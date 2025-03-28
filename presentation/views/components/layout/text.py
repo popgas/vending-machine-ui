@@ -1,5 +1,6 @@
 import tkinter as tk
 from presentation.config.color_palette import ColorPalette  # Assumes ColorPalette.textColor is defined.
+from presentation.views.components.layout.enums.alignment import Side, Anchor
 from presentation.views.components.layout.padding import Padding
 
 
@@ -9,8 +10,8 @@ class Text:
                  color=None,
                  font_family=None,
                  padding: Padding = None,
-                 side=tk.TOP,
-                 anchor=tk.CENTER,
+                 side=Side.TOP,
+                 anchor=Anchor.CENTER,
                  font_size=13):
         self.label = label
         self.color = color or ColorPalette.textColor  # Use default text color.
