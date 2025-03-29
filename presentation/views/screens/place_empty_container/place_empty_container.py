@@ -162,7 +162,7 @@ class PlaceEmptyContainerScreen(tk.Frame):
         AudioWorker.play(f"{self.curr_dir}/assets/place_container_cancellation.mp3")
         self.state.update(cancelling=True)
         self.cancel_timer()
-        self.app.after(7 * 1000, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
+        self.app.after(7 * 1000, lambda: GpioWorker.activate(self.order_intent.get_close_door_pin()))
         self.app.after(12 * 1000, lambda: self.app.off_all("welcome"))
 
     def on_route_popped(self):
