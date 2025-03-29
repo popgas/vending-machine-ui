@@ -115,7 +115,7 @@ class ProductSelectionScreen(tk.Frame):
                              color=ColorPalette.blue3,
                              anchor=Anchor.TOP_RIGHT,
                              padding=Padding(bottom=15),
-                             font_size=40),
+                             font_size=30),
                     ],
                     on_click=onclick,
                 )
