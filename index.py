@@ -1,4 +1,6 @@
+from domains.enums.order_product_selected import OrderProductSelected
 from infrastructure.hardware.gpio import GpioWorker
+from presentation.abstractions.new_order_intent import NewOrderIntent
 from presentation.views.screens.camera_verification.camera_verification import CameraVerificationScreen
 from presentation.views.screens.card_machine.card_machine import CardMachineScreen
 from presentation.views.screens.order_completed.order_completed import OrderCompletedScreen
@@ -27,5 +29,12 @@ if __name__ == '__main__':
     app.wm_iconphoto(False, photo)
 
     app.attributes("-fullscreen", True)
-    app.push("welcome")
+    app.push("order_completed", NewOrderIntent(
+        productSelected=OrderProductSelected.onlyGasRefill,
+        productPrice=100,
+        stockCount=40,
+        paymentMethodId=5,
+        correlationId="1234"
+    ))
+    # app.push("welcome")
     app.mainloop()

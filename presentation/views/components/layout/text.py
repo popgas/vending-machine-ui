@@ -27,7 +27,8 @@ class Text(BuildableWidget):
             label = tk.Label(parent,
                              bg=parent["bg"],
                              fg=self.color,
-                             text=self.label,
+                             text=self.label if isinstance(self.label, str) else None,
+                             textvariable=self.label if isinstance(self.label, tk.StringVar) else None,
                              font=("Helvetica", self.font_size))
             label.pack(
                 side=self.side or parent['side'],

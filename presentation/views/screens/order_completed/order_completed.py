@@ -49,25 +49,13 @@ class OrderCompletedScreen(tkinter.Frame):
                         anchor=Anchor.CENTER
                     ),
                     SizedBox(height=20),
-                    Text("Obrigado pela compra", font_size=40, color=ColorPalette.blue3),
-                    SizedBox(height=40),
+                    Text("Obrigado pela compra", font_size=35, color=ColorPalette.blue3),
+                    SizedBox(height=60),
                     *self.get_rating_component(),
                     *self.closing_doors_components(),
                     SizedBox(height=40),
                     SpacerVertical(),
-                    Column(
-                        width=500,
-                        height=100,
-                        fill=Fill.NONE,
-                        expand=False,
-                        children=[
-                            BlueButton(
-                                label="Voltar ao Ínicio",
-                                font_size=30,
-                                on_click=lambda: self.close_door_and_go_back_to_beginning(),
-                            ),
-                        ]
-                    ),
+                    *self.get_go_back_button(),
                 ],
             ),
         )
@@ -75,12 +63,33 @@ class OrderCompletedScreen(tkinter.Frame):
         AudioWorker.play(f"{self.curr_dir}/assets/thanks_and_rate.mp3")
         self.timer = self.app.after(120 * 1000, self.close_door_and_go_back_to_beginning)
 
+    def get_go_back_button(self) -> list[BuildableWidget]:
+        if self.state.closing_doors:
+            return []
+
+        return [
+            Column(
+                width=500,
+                height=100,
+                fill=Fill.NONE,
+                expand=False,
+                children=[
+                    BlueButton(
+                        label="Voltar ao Ínicio",
+                        font_size=30,
+                        on_click=lambda: self.close_door_and_go_back_to_beginning(),
+                    ),
+                ]
+            )
+        ]
+
     def closing_doors_components(self) -> list[BuildableWidget]:
         if self.state.closing_doors:
             return [
+                SpacerVertical(),
                 CircularSpinner(root=self.app, side=Side.TOP, anchor=Anchor.CENTER),
                 SizedBox(height=20),
-                Text("Fechando portas...")
+                Text("Fechando portas...", font_size=20)
             ]
 
         return []
@@ -89,7 +98,7 @@ class OrderCompletedScreen(tkinter.Frame):
         if not self.state.has_rated:
             return [
                 Column(
-                    width=750,
+                    width=int(self.app.container.winfo_width() * 0.9),
                     height=250,
                     fill=Fill.NONE,
                     expand=False,
@@ -97,7 +106,7 @@ class OrderCompletedScreen(tkinter.Frame):
                         Column(
                             padding=Padding.all(30),
                             children=[
-                                Text("Avalie a sua experiência", font_size=30, color=ColorPalette.blue3),
+                                Text("Avalie a sua experiência", font_size=25, color=ColorPalette.blue3),
                                 SizedBox(height=40),
                                 Row(
                                     children=[
@@ -119,7 +128,7 @@ class OrderCompletedScreen(tkinter.Frame):
 
         return [
             Column(
-                width=850,
+                width=int(self.app.container.winfo_width() * 0.8),
                 height=250,
                 fill=Fill.NONE,
                 expand=False,
@@ -129,7 +138,7 @@ class OrderCompletedScreen(tkinter.Frame):
                             Column(
                                 padding=Padding.all(20),
                                 children=[
-                                    Text("Seu feedback foi enviado, muito obrigado!", font_size=30,
+                                    Text("Seu feedback foi enviado, muito obrigado!", font_size=22,
                                          color=ColorPalette.blue3),
                                     SizedBox(height=35),
                                     Icon("circle-check-green", width=70, height=70, side=Side.TOP, anchor=Anchor.CENTER),
@@ -146,8 +155,8 @@ class OrderCompletedScreen(tkinter.Frame):
 
     def get_rate_button(self, image, title, rating_score):
         return Column(
-            width=140,
-            height=140,
+            expand=True,
+            fill=Fill.X,
             side=Side.LEFT,
             children=[
                 ImageFromAssets(

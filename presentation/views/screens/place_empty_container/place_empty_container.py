@@ -17,8 +17,8 @@ from presentation.views.components.layout.spacer import SpacerVertical
 from presentation.views.components.layout.text import Text
 from presentation.views.components.scaffold.state_provider import StateProvider
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
-from presentation.views.screens.place_empty_container.place_empty_container_state import PlaceEmptyContainerState, \
-    PlaceEmptyContainerTimerState
+from presentation.views.components.state.countdown_timer import CountdownTimer
+from presentation.views.screens.place_empty_container.place_empty_container_state import PlaceEmptyContainerState
 from utils.file import FileUtils
 
 
@@ -29,9 +29,14 @@ class PlaceEmptyContainerScreen(tk.Frame):
         self.order_intent = order_intent
         self.curr_dir = FileUtils.dir(__file__)
         self.state = PlaceEmptyContainerState()
-        self.timer_state = PlaceEmptyContainerTimerState()
-        self.app.after(1000, self.handle_timer)
-        self.countdown_timer = None
+
+        self.countdown_timer = CountdownTimer(
+            app=app,
+            initial_value=120,
+            on_reached_zero=self.on_reached_zero_countdown,
+            padding=Padding(top=25, bottom=10),
+            text_builder=lambda v: f"A porta irá fechar automaticamente em {v} segundo(s)..."
+        )
 
         StateProvider(
             parent=self,
@@ -45,11 +50,12 @@ class PlaceEmptyContainerScreen(tk.Frame):
                         expand=True,
                         children=[
                             SpacerVertical(),
-                            Text("Insira seu botijão vazio", font_size=40, color=ColorPalette.blue3),
+                            Text("Insira seu botijão vazio", font_size=32, color=ColorPalette.blue3),
                             SizedBox(height=20),
-                            Text("Coloque seu botijão vazio na porta que se abriu e afaste-se", font_size=25),
+                            Text("Coloque seu botijão vazio na porta", font_size=25),
+                            Text(" que se abriu e afaste-se", font_size=25),
                             self.get_timer_text(),
-                            SizedBox(height=30),
+                            SizedBox(height=50),
                             Column(
                                 expand=True,
                                 children=[
@@ -70,7 +76,7 @@ class PlaceEmptyContainerScreen(tk.Frame):
                                 ]
                             ),
                             SizedBox(height=40),
-                            self.get_button_or_closing_door_spinner(),
+                            *self.get_button_or_closing_door_spinner(),
                         ],
                     ),
                 ]
@@ -81,8 +87,7 @@ class PlaceEmptyContainerScreen(tk.Frame):
         GpioWorker.activate(self.order_intent.get_open_door_pin())
 
     def go_to_camera_verification_part1(self):
-        self.state.update(closing_door=True)
-        self.timer_state.update(timer_reached_zero=True)
+        self.state.update(closing_door=True, timer_reached_zero=True)
         self.app.after(150, self.go_to_camera_verification_part2)
 
     def go_to_camera_verification_part2(self):
@@ -94,116 +99,97 @@ class PlaceEmptyContainerScreen(tk.Frame):
         self.state.update(closing_door=False)
         self.app.push('camera_verification', self.order_intent)
 
-    def get_button_or_closing_door_spinner(self):
+    def get_button_or_closing_door_spinner(self) -> list[BuildableWidget]:
         if self.state.cancelling:
-            return Column(
-                children=[
-                    CircularSpinner(root=self.app, side=Side.TOP, anchor=Anchor.CENTER),
-                    SizedBox(height=20),
-                    Text("Cancelando operação",
-                         font_size=30,
-                         color="#333"),
-                    SizedBox(height=10),
-                    Text("Iremos fechar a porta, afaste-se por favor!",
-                         font_size=25,
-                         color="#333"),
-                ]
-            )
+            return [
+                CircularSpinner(root=self.app, side=Side.TOP, anchor=Anchor.CENTER),
+                SizedBox(height=20),
+                Text("Cancelando operação",
+                     font_size=27,
+                     color="darkred"),
+                SizedBox(height=10),
+                Text("Iremos fechar a porta, afaste-se por favor!",
+                     font_size=22,
+                     color="#333"),
+                SpacerVertical(),
+            ]
 
         if self.state.closing_door:
-            return Column(
+            return [
+                CircularSpinner(root=self.app, side=Side.TOP, anchor=Anchor.CENTER),
+                SizedBox(height=20),
+                Text("Fechando porta, afaste-se por favor!",
+                     font_size=25,
+                     color="#333"),
+                SpacerVertical(),
+            ]
+
+        return [
+            SpacerVertical(),
+            Column(
                 children=[
-                    CircularSpinner(root=self.app, side=Side.TOP, anchor=Anchor.CENTER),
-                    SizedBox(height=20),
-                    Text("Fechando porta, afaste-se por favor!",
-                         font_size=30,
-                         color="#333"),
-                ]
+                    Text("Pronto. Já coloquei meu botijão",
+                         font_size=20,
+                         padding=Padding.all(50),
+                         side=Side.LEFT,
+                         anchor=Anchor.LEFT,
+                         color="#fff"),
+                    Icon("arrow-right-white",
+                         anchor=Anchor.RIGHT,
+                         side=Side.RIGHT,
+                         width=30,
+                         height=34,
+                         padding=Padding.all(50)),
+                ],
+                background_color=ColorPalette.blue3,
+                border_radius=5,
+                border_color="#ccc",
+                on_click=self.go_to_camera_verification_part1,
+            ),
+
+            SizedBox(height=60),
+
+            Column(
+                children=[
+                    Text("Cancelar Operação",
+                         font_size=20,
+                         padding=Padding(50, 0, 15, 15),
+                         side=Side.LEFT,
+                         anchor=Anchor.LEFT,
+                         color="#fff"),
+                    Icon("xmark-white",
+                         anchor=Anchor.RIGHT,
+                         side=Side.RIGHT,
+                         width=30,
+                         height=40,
+                         padding=Padding(0, 50, 15, 15)),
+                ],
+                background_color="#cd5c5c",
+                border_radius=5,
+                on_click=self.cancel_operation,
             )
-
-        return Column(
-            children=[
-                Row(
-                    children=[
-                        Text("Pronto. Já coloquei meu botijão",
-                             font_size=20,
-                             padding=Padding.all(30),
-                             side=Side.LEFT,
-                             anchor=Anchor.LEFT,
-                             color="#fff"),
-                        Icon("arrow-right-white", anchor=Anchor.RIGHT, width=30, height=34, padding=Padding.all(30)),
-                    ],
-                    background_color=ColorPalette.blue3,
-                    border_radius=5,
-                    border_color="#ccc",
-                    fill=Fill.NONE,
-                    on_click=self.go_to_camera_verification_part1,
-                ),
-
-                Row(
-                    children=[
-                        Text("Cancelar Operação",
-                             font_size=20,
-                             padding=Padding(30, 0, 30, 30),
-                             side=Side.LEFT,
-                             anchor=Anchor.LEFT,
-                             color="#fff"),
-                        Icon("xmark-white", anchor=Anchor.RIGHT, width=30, height=40, padding=Padding.all(30)),
-                    ],
-                    background_color="#cd5c5c",
-                    border_radius=5,
-                    fill=Fill.NONE,
-                    on_click=self.cancel_operation,
-                )
-            ],
-        )
+        ]
 
     def cancel_operation(self):
         AudioWorker.play(f"{self.curr_dir}/assets/place_container_cancellation.mp3")
         self.state.update(cancelling=True)
-        self.cancel_timer()
+        self.countdown_timer.cancel()
         self.app.after(7 * 1000, lambda: GpioWorker.activate(self.order_intent.get_close_door_pin()))
         self.app.after(12 * 1000, lambda: self.app.off_all("welcome"))
 
     def on_route_popped(self):
         print("route_popped")
-        self.timer_state.update(
-            timer_reached_zero=False,
-            time_to_close_door_automatically=120
-        )
-        self.handle_timer()
+        self.countdown_timer.cancel()
 
-    def handle_timer(self):
-        if self.timer_state.timer_reached_zero:
-            self.cancel_timer()
-            return
-
-        if self.timer_state.time_to_close_door_automatically == 1:
-            self.timer_state.update(timer_reached_zero=True)
-            self.cancel_timer()
-            AudioWorker.play(f"{self.curr_dir}/assets/door_open_idle.mp3")
-            self.app.after(7 * 1000, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
-            self.app.after(12 * 1000, lambda: self.app.off_all("welcome"))
-            return
-
-        self.timer_state.update(
-            time_to_close_door_automatically=self.timer_state.time_to_close_door_automatically - 1
-        )
-        self.countdown_timer = self.app.after(1000, self.handle_timer)
+    def on_reached_zero_countdown(self):
+        self.state.update(timer_reached_zero=True)
+        self.countdown_timer.cancel()
+        AudioWorker.play(f"{self.curr_dir}/assets/door_open_idle.mp3")
+        self.app.after(7 * 1000, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
+        self.app.after(12 * 1000, lambda: self.app.off_all("welcome"))
 
     def get_timer_text(self) -> BuildableWidget:
-        if self.timer_state.timer_reached_zero or self.state.cancelling:
+        if self.state.timer_reached_zero or self.state.cancelling:
             return Column(children=[])
 
-        return StateProvider(
-            parent=self,
-            state=self.timer_state,
-            child=lambda: Text(
-                f"A porta irá fechar automaticamente em {self.timer_state.time_to_close_door_automatically} segundo(s)...",
-                font_size=15)
-        )
-
-    def cancel_timer(self):
-        if self.countdown_timer is not None:
-            self.app.after_cancel(self.countdown_timer)
-
+        return self.countdown_timer

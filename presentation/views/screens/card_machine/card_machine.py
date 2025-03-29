@@ -14,11 +14,13 @@ from presentation.views.components.layout.contracts.buildable_widget import Buil
 from presentation.views.components.layout.enums.alignment import Side, Anchor
 from presentation.views.components.layout.icon import Icon
 from presentation.views.components.layout.image import ImageFromAssets, CircularSpinner
+from presentation.views.components.layout.padding import Padding
 from presentation.views.components.layout.sized_box import SizedBox
 from presentation.views.components.layout.spacer import SpacerVertical
 from presentation.views.components.layout.text import Text
 from presentation.views.components.scaffold.state_provider import StateProvider
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
+from presentation.views.components.state.countdown_timer import CountdownTimer
 from presentation.views.screens.card_machine.card_machine_state import CardMachineState
 from utils.file import FileUtils
 
@@ -32,6 +34,15 @@ class CardMachineScreen(tkinter.Frame):
         self.app = app
         self.state = CardMachineState()
         self.correlation_id = None
+
+        self.countdown_timer = CountdownTimer(
+            app=app,
+            initial_value=7,
+            on_reached_zero=self.app.pop,
+            padding=Padding(top=25, bottom=10),
+            text_builder=lambda v: f"Aguarde {v} segundo(s)...",
+            autostart=False
+        )
 
         StateProvider(
             parent=self,
@@ -53,11 +64,7 @@ class CardMachineScreen(tkinter.Frame):
             ),
         )
 
-        self.correlation_id = uuid.uuid4().hex
-        self.app.after(5000, lambda: self.app.push('preparing_order', self.order_intent.copy_with(
-            correlationId=self.correlation_id,
-        )))
-        # self.app.after(200, self.create_order_request)
+        self.app.after(200, self.create_order_request)
 
     def play_initial_audio(self):
         if self.order_intent.paymentMethodId == 5 or self.order_intent.paymentMethodId == 9:
@@ -65,11 +72,16 @@ class CardMachineScreen(tkinter.Frame):
         else:
             AudioWorker.play(f"{self.curr_dir}/assets/audio.mp3")
 
-    def get_payment_text(self) -> str:
+    def get_payment_text(self) -> list[BuildableWidget]:
         if self.order_intent.paymentMethodId == 5 or self.order_intent.paymentMethodId == 9:
-            return "Escaneie o QR code na tela da maquininha de cartão para efetuar o pagamento"
+            return [
+                Text("Escaneie o QR code na tela da maquininha", font_size=22),
+                Text("de cartão para efetuar o pagamento", font_size=22),
+            ]
         else:
-            return "Insira ou aproxime seu cartão na maquininha"
+            return [
+                Text("Insira ou aproxime seu cartão na maquininha", font_size=22),
+            ]
 
     def get_content(self) -> list[BuildableWidget]:
         if self.state.rejected:
@@ -77,19 +89,28 @@ class CardMachineScreen(tkinter.Frame):
                 SpacerVertical(),
                 Icon("circle-exclamation-red", width=70, height=70, side=Side.TOP, anchor=Anchor.CENTER),
                 SizedBox(height=20),
-                Text("Pagamento Recusado", font_size=40, color=ColorPalette.blue3),
+                Text("Pagamento Recusado", font_size=35, color=ColorPalette.blue3),
                 SizedBox(height=20),
-                Text("O pagamento foi cancelado ou recusado.", font_size=25),
-                Text("Tente novamente ou escolha outra forma de pagamento",font_size=25),
+                Text("O pagamento foi cancelado ou recusado.", font_size=22),
+                SizedBox(height=50),
+                self.countdown_timer,
                 SpacerVertical(),
             ]
 
         return [
             SpacerVertical(),
-            Text("Aguardando pagamento", font_size=40, color=ColorPalette.blue3),
+            Text("Aguardando pagamento", font_size=35, color=ColorPalette.blue3),
             SizedBox(height=20),
-            Text(self.get_payment_text(), font_size=25),
+            *self.get_payment_text(),
             SizedBox(height=40),
+            ImageFromAssets(
+                path=f"{self.curr_dir}/assets/billing-machine.png",
+                width=150,
+                height=150,
+                side=Side.TOP,
+                anchor=Anchor.CENTER,
+            ),
+            SpacerVertical(),
             CircularSpinner(root=self.app, side=Side.TOP, anchor=Anchor.CENTER),
             SpacerVertical(),
         ]
@@ -144,8 +165,8 @@ class CardMachineScreen(tkinter.Frame):
             awaiting_payment_approval=False,
             rejected=True
         )
+        self.countdown_timer.start()
         AudioWorker.play(f"{self.curr_dir}/assets/payment_rejected.mp3")
-        self.app.after(7 * 1000, lambda: self.app.pop())
 
     def card_machine_unreachable(self):
         AudioWorker.play(f"{self.curr_dir}/assets/card_machine_disconnected.mp3")

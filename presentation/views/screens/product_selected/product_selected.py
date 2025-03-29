@@ -41,7 +41,7 @@ class ProductSelectionScreen(tk.Frame):
                         expand=True,
                         children=[
                             SpacerVertical(),
-                            Text("Selecione o produto", font_size=50, color=ColorPalette.blue3),
+                            Text("Selecione o produto", font_size=40, color=ColorPalette.blue3),
                             SpacerVertical(),
                             self.product_button(
                                 title="Recarga 13kg",
@@ -86,9 +86,9 @@ class ProductSelectionScreen(tk.Frame):
 
     def product_button(self, title, caption, price, onclick) -> BuildableWidget:
         return Column(
-            background_color="#fff",
             border_radius=5,
             border_color="#ccc",
+            background_color=ColorPalette.blue3,
             on_click=onclick,
             padding=Padding(left=20, right=20, bottom=20),
             children=[
@@ -98,13 +98,13 @@ class ProductSelectionScreen(tk.Frame):
                         Column(
                             children=[
                                 Text(title,
-                                     font_size=25,
+                                     font_size=22,
                                      anchor=Anchor.LEFT,
-                                     color=ColorPalette.blue3),
+                                     color="#fff"),
                                 SizedBox(height=5),
                                 Text(caption,
-                                     color=ColorPalette.neutralPrimary,
                                     anchor=Anchor.LEFT,
+                                     color="#fff",
                                      font_size=15),
                             ],
                             side=Side.LEFT,
@@ -112,7 +112,7 @@ class ProductSelectionScreen(tk.Frame):
                         ),
                         SpacerHorizontal(),
                         Text(price,
-                             color=ColorPalette.blue3,
+                             color="#99E6FD",
                              anchor=Anchor.TOP_RIGHT,
                              padding=Padding(bottom=15),
                              font_size=30),

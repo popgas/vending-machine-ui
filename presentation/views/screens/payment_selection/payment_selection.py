@@ -8,7 +8,6 @@ from presentation.views.components.layout.column import Column
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
 from presentation.views.components.layout.enums.alignment import Side, Anchor, Fill
 from presentation.views.components.layout.image import ImageFromAssets
-from presentation.views.components.layout.padding import Padding
 from presentation.views.components.layout.row import Row
 from presentation.views.components.layout.sized_box import SizedBox
 from presentation.views.components.layout.spacer import SpacerVertical
@@ -38,7 +37,8 @@ class PaymentSelectionScreen(tk.Frame):
                         expand=True,
                         children=[
                             SpacerVertical(),
-                            Text("Selecione a forma de pagamento", font_size=40, color=ColorPalette.blue3),
+                            Text("Selecione", font_size=40, color=ColorPalette.blue3),
+                            Text("a forma de pagamento", font_size=40, color=ColorPalette.blue3),
                             SizedBox(height=100),
                             Column(
                                 expand=True,
@@ -52,7 +52,6 @@ class PaymentSelectionScreen(tk.Frame):
                                         title="Cartão de Débito",
                                         onclick=lambda: self.debit_card()
                                     ),
-                                    SizedBox(height=10),
                                     self.payment_button(
                                         image=ImageFromAssets(
                                             path=f"{self.curr_dir}/assets/cartao.png",
@@ -62,7 +61,6 @@ class PaymentSelectionScreen(tk.Frame):
                                         title="Cartão de Crédito",
                                         onclick=lambda: self.credit_card()
                                     ),
-                                    SizedBox(height=10),
                                     self.payment_button(
                                         image=ImageFromAssets(
                                             path=f"{self.curr_dir}/assets/pix.png",
@@ -90,8 +88,8 @@ class PaymentSelectionScreen(tk.Frame):
             fill=Fill.NONE,
             children=[
                 Row(
-                    width=600,
-                    height=100,
+                    width=int(self.app.container.winfo_width() * 0.8),
+                    height=150,
                     children=[
                         SizedBox(width=30),
                         image,

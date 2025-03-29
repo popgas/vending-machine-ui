@@ -48,6 +48,8 @@ class CircularSpinner(BuildableWidget):
         self.index = 0
         self.image = ImageFromAssets(
              path=self.path,
+            width=100,
+             height=100,
              **kwargs
          )
 
