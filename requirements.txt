@@ -4,6 +4,4 @@ numpy==2.2.4
 opencv-python==4.11.0.86
 tk~=0.1.0
 pillow~=10.4.0
-Pygments~=2.19.1
-PyQt6~=6.8.1
 Rx~=3.2.0
