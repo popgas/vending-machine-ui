@@ -26,10 +26,18 @@ class ProductSelectionScreen(tk.Frame):
         super().__init__(app.container, bg="#ECEFF1")
         self.app = app
 
-        self.prices = self.get_prices()
+        self.data = self.get_data()
 
-        self.gas_refill_price = float(self.prices['gas_refill_price'])
-        self.container_with_gas_price = self.gas_refill_price + float(self.prices['container_price'])
+        if int(self.data['container_full_stock_count']) == 0:
+            app.off_all('empty_stock')
+            return
+
+        if 'is_under_maintenance' in self.data and bool(self.data['is_under_maintenance']):
+            app.off_all('tech_support')
+            return
+
+        self.gas_refill_price = float(self.data['gas_refill_price'])
+        self.container_with_gas_price = self.gas_refill_price + float(self.data['container_price'])
 
         StateProvider(
             parent=self,
@@ -68,7 +76,7 @@ class ProductSelectionScreen(tk.Frame):
         order_intent = NewOrderIntent(
             productSelected=OrderProductSelected.onlyGasRefill,
             productPrice=self.container_with_gas_price,
-            stockCount=int(self.prices['container_full_stock_count']),
+            stockCount=int(self.data['container_full_stock_count']),
         )
 
         self.app.push('place_empty_container', order_intent)
@@ -78,7 +86,7 @@ class ProductSelectionScreen(tk.Frame):
         order_intent = NewOrderIntent(
             productSelected=OrderProductSelected.gasWithContainer,
             productPrice=self.gas_refill_price,
-            stockCount=int(self.prices['container_full_stock_count']),
+            stockCount=int(self.data['container_full_stock_count']),
         )
 
         self.app.push('payment_selection', order_intent)
@@ -122,6 +130,6 @@ class ProductSelectionScreen(tk.Frame):
             ]
         )
 
-    def get_prices(self):
+    def get_data(self):
         vm_id = os.environ['VENDING_MACHINE_ID']
         return PopGasApi.request("GET", f"/vending-machine-orders/{vm_id}/prices").json()
