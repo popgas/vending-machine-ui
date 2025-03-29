@@ -1,10 +1,11 @@
 import tkinter as tk
 from presentation.config.color_palette import ColorPalette  # Assumes ColorPalette.textColor is defined.
+from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
 from presentation.views.components.layout.enums.alignment import Side, Anchor
 from presentation.views.components.layout.padding import Padding
 
 
-class Text:
+class Text(BuildableWidget):
     def __init__(self,
                  label="Label",
                  color=None,

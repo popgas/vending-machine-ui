@@ -14,7 +14,7 @@ from presentation.views.components.layout.row import Row
 from presentation.views.components.layout.sized_box import SizedBox
 from presentation.views.components.layout.spacer import SpacerHorizontal, SpacerVertical
 from presentation.views.components.layout.text import Text
-from presentation.views.components.scaffold.scaffold import Scaffold
+from presentation.views.components.scaffold.state_provider import StateProvider
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
 from application import Application
 from utils.file import FileUtils
@@ -31,7 +31,7 @@ class ProductSelectionScreen(tk.Frame):
         self.gas_refill_price = float(self.prices['gas_refill_price'])
         self.container_with_gas_price = self.gas_refill_price + float(self.prices['container_price'])
 
-        Scaffold(
+        StateProvider(
             parent=self,
             child=Column(
                 expand=True,
@@ -104,7 +104,7 @@ class ProductSelectionScreen(tk.Frame):
                                 SizedBox(height=5),
                                 Text(caption,
                                      color=ColorPalette.neutralPrimary,
-                                     font_size=25),
+                                     font_size=20),
                             ],
                             side=Side.LEFT,
                         ),

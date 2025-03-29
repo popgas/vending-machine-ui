@@ -9,7 +9,7 @@ from presentation.views.components.layout.padding import Padding
 
 class Column(BuildableWidget):
     def __init__(self,
-                 children: list,
+                 children: list = [],
                  background_color=None,
                  spacing=0,
                  on_click=None,

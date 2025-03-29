@@ -3,7 +3,7 @@ from collections.abc import Callable
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
 
 
-class Scaffold:
+class StateProvider(BuildableWidget):
     def __init__(self, parent, child: BuildableWidget | Callable[[], BuildableWidget], state=None):
         """
         :param parent: The parent Tkinter widget.
@@ -20,8 +20,11 @@ class Scaffold:
         if self.state is not None:
             self.state.subscribe(lambda: self.build())
 
-    def build(self):
+    def build(self, parent=None):
         if self.widget is not None:
             self.widget.destroy()
 
+        self.parent = parent if parent is not None else self.parent
         self.widget = self.child().build(parent=self.parent)
+
+        return self.widget

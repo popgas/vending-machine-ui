@@ -17,7 +17,7 @@ from presentation.views.components.layout.row import Row
 from presentation.views.components.layout.sized_box import SizedBox
 from presentation.views.components.layout.spacer import SpacerVertical
 from presentation.views.components.layout.text import Text
-from presentation.views.components.scaffold.scaffold import Scaffold
+from presentation.views.components.scaffold.state_provider import StateProvider
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
 from presentation.views.screens.order_completed.order_completed_state import OrderCompletedState
 from utils.file import FileUtils
@@ -31,7 +31,7 @@ class OrderCompletedScreen(tkinter.Frame):
         self.curr_dir = FileUtils.dir(__file__)
         self.state = OrderCompletedState()
 
-        Scaffold(
+        StateProvider(
             parent=self,
             state=self.state,
             child=lambda: Column(

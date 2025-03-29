@@ -12,7 +12,7 @@ from presentation.views.components.layout.image import ImageFromAssets, Circular
 from presentation.views.components.layout.sized_box import SizedBox
 from presentation.views.components.layout.spacer import SpacerVertical
 from presentation.views.components.layout.text import Text
-from presentation.views.components.scaffold.scaffold import Scaffold
+from presentation.views.components.scaffold.state_provider import StateProvider
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
 from utils.file import FileUtils
 
@@ -24,7 +24,7 @@ class PreparingOrderScreen(tkinter.Frame):
         self.curr_dir = FileUtils.dir(__file__)
         self.order_intent = order_intent
 
-        Scaffold(
+        StateProvider(
             parent=self,
             child=Column(
                 expand=True,

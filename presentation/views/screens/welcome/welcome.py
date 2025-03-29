@@ -6,7 +6,7 @@ from presentation.views.components.layout.enums.alignment import Anchor
 from presentation.views.components.layout.padding import Padding
 from presentation.views.components.layout.spacer import SpacerVertical
 from presentation.views.components.layout.text import Text
-from presentation.views.components.scaffold.scaffold import Scaffold
+from presentation.views.components.scaffold.state_provider import StateProvider
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
 from application import Application
 
@@ -14,7 +14,7 @@ class WelcomeScreen(tk.Frame):
     def __init__(self, app: Application):
         super().__init__(app.container, bg="#ECEFF1")
 
-        Scaffold(
+        StateProvider(
             parent=self,
             child=Column(
                 expand=True,

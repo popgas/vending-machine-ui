@@ -15,9 +15,10 @@ from presentation.views.components.layout.row import Row
 from presentation.views.components.layout.sized_box import SizedBox
 from presentation.views.components.layout.spacer import SpacerVertical
 from presentation.views.components.layout.text import Text
-from presentation.views.components.scaffold.scaffold import Scaffold
+from presentation.views.components.scaffold.state_provider import StateProvider
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
-from presentation.views.screens.place_empty_container.place_empty_container_state import PlaceEmptyContainerState
+from presentation.views.screens.place_empty_container.place_empty_container_state import PlaceEmptyContainerState, \
+    PlaceEmptyContainerTimerState
 from utils.file import FileUtils
 
 
@@ -28,13 +29,10 @@ class PlaceEmptyContainerScreen(tk.Frame):
         self.order_intent = order_intent
         self.curr_dir = FileUtils.dir(__file__)
         self.state = PlaceEmptyContainerState()
+        self.timer_state = PlaceEmptyContainerTimerState()
         self.app.after(1000, self.handle_timer)
-        # self.timer = QTimer()
-        # self.timer.setInterval(1000)
-        # self.timer.timeout.connect(self.handle_timer)
-        # self.timer.start()
 
-        Scaffold(
+        StateProvider(
             parent=self,
             state=self.state,
             child=lambda: Column(
@@ -49,7 +47,7 @@ class PlaceEmptyContainerScreen(tk.Frame):
                             Text("Insira seu botijão vazio", font_size=40, color=ColorPalette.blue3),
                             SizedBox(height=20),
                             Text("Coloque seu botijão vazio na porta que se abriu e afaste-se", font_size=25),
-                            *self.get_timer_text(),
+                            self.get_timer_text(),
                             SizedBox(height=30),
                             Column(
                                 expand=True,
@@ -73,7 +71,6 @@ class PlaceEmptyContainerScreen(tk.Frame):
                             SizedBox(height=40),
                             self.get_button_or_closing_door_spinner(),
                         ],
-                        # alignment=Qt.AlignmentFlag.AlignCenter
                     ),
                 ]
             ),
@@ -83,7 +80,8 @@ class PlaceEmptyContainerScreen(tk.Frame):
         GpioWorker.activate(self.order_intent.get_open_door_pin())
 
     def go_to_camera_verification_part1(self):
-        self.state.update(closing_door=True, timer_reached_zero=True)
+        self.state.update(closing_door=True)
+        self.timer_state.update(timer_reached_zero=True)
         self.app.after(150, self.go_to_camera_verification_part2)
 
     def go_to_camera_verification_part2(self):
@@ -168,35 +166,37 @@ class PlaceEmptyContainerScreen(tk.Frame):
 
     def on_route_popped(self):
         print("route_popped")
-        self.state.update(
+        self.timer_state.update(
             timer_reached_zero=False,
             time_to_close_door_automatically=120
         )
         self.handle_timer()
 
     def handle_timer(self):
-        if self.state.timer_reached_zero:
+        if self.timer_state.timer_reached_zero:
             return
 
-        if self.state.time_to_close_door_automatically == 1:
-            self.state.update(timer_reached_zero=True)
+        if self.timer_state.time_to_close_door_automatically == 1:
+            self.timer_state.update(timer_reached_zero=True)
             AudioWorker.play(f"{self.curr_dir}/assets/door_open_idle.mp3")
             self.app.after(7 * 1000, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
             self.app.after(12 * 1000, lambda: self.app.off_all("welcome"))
             return
 
-        self.state.update(
-            time_to_close_door_automatically=self.state.time_to_close_door_automatically - 1
+        self.timer_state.update(
+            time_to_close_door_automatically=self.timer_state.time_to_close_door_automatically - 1
         )
         self.app.after(1000, self.handle_timer)
 
-    def get_timer_text(self) -> list[BuildableWidget]:
-        if self.state.timer_reached_zero or self.state.cancelling:
-            return []
+    def get_timer_text(self) -> BuildableWidget:
+        if self.timer_state.timer_reached_zero or self.state.cancelling:
+            return Column(children=[])
 
-        return [
-            SizedBox(height=20),
-            Text(f"A porta irá fechar automaticamente em {self.state.time_to_close_door_automatically} segundo(s)...",
-                 font_size=15),
-        ]
+        return StateProvider(
+            parent=self,
+            state=self.timer_state,
+            child=lambda: Text(
+                f"A porta irá fechar automaticamente em {self.timer_state.time_to_close_door_automatically} segundo(s)...",
+                font_size=15)
+        )
 

@@ -13,7 +13,7 @@ from presentation.views.components.layout.row import Row
 from presentation.views.components.layout.sized_box import SizedBox
 from presentation.views.components.layout.spacer import SpacerVertical
 from presentation.views.components.layout.text import Text
-from presentation.views.components.scaffold.scaffold import Scaffold
+from presentation.views.components.scaffold.state_provider import StateProvider
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
 from application import Application
 from utils.file import FileUtils
@@ -28,7 +28,7 @@ class PaymentSelectionScreen(tk.Frame):
 
         can_pop = order_intent.productSelected == OrderProductSelected.gasWithContainer
 
-        Scaffold(
+        StateProvider(
             parent=self,
             child=Column(
                 expand=True,

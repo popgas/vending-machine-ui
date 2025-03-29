@@ -16,7 +16,7 @@ from presentation.views.components.layout.image import ImageFromAssets, Circular
 from presentation.views.components.layout.sized_box import SizedBox
 from presentation.views.components.layout.spacer import SpacerVertical
 from presentation.views.components.layout.text import Text
-from presentation.views.components.scaffold.scaffold import Scaffold
+from presentation.views.components.scaffold.state_provider import StateProvider
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
 from presentation.views.screens.card_machine.card_machine_state import CardMachineState
 from utils.file import FileUtils
@@ -32,7 +32,7 @@ class CardMachineScreen(tkinter.Frame):
         self.state = CardMachineState()
         self.correlation_id = None
 
-        Scaffold(
+        StateProvider(
             parent=self,
             state=self.state,
             child=lambda: Column(
