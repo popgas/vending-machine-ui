@@ -31,6 +31,7 @@ class PlaceEmptyContainerScreen(tk.Frame):
         self.state = PlaceEmptyContainerState()
         self.timer_state = PlaceEmptyContainerTimerState()
         self.app.after(1000, self.handle_timer)
+        self.countdown_timer = None
 
         StateProvider(
             parent=self,
@@ -161,6 +162,7 @@ class PlaceEmptyContainerScreen(tk.Frame):
     def cancel_operation(self):
         AudioWorker.play(f"{self.curr_dir}/assets/place_container_cancellation.mp3")
         self.state.update(cancelling=True)
+        self.cancel_timer()
         self.app.after(7 * 1000, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
         self.app.after(12 * 1000, lambda: self.app.off_all("welcome"))
 
@@ -174,10 +176,12 @@ class PlaceEmptyContainerScreen(tk.Frame):
 
     def handle_timer(self):
         if self.timer_state.timer_reached_zero:
+            self.cancel_timer()
             return
 
         if self.timer_state.time_to_close_door_automatically == 1:
             self.timer_state.update(timer_reached_zero=True)
+            self.cancel_timer()
             AudioWorker.play(f"{self.curr_dir}/assets/door_open_idle.mp3")
             self.app.after(7 * 1000, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
             self.app.after(12 * 1000, lambda: self.app.off_all("welcome"))
@@ -186,7 +190,7 @@ class PlaceEmptyContainerScreen(tk.Frame):
         self.timer_state.update(
             time_to_close_door_automatically=self.timer_state.time_to_close_door_automatically - 1
         )
-        self.app.after(1000, self.handle_timer)
+        self.countdown_timer = self.app.after(1000, self.handle_timer)
 
     def get_timer_text(self) -> BuildableWidget:
         if self.timer_state.timer_reached_zero or self.state.cancelling:
@@ -199,4 +203,8 @@ class PlaceEmptyContainerScreen(tk.Frame):
                 f"A porta irá fechar automaticamente em {self.timer_state.time_to_close_door_automatically} segundo(s)...",
                 font_size=15)
         )
+
+    def cancel_timer(self):
+        if self.countdown_timer is not None:
+            self.app.after_cancel(self.countdown_timer)
 

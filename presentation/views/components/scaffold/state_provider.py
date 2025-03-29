@@ -22,7 +22,8 @@ class StateProvider(BuildableWidget):
 
     def build(self, parent=None):
         if self.widget is not None:
-            self.widget.destroy()
+            if self.widget.winfo_exists():
+                self.widget.destroy()
 
         self.parent = parent if parent is not None else self.parent
         self.widget = self.child().build(parent=self.parent)

@@ -1,5 +1,5 @@
 import tkinter as tk
-from presentation.config.color_palette import ColorPalette  # Assumes ColorPalette.textColor is defined.
+from presentation.config.color_palette import ColorPalette
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
 from presentation.views.components.layout.enums.alignment import Side, Anchor
 from presentation.views.components.layout.padding import Padding
@@ -23,16 +23,16 @@ class Text(BuildableWidget):
         self.anchor = anchor
 
     def build(self, parent=None):
-        label = tk.Label(parent,
-                         bg=parent["bg"],
-                         fg=self.color,
-                         text=self.label,
-                         font=("Helvetica", self.font_size))
-        label.pack(
-            side=self.side or parent['side'],
-            anchor=self.anchor or parent['anchor'],
-            pady=self.padding.pady,
-            padx=self.padding.padx,
-        )
-
-        return label
+        if parent.winfo_exists():
+            label = tk.Label(parent,
+                             bg=parent["bg"],
+                             fg=self.color,
+                             text=self.label,
+                             font=("Helvetica", self.font_size))
+            label.pack(
+                side=self.side or parent['side'],
+                anchor=self.anchor or parent['anchor'],
+                pady=self.padding.pady,
+                padx=self.padding.padx,
+            )
+            return label
