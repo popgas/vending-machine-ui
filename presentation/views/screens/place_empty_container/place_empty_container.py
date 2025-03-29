@@ -112,7 +112,6 @@ class PlaceEmptyContainerScreen(tk.Frame):
 
         if self.state.closing_door:
             return Column(
-                padding=Padding(bottom=30),
                 children=[
                     CircularSpinner(root=self.app, side=Side.TOP, anchor=Anchor.CENTER),
                     SizedBox(height=20),

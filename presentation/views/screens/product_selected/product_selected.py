@@ -98,13 +98,14 @@ class ProductSelectionScreen(tk.Frame):
                         Column(
                             children=[
                                 Text(title,
-                                     font_size=30,
+                                     font_size=25,
                                      anchor=Anchor.LEFT,
                                      color=ColorPalette.blue3),
                                 SizedBox(height=5),
                                 Text(caption,
                                      color=ColorPalette.neutralPrimary,
-                                     font_size=20),
+                                    anchor=Anchor.LEFT,
+                                     font_size=15),
                             ],
                             side=Side.LEFT,
                             on_click=onclick,

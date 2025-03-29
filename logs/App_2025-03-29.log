@@ -22896,3 +22896,132 @@
 2025-03-29 16:16:34,677 - DEBUG - STREAM b'sRGB' 62 1
 2025-03-29 16:16:34,677 - DEBUG - STREAM b'gAMA' 75 4
 2025-03-29 16:16:34,677 - DEBUG - STREAM b'IDAT' 91 171329
+2025-03-29 16:33:03,769 - INFO - Acionar Saida 23
+2025-03-29 16:33:04,822 - DEBUG - STREAM b'IHDR' 16 13
+2025-03-29 16:33:04,822 - DEBUG - STREAM b'pHYs' 41 9
+2025-03-29 16:33:04,822 - DEBUG - STREAM b'sRGB' 62 1
+2025-03-29 16:33:04,822 - DEBUG - STREAM b'gAMA' 75 4
+2025-03-29 16:33:04,822 - DEBUG - STREAM b'IDAT' 91 2264
+2025-03-29 16:33:04,823 - DEBUG - STREAM b'IHDR' 16 13
+2025-03-29 16:33:04,823 - DEBUG - STREAM b'pHYs' 41 9
+2025-03-29 16:33:04,823 - DEBUG - STREAM b'sRGB' 62 1
+2025-03-29 16:33:04,823 - DEBUG - STREAM b'gAMA' 75 4
+2025-03-29 16:33:04,823 - DEBUG - STREAM b'IDAT' 91 404
+2025-03-29 16:33:04,824 - DEBUG - STREAM b'IHDR' 16 13
+2025-03-29 16:33:04,824 - DEBUG - STREAM b'pHYs' 41 9
+2025-03-29 16:33:04,824 - DEBUG - STREAM b'sRGB' 62 1
+2025-03-29 16:33:04,824 - DEBUG - STREAM b'gAMA' 75 4
+2025-03-29 16:33:04,824 - DEBUG - STREAM b'IDAT' 91 171329
+2025-03-29 16:33:10,008 - INFO - Acionar Saida 12
+2025-03-29 16:33:15,028 - DEBUG - STREAM b'IHDR' 16 13
+2025-03-29 16:33:15,028 - DEBUG - STREAM b'pHYs' 41 9
+2025-03-29 16:33:15,028 - DEBUG - STREAM b'sRGB' 62 1
+2025-03-29 16:33:15,028 - DEBUG - STREAM b'gAMA' 75 4
+2025-03-29 16:33:15,028 - DEBUG - STREAM b'IDAT' 91 2264
+2025-03-29 16:33:15,029 - DEBUG - STREAM b'IHDR' 16 13
+2025-03-29 16:33:15,029 - DEBUG - STREAM b'pHYs' 41 9
+2025-03-29 16:33:15,029 - DEBUG - STREAM b'sRGB' 62 1
+2025-03-29 16:33:15,029 - DEBUG - STREAM b'gAMA' 75 4
+2025-03-29 16:33:15,029 - DEBUG - STREAM b'IDAT' 91 404
+2025-03-29 16:33:15,029 - DEBUG - STREAM b'IHDR' 16 13
+2025-03-29 16:33:15,030 - DEBUG - STREAM b'pHYs' 41 9
+2025-03-29 16:33:15,030 - DEBUG - STREAM b'sRGB' 62 1
+2025-03-29 16:33:15,030 - DEBUG - STREAM b'gAMA' 75 4
+2025-03-29 16:33:15,030 - DEBUG - STREAM b'IDAT' 91 171329
+2025-03-29 16:33:15,043 - DEBUG - STREAM b'IHDR' 16 13
+2025-03-29 16:33:15,043 - DEBUG - STREAM b'pHYs' 41 9
+2025-03-29 16:33:15,043 - DEBUG - STREAM b'sRGB' 62 1
+2025-03-29 16:33:15,043 - DEBUG - STREAM b'gAMA' 75 4
+2025-03-29 16:33:15,043 - DEBUG - STREAM b'IDAT' 91 172
+2025-03-29 16:33:15,043 - DEBUG - STREAM b'IHDR' 16 13
+2025-03-29 16:33:15,043 - DEBUG - STREAM b'pHYs' 41 9
+2025-03-29 16:33:15,043 - DEBUG - STREAM b'sRGB' 62 1
+2025-03-29 16:33:15,043 - DEBUG - STREAM b'gAMA' 75 4
+2025-03-29 16:33:15,043 - DEBUG - STREAM b'IDAT' 91 232
+2025-03-29 16:33:15,047 - DEBUG - STREAM b'IHDR' 16 13
+2025-03-29 16:33:15,047 - DEBUG - STREAM b'pHYs' 41 9
+2025-03-29 16:33:15,047 - DEBUG - STREAM b'sRGB' 62 1
+2025-03-29 16:33:15,047 - DEBUG - STREAM b'gAMA' 75 4
+2025-03-29 16:33:15,047 - DEBUG - STREAM b'IDAT' 91 2264
+2025-03-29 16:33:15,048 - DEBUG - STREAM b'IHDR' 16 13
+2025-03-29 16:33:15,048 - DEBUG - STREAM b'pHYs' 41 9
+2025-03-29 16:33:15,048 - DEBUG - STREAM b'sRGB' 62 1
+2025-03-29 16:33:15,048 - DEBUG - STREAM b'gAMA' 75 4
+2025-03-29 16:33:15,048 - DEBUG - STREAM b'IDAT' 91 404
+2025-03-29 16:33:15,049 - DEBUG - STREAM b'IHDR' 16 13
+2025-03-29 16:33:15,049 - DEBUG - STREAM b'pHYs' 41 9
+2025-03-29 16:33:15,049 - DEBUG - STREAM b'sRGB' 62 1
+2025-03-29 16:33:15,049 - DEBUG - STREAM b'gAMA' 75 4
+2025-03-29 16:33:15,049 - DEBUG - STREAM b'IDAT' 91 282763
+2025-03-29 16:33:19,103 - INFO - Imagem carregada: ./assets/images/security-camera-images/a1.png
+2025-03-29 16:33:19,105 - INFO - Imagem carregada: ./assets/images/security-camera-images/48.png
+2025-03-29 16:33:19,107 - INFO - Imagem carregada: ./assets/images/security-camera-images/a3.png
+2025-03-29 16:33:19,109 - INFO - Imagem carregada: ./assets/images/security-camera-images/49.png
+2025-03-29 16:33:19,111 - INFO - Imagem carregada: ./assets/images/security-camera-images/a2.png
+2025-03-29 16:33:19,114 - INFO - Imagem carregada: ./assets/images/security-camera-images/8.png
+2025-03-29 16:33:19,116 - INFO - Imagem carregada: ./assets/images/security-camera-images/9.png
+2025-03-29 16:33:19,119 - INFO - Imagem carregada: ./assets/images/security-camera-images/14.png
+2025-03-29 16:33:19,121 - INFO - Imagem carregada: ./assets/images/security-camera-images/28.png
+2025-03-29 16:33:19,123 - INFO - Imagem carregada: ./assets/images/security-camera-images/29.png
+2025-03-29 16:33:19,125 - INFO - Imagem carregada: ./assets/images/security-camera-images/15.png
+2025-03-29 16:33:19,127 - INFO - Imagem carregada: ./assets/images/security-camera-images/17.png
+2025-03-29 16:33:19,129 - INFO - Imagem carregada: ./assets/images/security-camera-images/16.png
+2025-03-29 16:33:19,131 - INFO - Imagem carregada: ./assets/images/security-camera-images/12.png
+2025-03-29 16:33:19,133 - INFO - Imagem carregada: ./assets/images/security-camera-images/13.png
+2025-03-29 16:33:19,135 - INFO - Imagem carregada: ./assets/images/security-camera-images/39.png
+2025-03-29 16:33:19,137 - INFO - Imagem carregada: ./assets/images/security-camera-images/11.png
+2025-03-29 16:33:19,140 - INFO - Imagem carregada: ./assets/images/security-camera-images/10.png
+2025-03-29 16:33:19,142 - INFO - Imagem carregada: ./assets/images/security-camera-images/38.png
+2025-03-29 16:33:19,144 - INFO - Imagem carregada: ./assets/images/security-camera-images/35.png
+2025-03-29 16:33:19,146 - INFO - Imagem carregada: ./assets/images/security-camera-images/21.png
+2025-03-29 16:33:19,148 - INFO - Imagem carregada: ./assets/images/security-camera-images/20.png
+2025-03-29 16:33:19,150 - INFO - Imagem carregada: ./assets/images/security-camera-images/34.png
+2025-03-29 16:33:19,152 - INFO - Imagem carregada: ./assets/images/security-camera-images/22.png
+2025-03-29 16:33:19,154 - INFO - Imagem carregada: ./assets/images/security-camera-images/36.png
+2025-03-29 16:33:19,157 - INFO - Imagem carregada: ./assets/images/security-camera-images/37.png
+2025-03-29 16:33:19,159 - INFO - Imagem carregada: ./assets/images/security-camera-images/23.png
+2025-03-29 16:33:19,161 - INFO - Imagem carregada: ./assets/images/security-camera-images/27.png
+2025-03-29 16:33:19,163 - INFO - Imagem carregada: ./assets/images/security-camera-images/33.png
+2025-03-29 16:33:19,165 - INFO - Imagem carregada: ./assets/images/security-camera-images/32.png
+2025-03-29 16:33:19,167 - INFO - Imagem carregada: ./assets/images/security-camera-images/26.png
+2025-03-29 16:33:19,169 - INFO - Imagem carregada: ./assets/images/security-camera-images/18.png
+2025-03-29 16:33:19,172 - INFO - Imagem carregada: ./assets/images/security-camera-images/30.png
+2025-03-29 16:33:19,174 - INFO - Imagem carregada: ./assets/images/security-camera-images/24.png
+2025-03-29 16:33:19,176 - INFO - Imagem carregada: ./assets/images/security-camera-images/25.png
+2025-03-29 16:33:19,178 - INFO - Imagem carregada: ./assets/images/security-camera-images/31.png
+2025-03-29 16:33:19,181 - INFO - Imagem carregada: ./assets/images/security-camera-images/19.png
+2025-03-29 16:33:19,183 - INFO - Imagem carregada: ./assets/images/security-camera-images/4.png
+2025-03-29 16:33:19,186 - INFO - Imagem carregada: ./assets/images/security-camera-images/42.png
+2025-03-29 16:33:19,188 - INFO - Imagem carregada: ./assets/images/security-camera-images/43.png
+2025-03-29 16:33:19,190 - INFO - Imagem carregada: ./assets/images/security-camera-images/5.png
+2025-03-29 16:33:19,192 - INFO - Imagem carregada: ./assets/images/security-camera-images/41.png
+2025-03-29 16:33:19,195 - INFO - Imagem carregada: ./assets/images/security-camera-images/7.png
+2025-03-29 16:33:19,197 - INFO - Imagem carregada: ./assets/images/security-camera-images/6.png
+2025-03-29 16:33:19,199 - INFO - Imagem carregada: ./assets/images/security-camera-images/40.png
+2025-03-29 16:33:19,201 - INFO - Imagem carregada: ./assets/images/security-camera-images/44.png
+2025-03-29 16:33:19,203 - INFO - Imagem carregada: ./assets/images/security-camera-images/2.png
+2025-03-29 16:33:19,205 - INFO - Imagem carregada: ./assets/images/security-camera-images/3.png
+2025-03-29 16:33:19,206 - INFO - Imagem carregada: ./assets/images/security-camera-images/51.png
+2025-03-29 16:33:19,208 - INFO - Imagem carregada: ./assets/images/security-camera-images/1.png
+2025-03-29 16:33:19,209 - INFO - Imagem carregada: ./assets/images/security-camera-images/46.png
+2025-03-29 16:33:21,948 - DEBUG - STREAM b'IHDR' 16 13
+2025-03-29 16:33:21,949 - DEBUG - STREAM b'pHYs' 41 9
+2025-03-29 16:33:21,949 - DEBUG - STREAM b'sRGB' 62 1
+2025-03-29 16:33:21,949 - DEBUG - STREAM b'gAMA' 75 4
+2025-03-29 16:33:21,949 - DEBUG - STREAM b'IDAT' 91 2264
+2025-03-29 16:33:21,981 - DEBUG - STREAM b'IHDR' 16 13
+2025-03-29 16:33:21,981 - DEBUG - STREAM b'pHYs' 41 9
+2025-03-29 16:33:21,982 - DEBUG - STREAM b'sRGB' 62 1
+2025-03-29 16:33:21,982 - DEBUG - STREAM b'gAMA' 75 4
+2025-03-29 16:33:21,982 - DEBUG - STREAM b'IDAT' 91 404
+2025-03-29 16:33:22,005 - DEBUG - STREAM b'IHDR' 16 13
+2025-03-29 16:33:22,005 - DEBUG - STREAM b'pHYs' 41 9
+2025-03-29 16:33:22,005 - DEBUG - STREAM b'sRGB' 62 1
+2025-03-29 16:33:22,005 - DEBUG - STREAM b'gAMA' 75 4
+2025-03-29 16:33:22,005 - DEBUG - STREAM b'IDAT' 91 1267
+2025-03-29 16:33:22,030 - DEBUG - STREAM b'IHDR' 16 13
+2025-03-29 16:33:22,030 - DEBUG - STREAM b'pHYs' 41 9
+2025-03-29 16:33:22,030 - DEBUG - STREAM b'sRGB' 62 1
+2025-03-29 16:33:22,030 - DEBUG - STREAM b'gAMA' 75 4
+2025-03-29 16:33:22,030 - DEBUG - STREAM b'IDAT' 91 282763
+2025-03-29 16:33:22,234 - INFO - Acionar Saida 23
