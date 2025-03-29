@@ -100,7 +100,7 @@ class PlaceEmptyContainerScreen(tk.Frame):
                 children=[
                     CircularSpinner(root=self.app, side=Side.TOP, anchor=Anchor.CENTER),
                     SizedBox(height=20),
-                    Text("Cancelamento operação",
+                    Text("Cancelando operação",
                          font_size=30,
                          color="#333"),
                     SizedBox(height=10),
