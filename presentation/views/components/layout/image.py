@@ -56,6 +56,9 @@ class CircularSpinner(BuildableWidget):
         self.animate()
 
     def animate(self):
+        if not self.image.winfo_exists():
+            return
+
         self.image.config(image=self.frames[self.index])
         self.index = (self.index + 1) % len(self.frames)
         self.root.after(30, self.animate)

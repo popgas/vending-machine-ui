@@ -1,6 +1,6 @@
 from dataclasses import dataclass, replace
 from typing import Optional
-
+import platform
 from domains.enums.machine_doors import VendingMachinePins
 from domains.enums.order_product_selected import OrderProductSelected
 
@@ -52,13 +52,13 @@ class NewOrderIntent:
         else:
             return VendingMachinePins.closeDoor3
 
-    def get_camera(self) -> int:
-        """
-        Returns a camera id based on the stock count.
-        """
+    def get_camera(self) -> int | str:
+        if platform.system() == 'Darwin':
+            return 0
+
         if self.stockCount >= 28:
-            return 1
+            return '/dev/video0'
         elif self.stockCount >= 15:
-            return 2
+            return '/dev/video4'
         else:
-            return 3
+            return '/dev/video2'

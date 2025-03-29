@@ -8,10 +8,10 @@ class AudioWorker:
 
     @staticmethod
     def play(path):
-        rx.just(path).subscribe(
+        rx.return_value(path).subscribe(
             on_next=AudioWorker.__play_audio,
             on_completed= lambda: print("audio played"),
-            on_error= lambda: print("audio not played"),
+            on_error= lambda e: print(f"audio not played {e}"),
             scheduler=AudioWorker.pool_scheduler
         )
 
@@ -26,4 +26,9 @@ class AudioWorker:
 
     @staticmethod
     def stop():
-        pygame.mixer.music.stop()
+        rx.return_value(None).subscribe(
+            on_next=lambda e: pygame.mixer.music.stop(),
+            on_completed= lambda: print("audio stopped"),
+            on_error= lambda e: print(f"audio not stopped {e}"),
+            scheduler= AudioWorker.pool_scheduler,
+        )

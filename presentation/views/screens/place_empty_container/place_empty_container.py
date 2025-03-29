@@ -96,6 +96,21 @@ class PlaceEmptyContainerScreen(tk.Frame):
         self.app.push('camera_verification', self.order_intent)
 
     def get_button_or_closing_door_spinner(self):
+        if self.state.cancelling:
+            return Column(
+                children=[
+                    CircularSpinner(root=self.app, side=Side.TOP, anchor=Anchor.CENTER),
+                    SizedBox(height=20),
+                    Text("Cancelamento operação",
+                         font_size=30,
+                         color="#333"),
+                    SizedBox(height=10),
+                    Text("Iremos fechar a porta, afaste-se por favor!",
+                         font_size=25,
+                         color="#333"),
+                ]
+            )
+
         if self.state.closing_door:
             return Column(
                 padding=Padding(bottom=30),
@@ -104,7 +119,6 @@ class PlaceEmptyContainerScreen(tk.Frame):
                     SizedBox(height=20),
                     Text("Fechando porta, afaste-se por favor!",
                          font_size=30,
-                         # alignment=Qt.AlignmentFlag.AlignCenter,
                          color="#333"),
                 ]
             )
@@ -126,9 +140,31 @@ class PlaceEmptyContainerScreen(tk.Frame):
                     border_color="#ccc",
                     fill=Fill.NONE,
                     on_click=self.go_to_camera_verification_part1,
+                ),
+
+                Row(
+                    children=[
+                        Text("Cancelar Operação",
+                             font_size=20,
+                             padding=Padding(30, 0, 30, 30),
+                             side=Side.LEFT,
+                             anchor=Anchor.LEFT,
+                             color="#fff"),
+                        Icon("xmark-white", anchor=Anchor.RIGHT, width=30, height=40, padding=Padding.all(30)),
+                    ],
+                    background_color="#cd5c5c",
+                    border_radius=5,
+                    fill=Fill.NONE,
+                    on_click=self.cancel_operation,
                 )
             ],
         )
+
+    def cancel_operation(self):
+        AudioWorker.play(f"{self.curr_dir}/assets/place_container_cancellation.mp3")
+        self.state.update(cancelling=True)
+        self.app.after(7 * 1000, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
+        self.app.after(12 * 1000, lambda: self.app.off_all("welcome"))
 
     def on_route_popped(self):
         print("route_popped")
@@ -145,9 +181,8 @@ class PlaceEmptyContainerScreen(tk.Frame):
         if self.state.time_to_close_door_automatically == 1:
             self.state.update(timer_reached_zero=True)
             AudioWorker.play(f"{self.curr_dir}/assets/door_open_idle.mp3")
-            self.app.after(5 * 1000, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
-            # QTimer.singleShot(5 * 1000, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
-            self.app.after(10 * 1000, lambda: self.app.off_all("welcome"))
+            self.app.after(7 * 1000, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
+            self.app.after(12 * 1000, lambda: self.app.off_all("welcome"))
             return
 
         self.state.update(
@@ -156,7 +191,7 @@ class PlaceEmptyContainerScreen(tk.Frame):
         self.app.after(1000, self.handle_timer)
 
     def get_timer_text(self) -> list[BuildableWidget]:
-        if self.state.timer_reached_zero:
+        if self.state.timer_reached_zero or self.state.cancelling:
             return []
 
         return [

@@ -11,7 +11,7 @@ from presentation.views.components.layout.column import Column
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
 from presentation.views.components.layout.enums.alignment import Side, Anchor, Fill
 from presentation.views.components.layout.icon import Icon
-from presentation.views.components.layout.image import ImageFromAssets
+from presentation.views.components.layout.image import ImageFromAssets, CircularSpinner
 from presentation.views.components.layout.padding import Padding
 from presentation.views.components.layout.row import Row
 from presentation.views.components.layout.sized_box import SizedBox
@@ -50,12 +50,14 @@ class OrderCompletedScreen(tkinter.Frame):
                     ),
                     SizedBox(height=20),
                     Text("Obrigado pela compra", font_size=40, color=ColorPalette.blue3),
-                    SizedBox(height=70),
+                    SizedBox(height=40),
                     *self.get_rating_component(),
+                    *self.closing_doors_components(),
+                    SizedBox(height=40),
                     SpacerVertical(),
                     Column(
                         width=500,
-                        height=200,
+                        height=100,
                         fill=Fill.NONE,
                         expand=False,
                         children=[
@@ -66,13 +68,22 @@ class OrderCompletedScreen(tkinter.Frame):
                             ),
                         ]
                     ),
-                    SizedBox(height=70),
                 ],
             ),
         )
 
         AudioWorker.play(f"{self.curr_dir}/assets/thanks_and_rate.mp3")
         self.timer = self.app.after(120 * 1000, self.close_door_and_go_back_to_beginning)
+
+    def closing_doors_components(self) -> list[BuildableWidget]:
+        if self.state.closing_doors:
+            return [
+                CircularSpinner(root=self.app, side=Side.TOP, anchor=Anchor.CENTER),
+                SizedBox(height=20),
+                Text("Fechando portas...")
+            ]
+
+        return []
 
     def get_rating_component(self) -> list[BuildableWidget]:
         if not self.state.has_rated:
@@ -108,17 +119,20 @@ class OrderCompletedScreen(tkinter.Frame):
 
         return [
             Column(
-                width=750,
+                width=850,
+                height=250,
+                fill=Fill.NONE,
+                expand=False,
                 children=[
                     Column(
                         children=[
                             Column(
                                 padding=Padding.all(20),
                                 children=[
-                                    Text("Seu feedback foi enviado, muito obrigado!", font_size=35,
+                                    Text("Seu feedback foi enviado, muito obrigado!", font_size=30,
                                          color=ColorPalette.blue3),
                                     SizedBox(height=35),
-                                    Icon("fa6s.circle-check", color=ColorPalette.green1, width=70),
+                                    Icon("circle-check-green", width=70, height=70, side=Side.TOP, anchor=Anchor.CENTER),
                                 ],
                             )
                         ],
@@ -162,11 +176,9 @@ class OrderCompletedScreen(tkinter.Frame):
 
     def close_door_and_go_back_to_beginning(self):
         self.app.after_cancel(self.timer)
-        # loading_dialog = LoadingDialog(message="Fechando portas...")
-        # loading_dialog.show()
+        self.state.update(closing_doors=True)
 
         AudioWorker.play(f"{self.curr_dir}/assets/closing_doors.mp3")
         GpioWorker.activate(self.order_intent.get_close_door_pin())
 
-        # self.app.after(8 * 1000, lambda: loading_dialog.accept())
         self.app.after(10 * 1000, lambda: self.app.push("welcome"))

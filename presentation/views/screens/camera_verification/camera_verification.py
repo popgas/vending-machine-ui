@@ -1,3 +1,4 @@
+import os
 import tkinter as tk
 
 from infrastructure.hardware.audio import AudioWorker
@@ -26,7 +27,6 @@ class CameraVerificationScreen(tk.Frame):
         self.order_intent = order_intent
         self.curr_dir = FileUtils.dir(__file__)
         self.state = CameraVerificationState()
-        print(self.app.container.winfo_width())
 
         Scaffold(
             parent=self,
@@ -55,14 +55,18 @@ class CameraVerificationScreen(tk.Frame):
             return Column(
                 expand=True,
                 children=[
-                    Icon("fa6s.circle-exclamation",
+                    SpacerVertical(),
+                    Icon("circle-exclamation-red",
                          width=70,
-                         color="#cd5c5c"
-                         ),
+                         height=70,
+                         side=Side.TOP,
+                         anchor=Anchor.CENTER,
+                     ),
                     SizedBox(height=20),
-                    Text("Botião Reprovado", font_size=50, color=ColorPalette.blue3),
+                    Text("Botião Reprovado", font_size=40, color=ColorPalette.blue3),
                     SizedBox(height=20),
-                    Text("Infelizmente seu botijão vazio não passou em nossa verificação de segurança.", font_size=30),
+                    Text("Infelizmente seu botijão vazio não passou em nossa verificação de segurança.", font_size=25),
+                    SpacerVertical(),
                 ],
             )
 
@@ -80,12 +84,23 @@ class CameraVerificationScreen(tk.Frame):
         )
 
     def verify_placed_container(self):
-        CameraWorker.start(on_completed=self.handle_camera_callback)
+        CameraWorker.start(
+            camera_socket=self.order_intent.get_camera(),
+            on_completed=self.handle_camera_callback
+        )
 
     def handle_camera_callback(self, result: CameraResult):
-        if result.best_score >= 50:
+        if "DEBUG" in os.environ:
+            score_to_pass = 0
+        else:
+            score_to_pass = 50
+
+        print(f"handle_camera_callback {result.best_score} {score_to_pass}")
+
+        if result.best_score >= score_to_pass:
             self.app.push("payment_selection", self.order_intent)
         else:
+            print("failed verification")
             self.state.update(failed_security_check=True)
             self.app.after(150, self.validation_failed)
 

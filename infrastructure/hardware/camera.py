@@ -16,8 +16,9 @@ class CameraResult:
 class CameraWorker(Observer):
     pool_scheduler = ThreadPoolScheduler(1)
 
-    def __init__(self, on_completed):
+    def __init__(self, camera_socket, on_completed):
         super().__init__()
+        self.camera_socket = camera_socket
         self.on_completed = on_completed
         self.result = CameraResult()
         self.logger = Logger.get_logger()
@@ -28,6 +29,7 @@ class CameraWorker(Observer):
             photo = self.take_photo()
 
             self.result = self.is_eligible(photo, security_images)
+            self.on_completed(self.result)
 
         except Exception as e:
             print(e)
@@ -36,13 +38,13 @@ class CameraWorker(Observer):
         print(error)
 
     def on_completed(self) -> None:
-        self.on_completed(self.result)
+        print(f"on_completed called {self.result}")
 
     @staticmethod
-    def start(on_completed: Callable[[CameraResult], None]):
-        camera = CameraWorker(on_completed=on_completed)
+    def start(camera_socket, on_completed: Callable[[CameraResult], None]):
+        camera = CameraWorker(camera_socket=camera_socket, on_completed=on_completed)
 
-        rx.just(scheduler=CameraWorker.pool_scheduler).subscribe(camera)
+        rx.just(None).subscribe(camera, scheduler=CameraWorker.pool_scheduler)
 
     def is_eligible(self, photo, security_images) -> CameraResult:
         result = CameraResult(
@@ -102,7 +104,7 @@ class CameraWorker(Observer):
         return len(good_matches)
 
     def take_photo(self):
-        cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(self.camera_socket)
 
         if not cap.isOpened():
             raise ValueError(f"Não foi possível abrir a câmera")

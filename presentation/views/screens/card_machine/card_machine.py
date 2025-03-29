@@ -52,7 +52,7 @@ class CardMachineScreen(tkinter.Frame):
             ),
         )
 
-        # self.create_order_request()
+        self.app.after(200, self.create_order_request)
 
     def play_initial_audio(self):
         if self.order_intent.paymentMethodId == 5 or self.order_intent.paymentMethodId == 9:

@@ -32,7 +32,6 @@ class PaymentSelectionScreen(tk.Frame):
             parent=self,
             child=Column(
                 expand=True,
-                padding=Padding.all(30),
                 children=[
                     TransparentTopBar(app, can_pop=can_pop),
                     Column(
