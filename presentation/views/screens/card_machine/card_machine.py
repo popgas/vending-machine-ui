@@ -1,5 +1,6 @@
 import os
 import tkinter
+import uuid
 
 from application import Application
 from domains.enums.order_product_selected import OrderProductSelected
@@ -52,7 +53,11 @@ class CardMachineScreen(tkinter.Frame):
             ),
         )
 
-        self.app.after(200, self.create_order_request)
+        self.correlation_id = uuid.uuid4().hex
+        self.app.after(5000, lambda: self.app.push('preparing_order', self.order_intent.copy_with(
+            correlationId=self.correlation_id,
+        )))
+        # self.app.after(200, self.create_order_request)
 
     def play_initial_audio(self):
         if self.order_intent.paymentMethodId == 5 or self.order_intent.paymentMethodId == 9:
