@@ -107,6 +107,7 @@ class ProductSelectionScreen(tk.Frame):
                                      font_size=20),
                             ],
                             side=Side.LEFT,
+                            on_click=onclick,
                         ),
                         SpacerHorizontal(),
                         Text(price,
@@ -114,7 +115,8 @@ class ProductSelectionScreen(tk.Frame):
                              anchor=Anchor.TOP_RIGHT,
                              padding=Padding(bottom=15),
                              font_size=40),
-                    ]
+                    ],
+                    on_click=onclick,
                 )
             ]
         )

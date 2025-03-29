@@ -1,9 +1,9 @@
 class VendingMachinePins:
     openDoor1 = 23
-    closeDoor1 = 24
-    openDoor2 = 25
-    closeDoor2 = 8
-    openDoor3 = 7
-    closeDoor3 = 1
+    closeDoor1 = 12
+    openDoor2 = 1
+    closeDoor2 = 7
+    openDoor3 = 8
+    closeDoor3 = 25
     reloadDoor = 26
-    rotateCarrousel = 12
+    rotateCarrousel = 24

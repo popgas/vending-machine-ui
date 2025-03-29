@@ -61,7 +61,7 @@ class Column(BuildableWidget):
             widget.config(highlightbackground=self.border_color, highlightthickness=self.border_width)
 
         for child in self.children:
-            child.build(widget)
+            child.build(parent=widget)
 
         if self.on_click is not None:
             widget.bind("<ButtonPress>", lambda x: self.on_click())
