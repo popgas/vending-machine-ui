@@ -61,7 +61,7 @@ class OrderCompletedScreen(tkinter.Frame):
         )
 
         AudioWorker.play(f"{self.curr_dir}/assets/thanks_and_rate.mp3")
-        self.timer = self.app.after(120 * 1000, self.close_door_and_go_back_to_beginning)
+        self.timer = self.app.after(60 * 1000, self.close_door_and_go_back_to_beginning)
 
     def get_go_back_button(self) -> list[BuildableWidget]:
         if self.state.closing_doors:
