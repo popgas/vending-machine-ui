@@ -1,4 +1,5 @@
 import glob
+import time
 from typing import Callable
 
 import cv2
@@ -32,12 +33,12 @@ class CameraWorker(Observer):
             photo = self.take_photo()
 
             self.result = self.is_eligible(photo, security_images)
+            self.on_completed(self.result)
+
+        except Exception as e:
             self.on_completed(CameraResult(
                 error=True
             ))
-
-        except Exception as e:
-            self.on_completed(self.result)
 
     def on_error(self, error: Exception) -> None:
         print(error)
@@ -119,20 +120,23 @@ class CameraWorker(Observer):
     def take_photo(self):
         cap = cv2.VideoCapture(self.camera_socket)
 
-        if not cap.isOpened():
-            raise ValueError(f"Não foi possível abrir a câmera")
+        try:
+            print(f"using camera {self.camera_socket}")
 
-        cv2.waitKey(100)
-        ret, frame = cap.read()
+            if not cap.isOpened():
+                raise ValueError(f"Não foi possível abrir a câmera")
 
-        if not ret:
-            raise ValueError(f"Não foi possível abrir a câmera")
+            time.sleep(0.1)
+            ret, frame = cap.read()
 
-        cap.release()
+            if not ret:
+                raise ValueError(f"Não foi possível abrir a câmera")
 
-        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        return gray_frame
+            return gray_frame
+        finally:
+            cap.release()
 
     def load_security_images(self):
         fixed_image_paths = glob.glob("./assets/images/security-camera-images/*.png")
