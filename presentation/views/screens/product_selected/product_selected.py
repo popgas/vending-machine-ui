@@ -28,14 +28,6 @@ class ProductSelectionScreen(tk.Frame):
 
         self.data = self.get_data()
 
-        if int(self.data['container_full_stock_count']) == 0:
-            app.off_all('empty_stock')
-            return
-
-        if 'is_under_maintenance' in self.data and bool(self.data['is_under_maintenance']):
-            app.off_all('tech_support')
-            return
-
         self.gas_refill_price = float(self.data['gas_refill_price'])
         self.container_with_gas_price = self.gas_refill_price + float(self.data['container_price'])
 
@@ -69,8 +61,14 @@ class ProductSelectionScreen(tk.Frame):
             ),
         )
 
-
-        AudioWorker.play(f"{FileUtils.dir(__file__)}/assets/audio.mp3")
+        if int(self.data['container_full_stock_count']) == 0:
+            self.app.after(200, lambda: app.off_all('empty_stock'))
+            return
+        elif 'is_under_maintenance' in self.data and bool(self.data['is_under_maintenance']):
+            self.app.after(200, lambda: app.off_all('tech_support'))
+            return
+        else:
+            AudioWorker.play(f"{FileUtils.dir(__file__)}/assets/audio.mp3")
 
     def go_to_place_container_screen(self):
         order_intent = NewOrderIntent(
