@@ -10,10 +10,11 @@ from rx.scheduler import ThreadPoolScheduler
 from infrastructure.observability.logger import Logger
 
 class CameraResult:
-    def __init__(self, best_score=0, best_score_image=None, taken_photo=None):
+    def __init__(self, best_score=0, best_score_image=None, taken_photo=None, error=False):
         self.best_score = best_score
         self.best_score_image = best_score_image
         self.taken_photo = taken_photo
+        self.error = error
 
 class CameraWorker(Observer):
     pool_scheduler = ThreadPoolScheduler(1)
@@ -31,10 +32,12 @@ class CameraWorker(Observer):
             photo = self.take_photo()
 
             self.result = self.is_eligible(photo, security_images)
-            self.on_completed(self.result)
+            self.on_completed(CameraResult(
+                error=True
+            ))
 
         except Exception as e:
-            print(e)
+            self.on_completed(self.result)
 
     def on_error(self, error: Exception) -> None:
         print(error)

@@ -36,6 +36,10 @@ class Application(tk.Tk):
             return
 
         current_widget = self.nav_stack.pop()
+
+        if hasattr(current_widget, 'dispose') and callable(current_widget.dispose):
+            current_widget.dispose()
+
         # Remove the current widget.
         current_widget.destroy()
         # Bring the previous screen to the front.

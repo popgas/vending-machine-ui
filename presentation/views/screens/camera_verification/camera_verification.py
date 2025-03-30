@@ -104,6 +104,11 @@ class CameraVerificationScreen(tk.Frame):
         )
 
     def handle_camera_callback(self, result: CameraResult):
+        if result.error:
+            AudioWorker.play(f"{self.curr_dir}/assets/camera_not_working.mp3")
+            GpioWorker.activate(self.order_intent.get_open_door_pin())
+            return
+
         if "DEBUG" in os.environ:
             score_to_pass = 0
         else:
