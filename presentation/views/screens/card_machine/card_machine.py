@@ -128,8 +128,8 @@ class CardMachineScreen(tkinter.Frame):
             'payment_method_id': self.order_intent.paymentMethodId,
             'product_price': self.order_intent.productPrice,
             'product_selected': product_selected,
-            'placed_container_photo': self.order_intent.get_placed_container_photo_as_base64(),
-            'purchased_container_photo': self.order_intent.get_purchased_container_photo_as_base64(),
+            # 'placed_container_photo': self.order_intent.get_placed_container_photo_as_base64(),
+            # 'purchased_container_photo': self.order_intent.get_purchased_container_photo_as_base64(),
         }).json()
 
         print(f"creating order response {response}")

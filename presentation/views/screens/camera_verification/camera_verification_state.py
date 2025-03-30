@@ -4,7 +4,7 @@ from presentation.views.core.state_notifier import StateNotifier
 class CameraVerificationState(StateNotifier):
     def __init__(self):
         super().__init__()
-        self.failed_security_check = True
+        self.failed_security_check = False
 
     def update(self,
                failed_security_check=None):
