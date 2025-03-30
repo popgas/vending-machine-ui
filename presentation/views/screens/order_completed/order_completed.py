@@ -190,4 +190,4 @@ class OrderCompletedScreen(tkinter.Frame):
         AudioWorker.play(f"{self.curr_dir}/assets/closing_doors.mp3")
         GpioWorker.activate(self.order_intent.get_close_door_pin())
 
-        self.app.after(10 * 1000, lambda: self.app.push("welcome"))
+        self.app.after(15 * 1000, lambda: self.app.push("welcome"))
