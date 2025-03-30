@@ -10,9 +10,10 @@ from rx.scheduler import ThreadPoolScheduler
 from infrastructure.observability.logger import Logger
 
 class CameraResult:
-    def __init__(self, best_score=0, best_score_image=None):
+    def __init__(self, best_score=0, best_score_image=None, taken_photo=None):
         self.best_score = best_score
         self.best_score_image = best_score_image
+        self.taken_photo = taken_photo
 
 class CameraWorker(Observer):
     pool_scheduler = ThreadPoolScheduler(1)
@@ -62,6 +63,7 @@ class CameraWorker(Observer):
                 result = CameraResult(
                     best_score=score,
                     best_score_image=fixed_image,
+                    taken_photo=photo
                 )
 
         print(f"final score: {result.best_score}")

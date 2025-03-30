@@ -10,11 +10,13 @@ from presentation.views.components.layout.column import Column
 from presentation.views.components.layout.enums.alignment import Side, Anchor
 from presentation.views.components.layout.icon import Icon
 from presentation.views.components.layout.image import ImageFromAssets, CircularSpinner
+from presentation.views.components.layout.padding import Padding
 from presentation.views.components.layout.sized_box import SizedBox
 from presentation.views.components.layout.spacer import SpacerVertical
 from presentation.views.components.layout.text import Text
 from presentation.views.components.scaffold.state_provider import StateProvider
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
+from presentation.views.components.state.countdown_timer import CountdownTimer
 from presentation.views.screens.camera_verification.camera_verification_state import CameraVerificationState
 from application import Application
 from utils.file import FileUtils
@@ -27,6 +29,14 @@ class CameraVerificationScreen(tk.Frame):
         self.order_intent = order_intent
         self.curr_dir = FileUtils.dir(__file__)
         self.state = CameraVerificationState()
+        self.countdown_timer = CountdownTimer(
+            app=app,
+            initial_value=10,
+            on_reached_zero=self.app.pop,
+            padding=Padding(top=25, bottom=10),
+            text_builder=lambda v: f"Aguarde {v} segundo(s)...",
+            autostart=False
+        )
 
         StateProvider(
             parent=self,
@@ -63,9 +73,12 @@ class CameraVerificationScreen(tk.Frame):
                          anchor=Anchor.CENTER,
                      ),
                     SizedBox(height=20),
-                    Text("Botião Reprovado", font_size=40, color=ColorPalette.blue3),
-                    SizedBox(height=20),
-                    Text("Infelizmente seu botijão vazio não passou em nossa verificação de segurança.", font_size=25),
+                    Text("Botião Reprovado", font_size=35, color=ColorPalette.blue3),
+                    SizedBox(height=40),
+                    Text("Infelizmente seu botijão vazio não", font_size=22),
+                    Text("passou em nossa verificação de segurança.", font_size=22),
+                    SizedBox(height=100),
+                    self.countdown_timer,
                     SpacerVertical(),
                 ],
             )
@@ -98,7 +111,9 @@ class CameraVerificationScreen(tk.Frame):
         print(f"handle_camera_callback {result.best_score} {score_to_pass}")
 
         if result.best_score >= score_to_pass:
-            self.app.push("payment_selection", self.order_intent)
+            self.app.push("payment_selection", self.order_intent.copy_with(
+                placedContainerPhoto=result.taken_photo
+            ))
         else:
             print("failed verification")
             self.state.update(failed_security_check=True)
@@ -107,4 +122,4 @@ class CameraVerificationScreen(tk.Frame):
     def validation_failed(self):
         AudioWorker.play(f"{self.curr_dir}/assets/security_check_failed.mp3")
         GpioWorker.activate(self.order_intent.get_open_door_pin())
-        self.app.after(10 * 1000, lambda: self.app.pop())
+        self.countdown_timer.start()
