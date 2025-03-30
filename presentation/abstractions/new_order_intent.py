@@ -44,9 +44,9 @@ class NewOrderIntent:
         """
         Returns the pin number for opening a door based on the stock count.
         """
-        if self.stockCount >= 28:
+        if self.__use_first_door():
             return VendingMachinePins.openDoor1
-        elif self.stockCount >= 15:
+        elif self.__use_second_doors():
             return VendingMachinePins.openDoor2
         else:
             return VendingMachinePins.openDoor3
@@ -55,9 +55,9 @@ class NewOrderIntent:
         """
         Returns the pin number for closing a door based on the stock count.
         """
-        if self.stockCount >= 28:
+        if self.__use_first_door():
             return VendingMachinePins.closeDoor1
-        elif self.stockCount >= 15:
+        elif self.__use_second_doors():
             return VendingMachinePins.closeDoor2
         else:
             return VendingMachinePins.closeDoor3
@@ -66,9 +66,9 @@ class NewOrderIntent:
         if platform.system() == 'Darwin':
             return 0
 
-        if self.stockCount >= 28:
+        if self.__use_first_door():
             return '/dev/video0'
-        elif self.stockCount >= 15:
+        elif self.__use_second_doors():
             return '/dev/video4'
         else:
             return '/dev/video2'
@@ -83,3 +83,8 @@ class NewOrderIntent:
             retval, buffer = cv2.imencode('.jpg', self.purchasedContainerPhoto)
             return base64.b64encode(buffer).decode("utf-8")
 
+    def __use_first_door(self):
+        return self.stockCount >= 27
+
+    def __use_second_doors(self):
+        return self.stockCount >= 14
