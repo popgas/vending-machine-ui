@@ -69,7 +69,7 @@ class NewOrderIntent:
         if self.__use_first_door():
             return '/dev/video0'
         elif self.__use_second_doors():
-            return '/dev/video3'
+            return '/dev/video2'
         else:
             return '/dev/video2'
 
