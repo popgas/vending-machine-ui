@@ -1,7 +1,7 @@
 #!/bin/bash
 
-cp popgas.service /etc/systemd/system/popgas.service
-cp popgas.timer /etc/systemd/system/popgas.timer
+cp popgas.service /etc/systemd/system/
+cp popgas.timer /etc/systemd/system/
 
 sudo systemctl daemon-reload
 sudo systemctl enable popgas.timer
