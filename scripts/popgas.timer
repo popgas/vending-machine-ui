@@ -1,0 +1,9 @@
+[Unit]
+Description=Delay start of PopGas Vending Machine UI
+
+[Timer]
+OnBootSec=3min
+Unit=popgas.service
+
+[Install]
+WantedBy=timers.target
