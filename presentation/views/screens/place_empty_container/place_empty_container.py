@@ -1,6 +1,7 @@
 import tkinter as tk
 
 from application import Application
+from domains.enums.machine_doors import VendingMachinePins
 from infrastructure.hardware.audio import AudioWorker
 from infrastructure.hardware.gpio import GpioWorker
 from presentation.abstractions.new_order_intent import NewOrderIntent
@@ -92,8 +93,13 @@ class PlaceEmptyContainerScreen(tk.Frame):
 
     def go_to_camera_verification_part2(self):
         AudioWorker.play(f"{self.curr_dir}/assets/door_will_close.mp3")
-        self.app.after(5 * 1000, lambda: GpioWorker.activate(self.order_intent.get_close_door_pin()))
+        self.app.after(5 * 1000, self.close_all_doors)
         self.app.after(20 * 1000, self.go_to_camera_verification_part3)
+
+    def close_all_doors(self):
+        GpioWorker.activate(VendingMachinePins.closeDoor1)
+        GpioWorker.activate(VendingMachinePins.closeDoor2)
+        GpioWorker.activate(VendingMachinePins.closeDoor3)
 
     def go_to_camera_verification_part3(self):
         self.state.update(closing_door=False)
