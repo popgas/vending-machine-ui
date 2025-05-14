@@ -73,7 +73,7 @@ class ProductSelectionScreen(tk.Frame):
     def go_to_place_container_screen(self):
         order_intent = NewOrderIntent(
             productSelected=OrderProductSelected.onlyGasRefill,
-            productPrice=self.container_with_gas_price,
+            productPrice=self.gas_refill_price,
             stockCount=int(self.data['container_full_stock_count']),
         )
 
@@ -83,7 +83,7 @@ class ProductSelectionScreen(tk.Frame):
     def go_to_payment_selection_screen(self):
         order_intent = NewOrderIntent(
             productSelected=OrderProductSelected.gasWithContainer,
-            productPrice=self.gas_refill_price,
+            productPrice=self.container_with_gas_price,
             stockCount=int(self.data['container_full_stock_count']),
         )
 
