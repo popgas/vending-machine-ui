@@ -83,7 +83,7 @@ class PaymentSelectionScreen(tk.Frame):
                 SpacerVertical(),
                 Text("Selecione", font_size=40, color=ColorPalette.blue3),
                 Text("a forma de pagamento", font_size=40, color=ColorPalette.blue3),
-                SizedBox(height=100),
+                SizedBox(height=60),
                 Column(
                     expand=True,
                     children=[
@@ -170,7 +170,7 @@ class PaymentSelectionScreen(tk.Frame):
             children=[
                 Row(
                     width=int(self.app.container.winfo_width() * 0.8),
-                    height=150,
+                    height=120,
                     children=[
                         SizedBox(width=30),
                         image,
