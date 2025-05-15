@@ -94,7 +94,7 @@ class PlaceEmptyContainerScreen(tk.Frame):
     def go_to_camera_verification_part2(self):
         AudioWorker.play(f"{self.curr_dir}/assets/door_will_close.mp3")
         self.app.after(5 * 1000, self.close_all_doors)
-        self.app.after(20 * 1000, self.go_to_camera_verification_part3)
+        self.app.after(7 * 1000, self.go_to_camera_verification_part3)
 
     def close_all_doors(self):
         GpioWorker.activate(VendingMachinePins.closeDoor1)
