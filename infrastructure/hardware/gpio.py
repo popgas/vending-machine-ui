@@ -45,10 +45,11 @@ class GpioWorker:
             scheduler=GpioWorker.pool_scheduler
         )
 
-    def close_all_doors(self):
-        self.activate(VendingMachinePins.closeDoor1)
-        self.activate(VendingMachinePins.closeDoor2)
-        self.activate(VendingMachinePins.closeDoor3)
+    @staticmethod
+    def close_all_doors():
+        GpioWorker.activate(VendingMachinePins.closeDoor1)
+        GpioWorker.activate(VendingMachinePins.closeDoor2)
+        GpioWorker.activate(VendingMachinePins.closeDoor3)
 
     @staticmethod
     def __activate_pin(pin):
