@@ -191,7 +191,7 @@ class PlaceEmptyContainerScreen(tk.Frame):
         self.state.update(timer_reached_zero=True)
         self.countdown_timer.cancel()
         AudioWorker.play(f"{self.curr_dir}/assets/door_open_idle.mp3")
-        self.app.after(7 * 1000, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
+        self.app.after(7 * 1000, lambda: self.close_all_doors())
         self.app.after(12 * 1000, lambda: self.app.off_all("welcome"))
 
     def get_timer_text(self) -> BuildableWidget:
