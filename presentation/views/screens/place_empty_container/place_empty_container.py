@@ -93,13 +93,8 @@ class PlaceEmptyContainerScreen(tk.Frame):
 
     def go_to_camera_verification_part2(self):
         AudioWorker.play(f"{self.curr_dir}/assets/door_will_close.mp3")
-        self.app.after(5 * 1000, self.close_all_doors)
+        self.app.after(5 * 1000, lambda: GpioWorker.close_all_doors())
         self.app.after(7 * 1000, self.go_to_camera_verification_part3)
-
-    def close_all_doors(self):
-        GpioWorker.activate(VendingMachinePins.closeDoor1)
-        GpioWorker.activate(VendingMachinePins.closeDoor2)
-        GpioWorker.activate(VendingMachinePins.closeDoor3)
 
     def go_to_camera_verification_part3(self):
         self.state.update(closing_door=False)
@@ -191,7 +186,7 @@ class PlaceEmptyContainerScreen(tk.Frame):
         self.state.update(timer_reached_zero=True)
         self.countdown_timer.cancel()
         AudioWorker.play(f"{self.curr_dir}/assets/door_open_idle.mp3")
-        self.app.after(7 * 1000, lambda: self.close_all_doors())
+        self.app.after(7 * 1000, lambda: GpioWorker.close_all_doors())
         self.app.after(12 * 1000, lambda: self.app.off_all("welcome"))
 
     def get_timer_text(self) -> BuildableWidget:
