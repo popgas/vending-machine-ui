@@ -33,12 +33,12 @@ if __name__ == '__main__':
     app.wm_iconphoto(False, photo)
 
     app.attributes("-fullscreen", True)
-    app.push("payment_selection", NewOrderIntent(
-        productSelected=OrderProductSelected.onlyGasRefill,
-        productPrice=100,
-        stockCount=40,
-        paymentMethodId=5,
-        correlationId="1234"
-    ))
-    # app.push("welcome")
+    # app.push("payment_selection", NewOrderIntent(
+    #     productSelected=OrderProductSelected.onlyGasRefill,
+    #     productPrice=100,
+    #     stockCount=40,
+    #     paymentMethodId=5,
+    #     correlationId="1234"
+    # ))
+    app.push("welcome")
     app.mainloop()
