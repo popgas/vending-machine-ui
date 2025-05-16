@@ -1,4 +1,5 @@
 import base64
+import os
 from dataclasses import dataclass, replace
 from typing import Optional
 import platform
@@ -67,11 +68,11 @@ class NewOrderIntent:
             return 0
 
         if self.__use_first_door():
-            return '/dev/video0'
+            return os.environ['CAMERA_1']
         elif self.__use_second_doors():
-            return '/dev/video4'
+            return os.environ['CAMERA_2']
         else:
-            return '/dev/video2'
+            return os.environ['CAMERA_3']
 
     def get_placed_container_photo_as_base64(self) -> Optional[str]:
         if self.placedContainerPhoto is not None:
