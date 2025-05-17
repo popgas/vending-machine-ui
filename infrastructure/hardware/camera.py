@@ -124,47 +124,46 @@ class CameraWorker(Observer):
             if photo is None or fixed_image is None:
                 self.logger.error("Photo or fixed_image is None")
                 return 0.0
-
-            # Ensure BGR (3 channels, uint8)
             if len(photo.shape) != 3 or photo.shape[2] != 3 or photo.dtype != 'uint8':
                 self.logger.error(f"Photo is not a valid BGR image: shape={photo.shape}, dtype={photo.dtype}")
                 return 0.0
             if len(fixed_image.shape) != 3 or fixed_image.shape[2] != 3 or fixed_image.dtype != 'uint8':
-                self.logger.error(f"Fixed image is not a valid BGR image: shape={fixed_image.shape}, dtype={fixed_image.dtype}")
+                self.logger.error(
+                    f"Fixed image is not a valid BGR image: shape={fixed_image.shape}, dtype={fixed_image.dtype}")
                 return 0.0
 
-            # Convert to grayscale for ORB
-            gray_photo = cv2.cvtColor(photo, cv2.COLOR_BGR2GRAY)
-            gray_fixed = cv2.cvtColor(fixed_image, cv2.COLOR_BGR2GRAY)
+            # Split into B, G, R channels
+            b1, g1, r1 = cv2.split(photo)
+            b2, g2, r2 = cv2.split(fixed_image)
 
-            # Initialize ORB detector
-            orb = cv2.ORB_create(nfeatures=1000)  # Increase features for better matching
+            # Initialize ORB
+            orb = cv2.ORB_create(nfeatures=500)  # Fewer features per channel to balance speed
 
-            # Detect keypoints and compute descriptors
-            kp1, des1 = orb.detectAndCompute(gray_photo, None)
-            kp2, des2 = orb.detectAndCompute(gray_fixed, None)
+            # Process each channel
+            channels = [(b1, b2), (g1, g2), (r1, r2)]
+            total_good_matches = 0
+            total_possible_matches = 0
 
-            # Check if descriptors are found
-            if des1 is None or des2 is None:
-                self.logger.warning("No descriptors found in one or both images")
-                return 0.0
+            for ch1, ch2 in channels:
+                kp1, des1 = orb.detectAndCompute(ch1, None)
+                kp2, des2 = orb.detectAndCompute(ch2, None)
 
-            # Create Brute-Force Matcher (Hamming distance for ORB)
-            bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
-            matches = bf.match(des1, des2)
+                if des1 is None or des2 is None:
+                    self.logger.warning(f"No descriptors in channel: shape={ch1.shape}")
+                    continue
 
-            # Sort matches by distance (lower is better)
-            matches = sorted(matches, key=lambda x: x.distance)
+                bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+                matches = bf.match(des1, des2)
+                matches = sorted(matches, key=lambda x: x.distance)
+                good_matches = [m for m in matches if m.distance < 60]
 
-            # Filter good matches (adjust threshold as needed)
-            good_matches = [m for m in matches if m.distance < 60]
+                total_good_matches += len(good_matches)
+                total_possible_matches += min(len(kp1), len(kp2))
 
-            # Compute score based on number of good matches
-            max_possible_matches = min(len(kp1), len(kp2))
-            score = len(good_matches) / max_possible_matches if max_possible_matches > 0 else 0.0
-
-            # Normalize score to [0, 1] range
+            # Compute score
+            score = total_good_matches / total_possible_matches if total_possible_matches > 0 else 0.0
             score = min(score, 1.0)
+            self.logger.info(f"Good matches: {total_good_matches}, Possible: {total_possible_matches}, Score: {score}")
             return float(score)
 
         except Exception as e:
