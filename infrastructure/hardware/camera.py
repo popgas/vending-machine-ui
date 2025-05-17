@@ -130,10 +130,16 @@ class CameraWorker(Observer):
             if not cap.isOpened():
                 raise ValueError(f"Não foi possível abrir a câmera")
 
-            time.sleep(0.1)
+            time.sleep(1)
+
+            for _ in range(5):
+                cap.read()
+
+            time.sleep(1)
+
             ret, frame = cap.read()
 
-            if not ret:
+            if not ret or frame is None:
                 raise ValueError(f"Não foi possível abrir a câmera")
 
             gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
