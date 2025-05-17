@@ -67,7 +67,7 @@ class CameraWorker(Observer):
             score = self.compare_images(photo, fixed_image['content'])
             avg_score += score
 
-            self.logger.info(f"score: {score}, img: ${fixed_image['path']}")
+            self.logger.info(f"score: {score}, img: {fixed_image['path']}")
 
             if score > result.best_score:
                 result = CameraResult(
@@ -76,8 +76,9 @@ class CameraWorker(Observer):
                     taken_photo=photo
                 )
 
+        avg = avg_score / len(security_images) if security_images else 0
         self.logger.info(f"final score: {result.best_score}")
-        self.logger.info(f"avg score: {avg_score / len(security_images)}")
+        self.logger.info(f"avg score: {avg}")
 
         return result
 
@@ -118,34 +119,54 @@ class CameraWorker(Observer):
     #     return len(good_matches)
 
     def compare_images(self, photo, fixed_image):
-        # Validate inputs
-        if photo is None or fixed_image is None:
-            self.logger.error("Photo or fixed_image is None")
-            return 0.0
-
-        # Ensure both are 3-channel BGR images
-        if len(photo.shape) != 3 or photo.shape[2] != 3:
-            self.logger.error(f"Photo is not a 3-channel BGR image: {photo.shape}")
-            return 0.0
-        if len(fixed_image.shape) != 3 or fixed_image.shape[2] != 3:
-            self.logger.error(f"Fixed image is not a 3-channel BGR image: {fixed_image.shape}")
-            return 0.0
-
-        # Ensure uint8 type
-        if photo.dtype != 'uint8':
-            photo = photo.astype('uint8')
-        if fixed_image.dtype != 'uint8':
-            fixed_image = fixed_image.astype('uint8')
-
         try:
-            # Resize photo to match fixed_image dimensions
-            resized_frame = cv2.resize(photo, (fixed_image.shape[1], fixed_image.shape[0]))
+            # Validate inputs
+            if photo is None or fixed_image is None:
+                self.logger.error("Photo or fixed_image is None")
+                return 0.0
 
-            # Perform template matching
-            correlation = cv2.matchTemplate(resized_frame, fixed_image, cv2.TM_CCOEFF_NORMED)
-            max_corr = np.max(correlation)
+            # Ensure BGR (3 channels, uint8)
+            if len(photo.shape) != 3 or photo.shape[2] != 3 or photo.dtype != 'uint8':
+                self.logger.error(f"Photo is not a valid BGR image: shape={photo.shape}, dtype={photo.dtype}")
+                return 0.0
+            if len(fixed_image.shape) != 3 or fixed_image.shape[2] != 3 or fixed_image.dtype != 'uint8':
+                self.logger.error(f"Fixed image is not a valid BGR image: shape={fixed_image.shape}, dtype={fixed_image.dtype}")
+                return 0.0
 
-            return float(max_corr)
+            # Convert to grayscale for ORB
+            gray_photo = cv2.cvtColor(photo, cv2.COLOR_BGR2GRAY)
+            gray_fixed = cv2.cvtColor(fixed_image, cv2.COLOR_BGR2GRAY)
+
+            # Initialize ORB detector
+            orb = cv2.ORB_create(nfeatures=1000)  # Increase features for better matching
+
+            # Detect keypoints and compute descriptors
+            kp1, des1 = orb.detectAndCompute(gray_photo, None)
+            kp2, des2 = orb.detectAndCompute(gray_fixed, None)
+
+            # Check if descriptors are found
+            if des1 is None or des2 is None:
+                self.logger.warning("No descriptors found in one or both images")
+                return 0.0
+
+            # Create Brute-Force Matcher (Hamming distance for ORB)
+            bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+            matches = bf.match(des1, des2)
+
+            # Sort matches by distance (lower is better)
+            matches = sorted(matches, key=lambda x: x.distance)
+
+            # Filter good matches (adjust threshold as needed)
+            good_matches = [m for m in matches if m.distance < 60]
+
+            # Compute score based on number of good matches
+            max_possible_matches = min(len(kp1), len(kp2))
+            score = len(good_matches) / max_possible_matches if max_possible_matches > 0 else 0.0
+
+            # Normalize score to [0, 1] range
+            score = min(score, 1.0)
+            return float(score)
+
         except Exception as e:
             self.logger.error(f"Error in compare_images: {e}")
             return 0.0
