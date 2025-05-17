@@ -187,7 +187,10 @@ class CameraWorker(Observer):
         for image in fixed_image_paths:
             loaded = cv2.imread(image, cv2.IMREAD_GRAYSCALE)
             if loaded is not None:
-                images.append(loaded)
+                images.append({
+                    'content': loaded,
+                    'path': image
+                })
                 self.logger.info(f"Imagem carregada: {image}")
             else:
                 self.logger.error(f"Erro ao carregar a imagem: {image}")
