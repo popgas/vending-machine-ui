@@ -98,10 +98,14 @@ class CameraVerificationScreen(tk.Frame):
         )
 
     def verify_placed_container(self):
-        CameraWorker.start(
-            camera_socket=self.order_intent.get_camera(),
-            on_completed=self.handle_camera_callback
-        )
+        try:
+            CameraWorker.start(
+                camera_socket=self.order_intent.get_camera(),
+                on_completed=self.handle_camera_callback
+            )
+        except Exception as e:
+            self.handle_camera_callback(CameraResult(error=True))
+
 
     def handle_camera_callback(self, result: CameraResult):
         if result.error:
