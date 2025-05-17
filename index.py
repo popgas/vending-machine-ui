@@ -1,4 +1,7 @@
+import os
+
 from domains.enums.order_product_selected import OrderProductSelected
+from infrastructure.hardware.camera import CameraWorker
 from infrastructure.hardware.gpio import GpioWorker
 from presentation.abstractions.new_order_intent import NewOrderIntent
 from presentation.views.screens.camera_verification.camera_verification import CameraVerificationScreen
@@ -16,6 +19,9 @@ import tkinter as tk
 
 if __name__ == '__main__':
     GpioWorker.config()
+
+    if "DEBUG" in os.environ:
+        CameraWorker.dry_run()
 
     app = Application({
         'welcome': lambda *args: WelcomeScreen(*args),

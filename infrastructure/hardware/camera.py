@@ -1,4 +1,5 @@
 import glob
+import os
 import time
 from typing import Callable
 
@@ -154,3 +155,29 @@ class CameraWorker(Observer):
             self.logger.warning("Nenhuma imagem válida foi encontrada na pasta.")
 
         return images
+
+    @staticmethod
+    def dry_run():
+        cameras = [
+            os.environ['CAMERA_1'],
+            os.environ['CAMERA_2'],
+            os.environ['CAMERA_3']
+        ]
+        i = 0
+
+        for camera in cameras:
+            camera = cv2.VideoCapture(camera)
+
+            if not camera.isOpened():
+                print("Error: Could not open camera.")
+                exit()
+
+            ret, frame = camera.read()
+            camera.release()
+
+            if not ret:
+                print("Error: Could not read frame.")
+                exit()
+
+            cv2.imwrite(f"/tmp/photo{i}.jpg", frame)
+            i = i + 1
