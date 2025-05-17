@@ -184,25 +184,16 @@ class CameraWorker(Observer):
         fixed_image_paths = glob.glob(path)
         images = []
 
-        for image_path in fixed_image_paths:
-            # Load as BGR (3-channel)
-            loaded = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+        for image in fixed_image_paths:
+            loaded = cv2.imread(image, cv2.IMREAD_GRAYSCALE)
             if loaded is not None:
-                # Verify it's a 3-channel BGR image
-                if len(loaded.shape) == 3 and loaded.shape[2] == 3 and loaded.dtype == 'uint8':
-                    images.append({
-                        'path': image_path,
-                        'content': loaded
-                    })
-                    self.logger.info(f"Imagem carregada: {image_path}")
-                else:
-                    self.logger.error(f"Imagem não é BGR ou não é uint8: {image_path}, shape: {loaded.shape if loaded is not None else 'None'}, dtype: {loaded.dtype if loaded is not None else 'None'}")
+                images.append(loaded)
+                self.logger.info(f"Imagem carregada: {image}")
             else:
-                self.logger.error(f"Erro ao carregar a imagem: {image_path}")
+                self.logger.error(f"Erro ao carregar a imagem: {image}")
 
         if not images:
             self.logger.warning("Nenhuma imagem válida foi encontrada na pasta.")
-            raise ValueError("No valid BGR images found in the specified directory")
 
         return images
 
