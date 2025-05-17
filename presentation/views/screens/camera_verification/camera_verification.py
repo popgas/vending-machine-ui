@@ -114,7 +114,7 @@ class CameraVerificationScreen(tk.Frame):
             self.app.after(10000, lambda: self.app.pop())
             return
 
-        if result.best_score_security >= 0.45 and result.best_score_security >= result.best_score_empty:
+        if result.best_score_security >= 0.50 and result.best_score_security > result.best_score_empty:
             self.app.push("payment_selection", self.order_intent.copy_with(
                 placedContainerPhoto=result.taken_photo
             ))
