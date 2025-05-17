@@ -181,7 +181,7 @@ class CameraWorker(Observer):
             cap.release()
 
     def load_security_images(self, path):
-        fixed_image_paths = glob.glob()
+        fixed_image_paths = glob.glob(path)
         images = []
 
         for image_path in fixed_image_paths:
