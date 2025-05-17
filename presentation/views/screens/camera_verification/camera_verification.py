@@ -119,16 +119,23 @@ class CameraVerificationScreen(tk.Frame):
         else:
             score_to_pass = 0.45
 
-        print(f"handle_camera_callback {result.best_score} {score_to_pass}")
+        print(f"handle_camera_callback {result.best_score_security} >={score_to_pass}")
+        print(f"handle_camera_callback {result.best_score_empty} <=0.8")
 
-        if result.best_score >= score_to_pass:
+        if result.best_score_empty >= 0.8:
+            self.security_check_failed()
+
+        elif result.best_score_security >= score_to_pass:
             self.app.push("payment_selection", self.order_intent.copy_with(
                 placedContainerPhoto=result.taken_photo
             ))
         else:
-            print("failed verification")
-            self.state.update(failed_security_check=True)
-            self.app.after(150, self.validation_failed)
+            self.security_check_failed()
+
+    def security_check_failed(self):
+        print("failed verification")
+        self.state.update(failed_security_check=True)
+        self.app.after(150, self.validation_failed)
 
     def validation_failed(self):
         AudioWorker.play(f"{self.curr_dir}/assets/security_check_failed.mp3")
