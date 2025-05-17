@@ -59,9 +59,11 @@ class CameraWorker(Observer):
             best_score=0,
             best_score_image=None,
         )
+        avg_score = 0
 
         for idx, fixed_image in enumerate(security_images):
             score = self.compare_images(photo, fixed_image['content'])
+            avg_score += score
 
             self.logger.info(f"score: {score}, img: ${fixed_image['path']}")
 
@@ -73,8 +75,7 @@ class CameraWorker(Observer):
                 )
 
         self.logger.info(f"final score: {result.best_score}")
-
-
+        self.logger.info(f"avg score: {avg_score / len(security_images)}")
 
         return result
 
