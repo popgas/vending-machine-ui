@@ -38,11 +38,13 @@ class CameraWorker(Observer):
             self.on_completed(self.result)
 
         except Exception as e:
+            self.logger.error(e)
             self.on_completed(CameraResult(
                 error=True
             ))
 
     def on_error(self, error: Exception) -> None:
+        self.logger.error(error)
         self.logger.info(error)
 
     def on_completed(self) -> None:
