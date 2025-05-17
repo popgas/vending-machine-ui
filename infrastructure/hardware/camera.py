@@ -103,35 +103,6 @@ class CameraWorker(Observer):
         else:
             return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    # def compare_images(self, image1, image2):
-    #     # Convert images to grayscale for feature detection
-    #     gray1 = self.to_gray(image1)
-    #     gray2 = self.to_gray(image2)
-    #
-    #     # Initialize the ORB detector
-    #     orb = cv2.ORB_create()
-    #
-    #     # Detect keypoints and compute descriptors
-    #     kp1, des1 = orb.detectAndCompute(image1, None)
-    #     kp2, des2 = orb.detectAndCompute(gray2, None)
-    #
-    #     # Check if descriptors are found
-    #     if des1 is None or des2 is None:
-    #         return 0
-    #
-    #     # Create a Brute-Force Matcher object with Hamming distance (suitable for ORB)
-    #     bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
-    #     matches = bf.match(des1, des2)
-    #
-    #     # Sort matches based on distance. Lower distance means better match.
-    #     matches = sorted(matches, key=lambda x: x.distance)
-    #
-    #     # Filter for good matches based on a distance threshold (you can adjust the threshold)
-    #     good_matches = [m for m in matches if m.distance < 50]
-    #
-    #     # Return the number of good matches as a similarity score
-    #     return len(good_matches)
-
     def compare_images(self, photo, fixed_image):
         resized_frame = cv2.resize(photo, (fixed_image.shape[1], fixed_image.shape[0]))
         correlation = cv2.matchTemplate(resized_frame, fixed_image, cv2.TM_CCOEFF_NORMED)
@@ -161,17 +132,13 @@ class CameraWorker(Observer):
             if not ret or frame is None:
                 raise ValueError("Não foi possível abrir a câmera")
 
-            # Ensure BGR (3-channel, uint8)
-            if len(frame.shape) != 3 or frame.shape[2] != 3:
-                raise ValueError(f"Frame is not a 3-channel BGR image: {frame.shape}")
-            if frame.dtype != 'uint8':
-                frame = frame.astype('uint8')
+            gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
             # Save the frame
             curr_datetime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            cv2.imwrite(f"/tmp/photo_{curr_datetime}.jpg", frame)
+            cv2.imwrite(f"/tmp/photo_{curr_datetime}.jpg", gray_frame)
 
-            return frame
+            return gray_frame
 
         except Exception as e:
             self.logger.error(f"Error in take_photo: {e}")
