@@ -143,12 +143,12 @@ class CameraWorker(Observer):
             if not ret or frame is None:
                 raise ValueError(f"Não foi possível abrir a câmera")
 
-            gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            # gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
             curr_datetime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            cv2.imwrite(f"/tmp/photo_{curr_datetime}.jpg", gray_frame)
+            cv2.imwrite(f"/tmp/photo_{curr_datetime}.jpg", frame)
 
-            return gray_frame
+            return frame
         finally:
             cap.release()
 
