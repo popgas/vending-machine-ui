@@ -1,6 +1,7 @@
 import glob
 import os
 import time
+from datetime import datetime
 from typing import Callable
 
 import cv2
@@ -42,10 +43,10 @@ class CameraWorker(Observer):
             ))
 
     def on_error(self, error: Exception) -> None:
-        print(error)
+        self.logger.info(error)
 
     def on_completed(self) -> None:
-        print(f"on_completed called {self.result}")
+        self.logger.info(f"on_completed called {self.result}")
 
     @staticmethod
     def start(camera_socket, on_completed: Callable[[CameraResult], None]):
@@ -62,7 +63,7 @@ class CameraWorker(Observer):
         for idx, fixed_image in enumerate(security_images):
             score = self.compare_images(photo, fixed_image)
 
-            print(f"score: {score}")
+            self.logger.info(f"score: {score}")
 
             if score > result.best_score:
                 result = CameraResult(
@@ -71,7 +72,9 @@ class CameraWorker(Observer):
                     taken_photo=photo
                 )
 
-        print(f"final score: {result.best_score}")
+        self.logger.info(f"final score: {result.best_score}")
+
+
 
         return result
 
@@ -122,7 +125,7 @@ class CameraWorker(Observer):
         cap = cv2.VideoCapture(self.camera_socket)
 
         try:
-            print(f"using camera {self.camera_socket}")
+            self.logger.info(f"using camera {self.camera_socket}")
 
             if not cap.isOpened():
                 raise ValueError(f"Não foi possível abrir a câmera")
@@ -134,6 +137,9 @@ class CameraWorker(Observer):
                 raise ValueError(f"Não foi possível abrir a câmera")
 
             gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+            curr_datetime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            cv2.imwrite(f"/tmp/photo_{curr_datetime}.jpg", gray_frame)
 
             return gray_frame
         finally:
