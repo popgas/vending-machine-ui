@@ -61,14 +61,14 @@ class CameraWorker(Observer):
         )
 
         for idx, fixed_image in enumerate(security_images):
-            score = self.compare_images(photo, fixed_image)
+            score = self.compare_images(photo, fixed_image['content'])
 
-            self.logger.info(f"score: {score}")
+            self.logger.info(f"score: {score}, img: ${fixed_image['path']}")
 
             if score > result.best_score:
                 result = CameraResult(
                     best_score=score,
-                    best_score_image=fixed_image,
+                    best_score_image=fixed_image['content'],
                     taken_photo=photo
                 )
 
@@ -158,7 +158,10 @@ class CameraWorker(Observer):
         for image in fixed_image_paths:
             loaded = cv2.imread(image, cv2.IMREAD_GRAYSCALE)
             if loaded is not None:
-                images.append(loaded)
+                images.append({
+                    'path': image,
+                    'content': loaded
+                })
                 self.logger.info(f"Imagem carregada: {image}")
             else:
                 self.logger.error(f"Erro ao carregar a imagem: {image}")

@@ -117,7 +117,7 @@ class CameraVerificationScreen(tk.Frame):
         if "DEBUG" in os.environ:
             score_to_pass = 0
         else:
-            score_to_pass = 0.4
+            score_to_pass = 0.45
 
         print(f"handle_camera_callback {result.best_score} {score_to_pass}")
 
