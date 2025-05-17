@@ -92,7 +92,7 @@ class CameraWorker(Observer):
                 )
 
         self.logger.info(f"nota comparação botijão: {result.best_score_security}")
-        self.logger.info(f"nota comparação vazio: {result.best_score_security}")
+        self.logger.info(f"nota comparação vazio: {result.best_score_empty}")
 
         return result
 
