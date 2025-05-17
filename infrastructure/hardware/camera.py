@@ -118,11 +118,37 @@ class CameraWorker(Observer):
     #     return len(good_matches)
 
     def compare_images(self, photo, fixed_image):
-        resized_frame = cv2.resize(photo, (fixed_image.shape[1], fixed_image.shape[0]))
-        correlation = cv2.matchTemplate(resized_frame, fixed_image, cv2.TM_CCOEFF_NORMED)
-        max_corr = np.max(correlation)
+        # Validate inputs
+        if photo is None or fixed_image is None:
+            self.logger.error("Photo or fixed_image is None")
+            return 0.0
 
-        return max_corr
+        # Ensure both are 3-channel BGR images
+        if len(photo.shape) != 3 or photo.shape[2] != 3:
+            self.logger.error(f"Photo is not a 3-channel BGR image: {photo.shape}")
+            return 0.0
+        if len(fixed_image.shape) != 3 or fixed_image.shape[2] != 3:
+            self.logger.error(f"Fixed image is not a 3-channel BGR image: {fixed_image.shape}")
+            return 0.0
+
+        # Ensure uint8 type
+        if photo.dtype != 'uint8':
+            photo = photo.astype('uint8')
+        if fixed_image.dtype != 'uint8':
+            fixed_image = fixed_image.astype('uint8')
+
+        try:
+            # Resize photo to match fixed_image dimensions
+            resized_frame = cv2.resize(photo, (fixed_image.shape[1], fixed_image.shape[0]))
+
+            # Perform template matching
+            correlation = cv2.matchTemplate(resized_frame, fixed_image, cv2.TM_CCOEFF_NORMED)
+            max_corr = np.max(correlation)
+
+            return float(max_corr)
+        except Exception as e:
+            self.logger.error(f"Error in compare_images: {e}")
+            return 0.0
 
     def take_photo(self):
         cap = cv2.VideoCapture(self.camera_socket)
@@ -131,10 +157,11 @@ class CameraWorker(Observer):
             self.logger.info(f"using camera {self.camera_socket}")
 
             if not cap.isOpened():
-                raise ValueError(f"Não foi possível abrir a câmera")
+                raise ValueError("Não foi possível abrir a câmera")
 
             time.sleep(1)
 
+            # Clear buffer
             for _ in range(5):
                 cap.read()
 
@@ -143,16 +170,23 @@ class CameraWorker(Observer):
             ret, frame = cap.read()
 
             if not ret or frame is None:
-                raise ValueError(f"Não foi possível abrir a câmera")
+                raise ValueError("Não foi possível abrir a câmera")
 
-            # gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            # Ensure BGR (3-channel, uint8)
+            if len(frame.shape) != 3 or frame.shape[2] != 3:
+                raise ValueError(f"Frame is not a 3-channel BGR image: {frame.shape}")
+            if frame.dtype != 'uint8':
+                frame = frame.astype('uint8')
 
+            # Save the frame
             curr_datetime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             cv2.imwrite(f"/tmp/photo_{curr_datetime}.jpg", frame)
 
             return frame
+
         except Exception as e:
-            self.logger.error(e)
+            self.logger.error(f"Error in take_photo: {e}")
+            raise
 
         finally:
             cap.release()
@@ -161,19 +195,25 @@ class CameraWorker(Observer):
         fixed_image_paths = glob.glob("./assets/images/security-camera-images/*.png")
         images = []
 
-        for image in fixed_image_paths:
-            loaded = cv2.imread(image, cv2.IMREAD_GRAYSCALE)
+        for image_path in fixed_image_paths:
+            # Load as BGR (3-channel)
+            loaded = cv2.imread(image_path, cv2.IMREAD_COLOR)
             if loaded is not None:
-                images.append({
-                    'path': image,
-                    'content': loaded
-                })
-                self.logger.info(f"Imagem carregada: {image}")
+                # Verify it's a 3-channel BGR image
+                if len(loaded.shape) == 3 and loaded.shape[2] == 3 and loaded.dtype == 'uint8':
+                    images.append({
+                        'path': image_path,
+                        'content': loaded
+                    })
+                    self.logger.info(f"Imagem carregada: {image_path}")
+                else:
+                    self.logger.error(f"Imagem não é BGR ou não é uint8: {image_path}, shape: {loaded.shape if loaded is not None else 'None'}, dtype: {loaded.dtype if loaded is not None else 'None'}")
             else:
-                self.logger.error(f"Erro ao carregar a imagem: {image}")
+                self.logger.error(f"Erro ao carregar a imagem: {image_path}")
 
         if not images:
             self.logger.warning("Nenhuma imagem válida foi encontrada na pasta.")
+            raise ValueError("No valid BGR images found in the specified directory")
 
         return images
 
