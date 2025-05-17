@@ -111,6 +111,7 @@ class CameraVerificationScreen(tk.Frame):
         if result.error:
             AudioWorker.play(f"{self.curr_dir}/assets/camera_not_working.mp3")
             GpioWorker.activate(self.order_intent.get_open_door_pin())
+            self.app.after(10000, lambda: self.app.pop())
             return
 
         if "DEBUG" in os.environ:
