@@ -114,18 +114,7 @@ class CameraVerificationScreen(tk.Frame):
             self.app.after(10000, lambda: self.app.pop())
             return
 
-        if "DEBUG" in os.environ:
-            score_to_pass = 0
-        else:
-            score_to_pass = 0.45
-
-        print(f"handle_camera_callback {result.best_score_security} >={score_to_pass}")
-        print(f"handle_camera_callback {result.best_score_empty} <=0.8")
-
-        if result.best_score_empty >= 0.8:
-            self.security_check_failed()
-
-        elif result.best_score_security >= score_to_pass:
+        if result.best_score_security >= 0.45 and result.best_score_security >= result.best_score_empty:
             self.app.push("payment_selection", self.order_intent.copy_with(
                 placedContainerPhoto=result.taken_photo
             ))
