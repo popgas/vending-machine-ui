@@ -25,7 +25,7 @@ from utils.file import FileUtils
 
 class PlaceEmptyContainerScreen(tk.Frame):
     def __init__(self, app: Application, order_intent: NewOrderIntent):
-        super().__init__(app.container, bg="#ECEFF1")
+        super().__init__(app.container, bg="#FFFFFF")
         self.app = app
         self.order_intent = order_intent
         self.curr_dir = FileUtils.dir(__file__)

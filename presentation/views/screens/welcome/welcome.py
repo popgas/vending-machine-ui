@@ -12,7 +12,7 @@ from application import Application
 
 class WelcomeScreen(tk.Frame):
     def __init__(self, app: Application):
-        super().__init__(app.container, bg="#ECEFF1")
+        super().__init__(app.container, bg="#FFFFFF")
 
         StateProvider(
             parent=self,

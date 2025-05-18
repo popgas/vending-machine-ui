@@ -4,12 +4,12 @@ import tkinter as tk
 class Application(tk.Tk):
     def __init__(self, routes: dict[str, callable]):
         super().__init__()
-        self.title("Navigation Stack Example")
+        self.title("PopGás Auto Atendimento 24h")
         self.routes = routes
         self.nav_stack = []
 
         # Create a container frame to act like a stacked widget.
-        self.container = tk.Frame(self, bg="#ECEFF1")
+        self.container = tk.Frame(self, bg="#FFFFFF")
         self.container.pack(fill="both", expand=True)
 
         # To simulate threadpool functionality in PyQt, you might use Python threads,
@@ -71,10 +71,10 @@ class Application(tk.Tk):
         such as placing a Label or Canvas behind other widgets.
         Here, we'll set a background color and leave a note for further enhancement.
         """
-        self.configure(bg="#ECEFF1")
+        self.configure(bg="#FFFFFF")
         # For an image background, you might create a Label with the image and place it
         # behind all other widgets using place().
 
     def hide_bg(self):
         """Remove the background image (or reset the background)."""
-        self.configure(bg="#ECEFF1")  # Reset to the base background color.
+        self.configure(bg="#FFFFFF")  # Reset to the base background color.

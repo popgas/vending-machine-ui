@@ -1,5 +1,3 @@
-from presentation.config.color_palette import ColorPalette
-from presentation.views.components.dialogs.info_dialog import InfoDialog
 from presentation.views.components.layout.column import Column
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
 from presentation.views.components.layout.enums.alignment import Anchor, Side

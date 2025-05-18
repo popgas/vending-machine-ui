@@ -1,7 +1,7 @@
 class ColorPalette:
   blue1 = "#57B0CA"
   blue2 = "#006084"
-  blue3 = "#00405D"
+  blue3 = "#000FFF"
   green1 = "#78C900"
   green2 = "#458D1E"
   green3 = "#074E23"

@@ -29,7 +29,7 @@ from infrastructure.observability.logger import Logger
 
 class CameraVerificationScreen(tk.Frame):
     def __init__(self, app: Application, order_intent: NewOrderIntent):
-        super().__init__(app.container, bg="#ECEFF1")
+        super().__init__(app.container, bg="#FFFFFF")
         self.app = app
         self.logger = Logger.get_logger()
         self.order_intent = order_intent

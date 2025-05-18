@@ -20,7 +20,7 @@ from utils.file import FileUtils
 
 class PreparingOrderScreen(tkinter.Frame):
     def __init__(self, app: Application, order_intent: NewOrderIntent):
-        super().__init__(app.container, bg="#ECEFF1")
+        super().__init__(app.container, bg="#FFFFFF")
         self.app = app
         self.curr_dir = FileUtils.dir(__file__)
         self.order_intent = order_intent
