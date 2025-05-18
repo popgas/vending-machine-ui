@@ -32,7 +32,7 @@ class CameraWorker(Observer):
 
     def on_next(self, value: T_in) -> None:
         try:
-            security_images = self.load_security_images("./assets/images/security-camera-images/*.png")
+            security_images = self.load_security_images("./assets/images/security-camera-images/*.jpg")
             empty_images = self.load_security_images("./assets/images/empty-camera-images/*.jpg")
             photo = self.take_photo()
 
