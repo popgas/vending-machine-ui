@@ -76,10 +76,6 @@ class CameraWorker(Observer):
 
             gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-            # Save the frame
-            curr_datetime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            cv2.imwrite(f"/tmp/photo_{curr_datetime}.jpg", gray_frame)
-
             return gray_frame
 
         except Exception as e:

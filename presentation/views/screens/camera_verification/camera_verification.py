@@ -120,9 +120,16 @@ class CameraVerificationScreen(tk.Frame):
             self.app.after(10000, lambda: self.app.pop())
             return
 
-        _, buffer = cv2.imencode('.jpg', result.taken_photo)
-        base64_image = base64.b64encode(buffer).decode('utf-8')
-        base64_image = f"data:image/jpeg;base64,{base64_image}"
+        success, buffer = cv2.imencode('.jpg', result.taken_photo)
+
+        if not success:
+            raise RuntimeError("Falha ao codificar o frame em JPEG")
+
+        jpg_bytes = buffer.tobytes()
+        b64_str = base64.b64encode(jpg_bytes).decode('utf-8')
+
+        # Monta o Data URI
+        base64_image = f"data:image/jpeg;base64,{b64_str}"
 
         response = PopGasApi.request('POST', '/vending-machine-orders/verify-photo', json={
             'vending_machine_id': os.environ['VENDING_MACHINE_ID'],
