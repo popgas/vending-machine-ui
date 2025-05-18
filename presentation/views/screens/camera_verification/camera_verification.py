@@ -122,7 +122,7 @@ class CameraVerificationScreen(tk.Frame):
         base64_image = base64.b64encode(buffer).decode('utf-8')
         base64_image = f"data:image/jpeg;base64,{base64_image}"
 
-        response = PopGasApi.request('POST', '/verify-photo', json={
+        response = PopGasApi.request('POST', '/vending-machine-orders/verify-photo', json={
             'vending_machine_id': os.environ['VENDING_MACHINE_ID'],
             'base64_image': base64_image,
         }).json()
