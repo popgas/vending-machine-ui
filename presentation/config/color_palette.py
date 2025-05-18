@@ -1,4 +1,5 @@
 class ColorPalette:
+  white = "#FFFFFF"
   blue1 = "#57B0CA"
   blue2 = "#006084"
   blue3 = "#023147"

@@ -12,7 +12,7 @@ from application import Application
 
 class WelcomeScreen(tk.Frame):
     def __init__(self, app: Application):
-        super().__init__(app.container, bg="#FFFFFF")
+        super().__init__(app.container, bg="#023147")
 
         StateProvider(
             parent=self,
@@ -25,12 +25,12 @@ class WelcomeScreen(tk.Frame):
                         expand=True,
                         children=[
                             SpacerVertical(),
-                            Text("Bem-vindo", font_size=40, color=ColorPalette.blue3),
+                            Text("Bem-vindo", font_size=40, color=ColorPalette.white),
                             Text("Máquina de Auto Atendimento",
                                  font_size=30,
                                  padding=Padding.vertical(15),
-                                 color=ColorPalette.blue3),
-                            Text("24h", font_size=60, color=ColorPalette.blue3),
+                                 color=ColorPalette.white),
+                            Text("24h", font_size=60, color=ColorPalette.white),
                             SpacerVertical(),
                         ],
                         anchor=Anchor.CENTER,
@@ -38,9 +38,10 @@ class WelcomeScreen(tk.Frame):
                     Button(
                         label="Toque para Iniciar",
                         on_click=lambda: app.push('product_selection'),
-                        background_color=ColorPalette.blue3,
+                        background_color=ColorPalette.white,
                         pressed_background_color=ColorPalette.blue2,
-                        pressed_color="#fff",
+                        pressed_color=ColorPalette.blue3,
+                        color=ColorPalette.blue3,
                         font_size=30,
                         ipadx=20,
                         ipady=50,
