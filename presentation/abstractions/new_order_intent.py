@@ -74,6 +74,14 @@ class NewOrderIntent:
         else:
             return os.environ['CAMERA_3']
 
+    def get_camera_describer(self) -> str:
+        if self.__use_first_door():
+            return 'CAMERA_1'
+        elif self.__use_second_doors():
+            return 'CAMERA_2'
+        else:
+            return 'CAMERA_3'
+
     def get_placed_container_photo_as_base64(self) -> Optional[str]:
         if self.placedContainerPhoto is not None:
             retval, buffer = cv2.imencode('.jpg', self.placedContainerPhoto)

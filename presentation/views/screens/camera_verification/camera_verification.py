@@ -134,6 +134,7 @@ class CameraVerificationScreen(tk.Frame):
         response = PopGasApi.request('POST', '/vending-machine-orders/verify-photo', json={
             'vending_machine_id': os.environ['VENDING_MACHINE_ID'],
             'base64_image': base64_image,
+            'camera': self.order_intent.get_camera_describer(),
         }).json()
 
         self.logger.info(f"security check response {response}")
