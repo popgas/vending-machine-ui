@@ -24,12 +24,14 @@ from presentation.views.components.state.countdown_timer import CountdownTimer
 from presentation.views.screens.camera_verification.camera_verification_state import CameraVerificationState
 from application import Application
 from utils.file import FileUtils
+from infrastructure.observability.logger import Logger
 
 
 class CameraVerificationScreen(tk.Frame):
     def __init__(self, app: Application, order_intent: NewOrderIntent):
         super().__init__(app.container, bg="#ECEFF1")
         self.app = app
+        self.logger = Logger.get_logger()
         self.order_intent = order_intent
         self.curr_dir = FileUtils.dir(__file__)
         self.state = CameraVerificationState()
@@ -126,6 +128,8 @@ class CameraVerificationScreen(tk.Frame):
             'vending_machine_id': os.environ['VENDING_MACHINE_ID'],
             'base64_image': base64_image,
         }).json()
+
+        self.logger.info(f"security check response {response}")
 
         if bool(response['passed_verification']):
             self.app.push("payment_selection", self.order_intent.copy_with(
