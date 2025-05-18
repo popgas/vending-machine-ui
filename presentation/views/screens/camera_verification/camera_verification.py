@@ -1,9 +1,13 @@
+import base64
 import os
 import tkinter as tk
+
+import cv2
 
 from infrastructure.hardware.audio import AudioWorker
 from infrastructure.hardware.camera import CameraWorker, CameraResult
 from infrastructure.hardware.gpio import GpioWorker
+from infrastructure.http.popgas_api import PopGasApi
 from presentation.abstractions.new_order_intent import NewOrderIntent
 from presentation.config.color_palette import ColorPalette
 from presentation.views.components.layout.column import Column
@@ -114,7 +118,16 @@ class CameraVerificationScreen(tk.Frame):
             self.app.after(10000, lambda: self.app.pop())
             return
 
-        if result.best_score_security >= 0.50 and result.best_score_security > result.best_score_empty:
+        _, buffer = cv2.imencode('.jpg', result.taken_photo)
+        base64_image = base64.b64encode(buffer).decode('utf-8')
+        base64_image = f"data:image/jpeg;base64,{base64_image}"
+
+        response = PopGasApi.request('POST', '/verify-photo', json={
+            'vending_machine_id': os.environ['VENDING_MACHINE_ID'],
+            'base64_image': base64_image,
+        }).json()
+
+        if bool(response['passed_verification']):
             self.app.push("payment_selection", self.order_intent.copy_with(
                 placedContainerPhoto=result.taken_photo
             ))
