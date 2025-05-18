@@ -74,9 +74,7 @@ class CameraWorker(Observer):
             if not ret or frame is None:
                 raise ValueError("Não foi possível abrir a câmera")
 
-            gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-            return gray_frame
+            return frame
 
         except Exception as e:
             self.logger.error(f"Error in take_photo: {e}")

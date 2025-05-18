@@ -10,11 +10,8 @@ if __name__ == '__main__':
 
     ret, frame = cap.read()
 
-    # Converte para escala de cinza
-    gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
     # Codifica em JPEG
-    success, buffer = cv2.imencode('.jpg', gray_frame)
+    success, buffer = cv2.imencode('.jpg', frame)
     if not success:
         raise RuntimeError("Falha ao codificar o frame em JPEG")
 
