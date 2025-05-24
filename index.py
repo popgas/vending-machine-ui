@@ -1,12 +1,4 @@
-import asyncio
-import os
-import threading
-
-from domains.enums.order_product_selected import OrderProductSelected
-from infrastructure.hardware.camera import CameraWorker
 from infrastructure.hardware.gpio import GpioWorker
-from infrastructure.hardware.websocket import Websocket
-from presentation.abstractions.new_order_intent import NewOrderIntent
 from presentation.views.screens.camera_verification.camera_verification import CameraVerificationScreen
 from presentation.views.screens.card_machine.card_machine import CardMachineScreen
 from presentation.views.screens.emtpy_stock.empty_stock import EmptyStockScreen
