@@ -1,8 +1,11 @@
+import asyncio
 import os
+import threading
 
 from domains.enums.order_product_selected import OrderProductSelected
 from infrastructure.hardware.camera import CameraWorker
 from infrastructure.hardware.gpio import GpioWorker
+from infrastructure.hardware.websocket import Websocket
 from presentation.abstractions.new_order_intent import NewOrderIntent
 from presentation.views.screens.camera_verification.camera_verification import CameraVerificationScreen
 from presentation.views.screens.card_machine.card_machine import CardMachineScreen
@@ -17,11 +20,17 @@ from presentation.views.screens.welcome.welcome import WelcomeScreen
 from application import Application
 import tkinter as tk
 
+# def start_loop(loop):
+#     asyncio.set_event_loop(loop)
+#     loop.run_forever()
+
 if __name__ == '__main__':
     GpioWorker.config()
 
-    if "DEBUG" in os.environ:
-        CameraWorker.dry_run()
+    # bg_loop = asyncio.new_event_loop()
+    # thread = threading.Thread(target=start_loop, args=(bg_loop,), daemon=True)
+    # thread.start()
+    # asyncio.run_coroutine_threadsafe(Websocket.configure(), bg_loop)
 
     app = Application({
         'welcome': lambda *args: WelcomeScreen(*args),
@@ -39,7 +48,7 @@ if __name__ == '__main__':
     app.wm_iconphoto(False, photo)
 
     app.attributes("-fullscreen", True)
-    # app.push("payment_selection", NewOrderIntent(
+    # app.push("card_machine", NewOrderIntent(
     #     productSelected=OrderProductSelected.onlyGasRefill,
     #     productPrice=100,
     #     stockCount=40,

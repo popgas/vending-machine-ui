@@ -34,6 +34,7 @@ class CardMachineScreen(tkinter.Frame):
         self.app = app
         self.state = CardMachineState()
         self.correlation_id = None
+        self.idleTimer = None
 
         self.countdown_timer = CountdownTimer(
             app=app,
@@ -137,6 +138,8 @@ class CardMachineScreen(tkinter.Frame):
         self.correlation_id = str(response['correlation_id'])
         self.check_order_payment_status()
 
+        self.idleTimer = self.app.after(180 * 1000, lambda: self.handle_payment_rejected())
+
     def check_order_payment_status(self):
         print("Checking payment status")
         response = PopGasApi.request('GET', f"/vending-machine-orders/{self.correlation_id}").json()
@@ -147,20 +150,28 @@ class CardMachineScreen(tkinter.Frame):
 
         match status:
             case 'APPROVED':
+                self.cancel_idle_timer()
                 self.state.update(awaiting_payment_approval=False)
                 self.app.push('preparing_order', self.order_intent.copy_with(
                     correlationId=self.correlation_id,
                 ))
                 return
             case 'REJECTED' | 'UNAUTHORIZED' | 'ABORTED' | 'CANCELLED':
+                self.cancel_idle_timer()
                 self.handle_payment_rejected()
                 return
 
         if flow_status == 'ORDER_VALIDATION_FAILED':
+            self.cancel_idle_timer()
             self.card_machine_unreachable()
+            return
 
         if self.state.awaiting_payment_approval:
             self.app.after(3000, self.check_order_payment_status)
+
+    def cancel_idle_timer(self):
+        if self.idleTimer is not None:
+            self.app.after_cancel(self.idleTimer)
 
     def handle_payment_rejected(self):
         self.state.update(

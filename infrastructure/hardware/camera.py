@@ -1,6 +1,6 @@
+import base64
 import os
 import time
-from datetime import datetime
 from typing import Callable
 
 import cv2
@@ -84,27 +84,43 @@ class CameraWorker(Observer):
             cap.release()
 
     @staticmethod
-    def dry_run():
+    def take_photo_from_all_cameras():
         cameras = [
             os.environ['CAMERA_1'],
             os.environ['CAMERA_2'],
             os.environ['CAMERA_3']
         ]
-        i = 0
+
+        i = 1
+        photos = []
 
         for camera in cameras:
-            camera = cv2.VideoCapture(camera)
+            cap = cv2.VideoCapture(camera)
 
-            if not camera.isOpened():
+            if not cap.isOpened():
                 print("Error: Could not open camera.")
                 exit()
 
-            ret, frame = camera.read()
-            camera.release()
+            time.sleep(1)
+
+            for _ in range(5):
+                cap.read()
+
+            time.sleep(1)
+
+            ret, frame = cap.read()
+            cap.release()
 
             if not ret:
-                print("Error: Could not read frame.")
-                exit()
+                return []
 
-            cv2.imwrite(f"/tmp/photo{i}.jpg", frame)
-            i = i + 1
+            success, buffer = cv2.imencode('.jpg', frame)
+            jpg_bytes = buffer.tobytes()
+            b64_str = base64.b64encode(jpg_bytes).decode('utf-8')
+            base64_image = f"data:image/jpeg;base64,{b64_str}"
+
+            photos.append({
+                'camera': i,
+                'photo': base64_image,
+            })
+            i += 1
