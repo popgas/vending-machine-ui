@@ -193,6 +193,6 @@ class CardMachineScreen(tkinter.Frame):
     def card_machine_unreachable_part_2(self):
         AudioWorker.play(f"{self.curr_dir}/assets/error_take_back_empty_container.mp3")
 
-        self.app.after(5 * 1000, lambda: GpioWorker.activate(self.order_intent.get_open_door_pin()))
+        self.app.after(5 * 1000, lambda: GpioWorker.activate(self.order_intent.get_refill_open_door_pin()))
         self.app.after(10 * 1000, lambda: self.app.off_all("welcome"))
 

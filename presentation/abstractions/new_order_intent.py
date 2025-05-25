@@ -41,7 +41,19 @@ class NewOrderIntent:
             purchasedContainerPhoto=purchasedContainerPhoto if purchasedContainerPhoto is not None else self.purchasedContainerPhoto
         )
 
-    def get_open_door_pin(self) -> int:
+    def get_full_container_open_door_pin(self):
+        if self.stockCount == 27:
+            return VendingMachinePins.openDoor2
+
+        return self.get_refill_open_door_pin()
+
+    def get_full_container_close_door_pin(self):
+        if self.stockCount == 27:
+            return VendingMachinePins.closeDoor2
+
+        return self.get_refill_open_door_pin()
+
+    def get_refill_open_door_pin(self) -> int:
         """
         Returns the pin number for opening a door based on the stock count.
         """
@@ -52,7 +64,7 @@ class NewOrderIntent:
         else:
             return VendingMachinePins.openDoor3
 
-    def get_close_door_pin(self) -> int:
+    def get_refill_close_door_pin(self) -> int:
         """
         Returns the pin number for closing a door based on the stock count.
         """

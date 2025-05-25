@@ -159,7 +159,7 @@ class PaymentSelectionScreen(tk.Frame):
         elif self.order_intent.productSelected == OrderProductSelected.onlyGasRefill:
             self.state.update(cancelling=True)
             AudioWorker.play(f"{self.curr_dir}/assets/payment_cancellation.mp3")
-            GpioWorker.activate(self.order_intent.get_open_door_pin())
+            GpioWorker.activate(self.order_intent.get_refill_open_door_pin())
             self.app.after(20 * 1000, lambda: AudioWorker.play(f"{self.curr_dir}/assets/door_will_close_now.mp3"))
             self.app.after(23 * 1000, lambda: GpioWorker.close_all_doors())
             self.app.after(30 * 1000, lambda: self.app.off_all("welcome"))

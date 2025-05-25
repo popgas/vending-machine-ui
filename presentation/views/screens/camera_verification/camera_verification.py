@@ -116,7 +116,7 @@ class CameraVerificationScreen(tk.Frame):
     def handle_camera_callback(self, result: CameraResult):
         if result.error:
             AudioWorker.play(f"{self.curr_dir}/assets/camera_not_working.mp3")
-            GpioWorker.activate(self.order_intent.get_open_door_pin())
+            GpioWorker.activate(self.order_intent.get_refill_open_door_pin())
             self.app.after(10000, lambda: self.app.pop())
             return
 
@@ -153,5 +153,5 @@ class CameraVerificationScreen(tk.Frame):
 
     def validation_failed(self):
         AudioWorker.play(f"{self.curr_dir}/assets/security_check_failed.mp3")
-        GpioWorker.activate(self.order_intent.get_open_door_pin())
+        GpioWorker.activate(self.order_intent.get_refill_open_door_pin())
         self.countdown_timer.start()

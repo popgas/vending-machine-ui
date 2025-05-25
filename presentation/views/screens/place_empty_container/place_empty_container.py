@@ -85,7 +85,7 @@ class PlaceEmptyContainerScreen(tk.Frame):
         )
 
         AudioWorker.play(f"{self.curr_dir}/assets/audio.mp3")
-        GpioWorker.activate(self.order_intent.get_open_door_pin())
+        GpioWorker.activate(self.order_intent.get_refill_open_door_pin())
 
     def go_to_camera_verification_part1(self):
         self.state.update(closing_door=True, timer_reached_zero=True)
@@ -175,7 +175,7 @@ class PlaceEmptyContainerScreen(tk.Frame):
         AudioWorker.play(f"{self.curr_dir}/assets/place_container_cancellation.mp3")
         self.state.update(cancelling=True)
         self.countdown_timer.cancel()
-        self.app.after(7 * 1000, lambda: GpioWorker.activate(self.order_intent.get_close_door_pin()))
+        self.app.after(7 * 1000, lambda: GpioWorker.activate(self.order_intent.get_refill_close_door_pin()))
         self.app.after(12 * 1000, lambda: self.app.off_all("welcome"))
 
     def on_route_popped(self):
