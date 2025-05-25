@@ -51,7 +51,7 @@ class NewOrderIntent:
         if self.stockCount == 27:
             return VendingMachinePins.closeDoor2
 
-        return self.get_refill_open_door_pin()
+        return self.get_refill_close_door_pin()
 
     def get_refill_open_door_pin(self) -> int:
         """
