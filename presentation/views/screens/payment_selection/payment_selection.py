@@ -29,6 +29,7 @@ class PaymentSelectionScreen(tk.Frame):
         self.app = app
         self.curr_dir = FileUtils.dir(__file__)
         self.state = PaymentSelectionState()
+        self.clicked = False
 
         can_pop = order_intent.productSelected == OrderProductSelected.gasWithContainer
 
@@ -192,19 +193,37 @@ class PaymentSelectionScreen(tk.Frame):
             ]
         )
 
+    def on_route_popped(self):
+        self.clicked = False
+
     def debit_card(self):
+        if self.clicked is True:
+            return
+
+        self.clicked = True
+
         AudioWorker.stop()
         self.app.push('card_machine', self.order_intent.copy_with(
             paymentMethodId=2
         ))
 
     def credit_card(self):
+        if self.clicked is True:
+            return
+
+        self.clicked = True
+
         AudioWorker.stop()
         self.app.push('card_machine', self.order_intent.copy_with(
             paymentMethodId=3
         ))
 
     def pix_machine(self):
+        if self.clicked is True:
+            return
+
+        self.clicked = True
+
         AudioWorker.stop()
         self.app.push('card_machine', self.order_intent.copy_with(
             paymentMethodId=5

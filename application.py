@@ -7,6 +7,7 @@ class Application(tk.Tk):
         self.title("PopGás Auto Atendimento 24h")
         self.routes = routes
         self.nav_stack = []
+        self.nav_stack_names = []
 
         # Create a container frame to act like a stacked widget.
         self.container = tk.Frame(self, bg="#FFFFFF")
@@ -16,16 +17,24 @@ class Application(tk.Tk):
         # but for this example we'll omit that functionality.
 
     def push(self, name: str, *args):
-        print(name)
+        if len(self.nav_stack_names) > 0 and self.nav_stack_names[-1] == name:
+            print("duplicated!")
+            return
+
         """Push a new widget (screen) onto the navigation stack."""
         screen_constructor = self.routes.get(name)
 
         if screen_constructor:
             widget = screen_constructor(self, *args)
             self.nav_stack.append(widget)
+            self.nav_stack_names.append(name)
 
             widget.place(x=0, y=0, anchor="nw", relheight=1.0, relwidth=1.0)
-            widget.tkraise()  # Bring to front.
+            widget.tkraise()
+
+            if hasattr(widget, 'on_route_mounted') and callable(widget.on_route_mounted):
+                widget.on_route_mounted()
+
         else:
             print("Screen not found:", name)
 
@@ -35,6 +44,7 @@ class Application(tk.Tk):
             print("Cannot pop the last route.")
             return
 
+        self.nav_stack_names.pop()
         current_widget = self.nav_stack.pop()
 
         if hasattr(current_widget, 'dispose') and callable(current_widget.dispose):
@@ -55,6 +65,8 @@ class Application(tk.Tk):
         while self.nav_stack:
             widget = self.nav_stack.pop()
             widget.destroy()
+
+        self.nav_stack_names = []
         print("Navigation stack cleared.")
 
     def off_all(self, name: str):

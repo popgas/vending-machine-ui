@@ -1,6 +1,6 @@
 [Unit]
 Description=PopGas Vending Machine UI
-After=network.taraget graphical.target
+After=network.target graphical.target
 
 [Service]
 User=estacaogas24horas

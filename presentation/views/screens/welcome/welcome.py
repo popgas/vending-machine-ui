@@ -13,6 +13,7 @@ from application import Application
 class WelcomeScreen(tk.Frame):
     def __init__(self, app: Application):
         super().__init__(app.container, bg="#FFF")
+        self.app = app
 
         StateProvider(
             parent=self,
@@ -37,7 +38,7 @@ class WelcomeScreen(tk.Frame):
                     ),
                     Button(
                         label="Toque para Iniciar",
-                        on_click=lambda: app.push('product_selection'),
+                        on_click=lambda: self.go_to_product_selection(),
                         background_color=ColorPalette.blue3,
                         pressed_background_color=ColorPalette.blue2,
                         pressed_color="#fff",
@@ -49,3 +50,6 @@ class WelcomeScreen(tk.Frame):
                 ],
             )
         )
+
+    def go_to_product_selection(self):
+        self.app.push('product_selection')
