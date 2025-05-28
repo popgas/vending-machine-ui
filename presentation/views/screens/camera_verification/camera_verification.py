@@ -64,7 +64,7 @@ class CameraVerificationScreen(tk.Frame):
         )
 
         AudioWorker.play(f"{self.curr_dir}/assets/audio.mp3")
-        app.after(2000, self.verify_placed_container)
+        app.after(4000, self.verify_placed_container)
 
     def get_screen_content(self):
         if self.state.failed_security_check:

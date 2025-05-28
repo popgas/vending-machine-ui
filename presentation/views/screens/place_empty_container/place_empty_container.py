@@ -1,8 +1,8 @@
 import tkinter as tk
 
 from application import Application
-from domains.enums.machine_doors import VendingMachinePins
 from infrastructure.hardware.audio import AudioWorker
+from infrastructure.hardware.camera import CameraWorker
 from infrastructure.hardware.gpio import GpioWorker
 from presentation.abstractions.new_order_intent import NewOrderIntent
 from presentation.config.color_palette import ColorPalette
@@ -86,6 +86,12 @@ class PlaceEmptyContainerScreen(tk.Frame):
 
         AudioWorker.play(f"{self.curr_dir}/assets/audio.mp3")
         GpioWorker.activate(self.order_intent.get_refill_open_door_pin())
+
+    def warm_up_camera(self):
+        CameraWorker.start(
+            camera_socket=self.order_intent.get_camera(),
+            on_completed=lambda e: self.go_to_camera_verification_part1()
+        )
 
     def go_to_camera_verification_part1(self):
         self.state.update(closing_door=True, timer_reached_zero=True)
