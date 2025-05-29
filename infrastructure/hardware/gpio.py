@@ -9,7 +9,7 @@ from domains.enums.machine_doors import VendingMachinePins
 from infrastructure.observability.logger import Logger
 from gpiozero import LED, Button
 
-is_rp_5 = os.environ.get('RP5') == "1"
+is_rp_5 = os.environ.get('RP5')
 
 try:
     import RPi.GPIO as GPIO
