@@ -2,6 +2,7 @@ import os
 import time
 
 import rx
+from gpiozero.pins.lgpio import LGPIOFactory
 
 from rx.scheduler import ThreadPoolScheduler
 
@@ -9,13 +10,15 @@ from domains.enums.machine_doors import VendingMachinePins
 from infrastructure.observability.logger import Logger
 from gpiozero import LED, Button
 
+factory = LGPIOFactory(chip=0)
+
 is_rp_5 = os.environ.get('RP5')
-#
-# try:
-#     import RPi.GPIO as GPIO
-# except ImportError:
-#     from infrastructure.hardware.dummy_gpio import DummyGPIO
-#     GPIO = DummyGPIO()
+
+try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    from infrastructure.hardware.dummy_gpio import DummyGPIO
+    GPIO = DummyGPIO()
 
 class GpioWorker:
     pool_scheduler = ThreadPoolScheduler(1)
@@ -35,23 +38,21 @@ class GpioWorker:
         """
         Configura pinos de saída e entrada de acordo com o hardware detectado.
         """
-        # if is_rp_5:
-        GpioWorker._config_rp_5()
-        # else:
-        #     GpioWorker._config_rp_3()
+        if is_rp_5:
+            GpioWorker._config_rp_5()
+        else:
+            GpioWorker._config_rp_3()
 
     @staticmethod
     def _config_rp_3():
-        pass
-        # # Pi 3: setup via RPi.GPIO
-        # GPIO.setwarnings(False)
-        # GPIO.setmode(GPIO.BCM)
-        #
-        # for pin in GpioWorker.output_pins:
-        #     GPIO.setup(pin, GPIO.OUT)
-        #     GPIO.output(pin, GPIO.HIGH)
-        #
-        # GPIO.setup(VendingMachinePins.reloadDoor, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BCM)
+
+        for pin in GpioWorker.output_pins:
+            GPIO.setup(pin, GPIO.OUT)
+            GPIO.output(pin, GPIO.HIGH)
+
+        GPIO.setup(VendingMachinePins.reloadDoor, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     @staticmethod
     def _config_rp_5():
@@ -91,9 +92,9 @@ class GpioWorker:
                 pin.on()
             else:
                 pass
-                # GPIO.output(pin_num, GPIO.LOW)
-                # time.sleep(2)
-                # GPIO.output(pin_num, GPIO.HIGH)
+                GPIO.output(pin_num, GPIO.LOW)
+                time.sleep(2)
+                GPIO.output(pin_num, GPIO.HIGH)
 
         except Exception as e:
             logger.error(f"Erro ao acionar saída {pin_num}: {e}")
