@@ -10,7 +10,7 @@ Environment=VENDING_MACHINE_ID=39
 Environment=CAMERA_1=/dev/v4l/by-path/platform-xhci-hcd.0-usb-0:1:1.0-video-index0
 Environment=CAMERA_2=/dev/v4l/by-path/platform-xhci-hcd.0-usb-0:2:1.0-video-index0
 Environment=CAMERA_3=/dev/v4l/by-path/platform-xhci-hcd.1-usb-0:1:1.0-video-index0
-WorkingDirectory=/home/estacaogas24horas/PopGas/vending-machine-ui
+WorkingDirectory=/home/popgas/PopGas/vending-machine-ui
 ExecStart=/home/popgas/PopGas/vending-machine-ui/boot.sh
 Restart=always
 
