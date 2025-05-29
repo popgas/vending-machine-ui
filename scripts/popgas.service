@@ -5,6 +5,7 @@ After=network.target graphical.target
 [Service]
 User=estacaogas24horas
 Environment=DISPLAY=:0
+Environment=RP5=1
 Environment=VENDING_MACHINE_ID=39
 Environment=CAMERA_1=/dev/v4l/by-path/platform-xhci-hcd.0-usb-0:1:1.0-video-index0
 Environment=CAMERA_2=/dev/v4l/by-path/platform-xhci-hcd.0-usb-0:2:1.0-video-index0
