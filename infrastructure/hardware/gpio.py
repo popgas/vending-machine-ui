@@ -19,7 +19,7 @@ except ImportError:
 
 class GpioWorker:
     pool_scheduler = ThreadPoolScheduler(1)
-    reload_pin = Button(VendingMachinePins.reloadDoor, pull_up=True)
+    # reload_pin = Button(VendingMachinePins.reloadDoor, pull_up=True)
     output_pins = [
         VendingMachinePins.openDoor1,
         VendingMachinePins.openDoor2,
