@@ -6,3 +6,6 @@ tk~=0.1.0
 pillow~=10.4.0
 Rx~=3.2.0
 RPi.GPIO==0.7.1
+PyQt6~=6.8.1
+gpiozero~=2.0.1
+ably~=2.0.12
