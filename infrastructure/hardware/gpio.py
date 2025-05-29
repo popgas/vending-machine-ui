@@ -2,7 +2,7 @@ import os
 import time
 
 import rx
-from gpiozero import LED, Button
+
 from rx.scheduler import ThreadPoolScheduler
 
 from domains.enums.machine_doors import VendingMachinePins
@@ -11,11 +11,8 @@ from infrastructure.observability.logger import Logger
 is_rp_5 = os.environ.get('RP5') == "1"
 
 if is_rp_5:
-    from gpiozero.pins.lgpio import LGPIOFactory
-    factory = LGPIOFactory(chip=0)
+    from gpiozero import LED, Button
 else:
-    # from gpiozero.pins.rpigpio import RPiGPIOFactory
-    # factory = RPiGPIOFactory()
     try:
         import RPi.GPIO as GPIO
     except ImportError:
