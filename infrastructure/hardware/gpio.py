@@ -7,17 +7,15 @@ from rx.scheduler import ThreadPoolScheduler
 
 from domains.enums.machine_doors import VendingMachinePins
 from infrastructure.observability.logger import Logger
+from gpiozero import LED, Button
 
 is_rp_5 = os.environ.get('RP5') == "1"
 
-if is_rp_5:
-    from gpiozero import LED, Button
-else:
-    try:
-        import RPi.GPIO as GPIO
-    except ImportError:
-        from infrastructure.hardware.dummy_gpio import DummyGPIO
-        GPIO = DummyGPIO()
+try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    from infrastructure.hardware.dummy_gpio import DummyGPIO
+    GPIO = DummyGPIO()
 
 class GpioWorker:
     pool_scheduler = ThreadPoolScheduler(1)
