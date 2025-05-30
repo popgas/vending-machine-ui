@@ -8,6 +8,8 @@ class AudioWorker:
 
     @staticmethod
     def play(path):
+        AudioWorker.__play_audio(path)
+        return;
         rx.return_value(path).subscribe(
             on_next=AudioWorker.__play_audio,
             on_completed= lambda: print("audio played"),
