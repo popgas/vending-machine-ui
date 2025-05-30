@@ -21,10 +21,13 @@ class AudioWorker:
     def __play_audio(path):
         print("playing", path)
 
+        if pygame.mixer.get_init():
+            pygame.mixer.quit()
+
         pygame.init()
-        sound = pygame.mixer.Sound(path)
-        sound.set_volume(1.0)  # max volume
-        sound.play()
+        pygame.mixer.music.stop()
+        pygame.mixer.music.load(path)
+        pygame.mixer.music.play()
 
     @staticmethod
     def stop():
