@@ -21,6 +21,9 @@ class AudioWorker:
     def __play_audio(path):
         print("playing", path)
 
+        if pygame.mixer.get_init():
+            pygame.mixer.quit()
+
         pygame.mixer.init()
         pygame.mixer.music.stop()
         pygame.mixer.music.load(path)
