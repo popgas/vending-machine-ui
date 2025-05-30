@@ -24,7 +24,7 @@ class AudioWorker:
         if pygame.mixer.get_init():
             pygame.mixer.quit()
 
-        pygame.init()
+        pygame.mixer.init()
         pygame.mixer.music.stop()
         pygame.mixer.music.load(path)
         pygame.mixer.music.play()
