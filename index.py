@@ -21,8 +21,8 @@ from utils.file import FileUtils
 
 if __name__ == '__main__':
     AudioWorker.play(f"{FileUtils.dir(__file__)}/presentation/views/screens/product_selected/assets/audio.mp3")
-    exit()
-    GpioWorker.config()
+    # exit()
+    # GpioWorker.config()
 
     # bg_loop = asyncio.new_event_loop()
     # thread = threading.Thread(target=start_loop, args=(bg_loop,), daemon=True)
@@ -41,10 +41,10 @@ if __name__ == '__main__':
         'empty_stock': lambda *args: EmptyStockScreen(*args),
         'tech_support': lambda *args: TechSupportScreen(*args),
     })
-    photo = tk.PhotoImage(file='assets/icons/application_icon.png')
-    app.wm_iconphoto(False, photo)
+    # photo = tk.PhotoImage(file='assets/icons/application_icon.png')
+    # app.wm_iconphoto(False, photo)
 
-    app.attributes("-fullscreen", True)
+    # app.attributes("-fullscreen", True)
     # app.push("card_machine", NewOrderIntent(
     #     productSelected=OrderProductSelected.onlyGasRefill,
     #     productPrice=100,
@@ -52,5 +52,5 @@ if __name__ == '__main__':
     #     paymentMethodId=5,
     #     correlationId="1234"
     # ))
-    app.push("welcome")
+    # app.push("welcome")
     app.mainloop()
