@@ -1,3 +1,4 @@
+from infrastructure.hardware.audio import AudioWorker
 from infrastructure.hardware.gpio import GpioWorker
 from presentation.views.screens.camera_verification.camera_verification import CameraVerificationScreen
 from presentation.views.screens.card_machine.card_machine import CardMachineScreen
@@ -12,11 +13,15 @@ from presentation.views.screens.welcome.welcome import WelcomeScreen
 from application import Application
 import tkinter as tk
 
+from utils.file import FileUtils
+
 # def start_loop(loop):
 #     asyncio.set_event_loop(loop)
 #     loop.run_forever()
 
 if __name__ == '__main__':
+    AudioWorker.play(f"{FileUtils.dir(__file__)}/presentation/views/screens/product_selected/assets/audio.mp3")
+    exit()
     GpioWorker.config()
 
     # bg_loop = asyncio.new_event_loop()

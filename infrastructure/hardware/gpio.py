@@ -8,9 +8,12 @@ from rx.scheduler import ThreadPoolScheduler
 
 from domains.enums.machine_doors import VendingMachinePins
 from infrastructure.observability.logger import Logger
-from gpiozero import LED, Button
 
-factory = LGPIOFactory(chip=0)
+try:
+    from gpiozero import LED, Button
+    factory = LGPIOFactory(chip=0)
+except Exception as e:
+    pass
 
 is_rp_5 = os.environ.get('RP5')
 
