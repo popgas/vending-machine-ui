@@ -1,7 +1,7 @@
 import pygame
 import rx
 from rx.scheduler import ThreadPoolScheduler
-
+import sys
 
 class AudioWorker:
     pool_scheduler = ThreadPoolScheduler(1)
