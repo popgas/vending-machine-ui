@@ -2,7 +2,6 @@ import os
 import time
 
 import rx
-from gpiozero.pins.lgpio import LGPIOFactory
 
 from rx.scheduler import ThreadPoolScheduler
 
@@ -11,7 +10,6 @@ from infrastructure.observability.logger import Logger
 
 try:
     from gpiozero import LED, Button
-    factory = LGPIOFactory(chip=0)
 except Exception as e:
     pass
 

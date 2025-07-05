@@ -79,7 +79,7 @@ class CameraVerificationScreen(tk.Frame):
                          anchor=Anchor.CENTER,
                      ),
                     SizedBox(height=20),
-                    Text("Botião Reprovado", font_size=35, color=ColorPalette.blue3),
+                    Text("Botijão Reprovado", font_size=35, color=ColorPalette.blue3),
                     SizedBox(height=40),
                     Text("Infelizmente seu botijão vazio não", font_size=22),
                     Text("passou em nossa verificação de segurança.", font_size=22),

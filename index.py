@@ -1,5 +1,7 @@
-from infrastructure.hardware.audio import AudioWorker
+import tkinter as tk
+
 from infrastructure.hardware.gpio import GpioWorker
+from infrastructure.hardware.health_checker import HealthChecker
 from presentation.views.screens.camera_verification.camera_verification import CameraVerificationScreen
 from presentation.views.screens.card_machine.card_machine import CardMachineScreen
 from presentation.views.screens.emtpy_stock.empty_stock import EmptyStockScreen
@@ -11,7 +13,6 @@ from presentation.views.screens.product_selected.product_selected import Product
 from presentation.views.screens.technical_support.technical_support import TechSupportScreen
 from presentation.views.screens.welcome.welcome import WelcomeScreen
 from application import Application
-import tkinter as tk
 
 from utils.file import FileUtils
 
@@ -20,9 +21,7 @@ from utils.file import FileUtils
 #     loop.run_forever()
 
 if __name__ == '__main__':
-    AudioWorker.play(f"{FileUtils.dir(__file__)}/presentation/views/screens/product_selected/assets/audio.mp3")
-    # exit()
-    # GpioWorker.config()
+    GpioWorker.config()
 
     # bg_loop = asyncio.new_event_loop()
     # thread = threading.Thread(target=start_loop, args=(bg_loop,), daemon=True)
@@ -41,10 +40,11 @@ if __name__ == '__main__':
         'empty_stock': lambda *args: EmptyStockScreen(*args),
         'tech_support': lambda *args: TechSupportScreen(*args),
     })
-    # photo = tk.PhotoImage(file='assets/icons/application_icon.png')
-    # app.wm_iconphoto(False, photo)
 
-    # app.attributes("-fullscreen", True)
+    photo = tk.PhotoImage(file='assets/icons/application_icon.png')
+    app.wm_iconphoto(False, photo)
+
+    app.attributes("-fullscreen", True)
     # app.push("card_machine", NewOrderIntent(
     #     productSelected=OrderProductSelected.onlyGasRefill,
     #     productPrice=100,
@@ -52,5 +52,8 @@ if __name__ == '__main__':
     #     paymentMethodId=5,
     #     correlationId="1234"
     # ))
-    # app.push("welcome")
+    app.push("welcome")
+    HealthChecker.start(app)
     app.mainloop()
+
+
