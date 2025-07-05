@@ -2,6 +2,7 @@ import pygame
 import rx
 from rx.scheduler import ThreadPoolScheduler
 
+
 class AudioWorker:
     pool_scheduler = ThreadPoolScheduler(1)
 
@@ -18,10 +19,7 @@ class AudioWorker:
     def __play_audio(path):
         print("playing", path)
 
-        if pygame.mixer.get_init():
-            pygame.mixer.quit()
-
-        pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=4096)
+        pygame.mixer.init()
         pygame.mixer.music.stop()
         pygame.mixer.music.load(path)
         pygame.mixer.music.play()
