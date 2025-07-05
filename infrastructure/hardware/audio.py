@@ -7,14 +7,12 @@ class AudioWorker:
 
     @staticmethod
     def play(path):
-        AudioWorker.__play_audio(path)
-        # return
-        # rx.return_value(path).subscribe(
-        #     on_next=AudioWorker.__play_audio,
-        #     on_completed= lambda: print("audio played"),
-        #     on_error= lambda e: print(f"audio not played {e}"),
-        #     scheduler=AudioWorker.pool_scheduler
-        # )
+        rx.return_value(path).subscribe(
+            on_next=AudioWorker.__play_audio,
+            on_completed= lambda: print("audio played"),
+            on_error= lambda e: print(f"audio not played {e}"),
+            scheduler=AudioWorker.pool_scheduler
+        )
 
     @staticmethod
     def __play_audio(path):
