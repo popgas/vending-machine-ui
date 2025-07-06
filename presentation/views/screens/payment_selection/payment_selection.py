@@ -213,7 +213,7 @@ class PaymentSelectionScreen(tk.Frame):
                                  side=Side.TOP,
                                  anchor=Anchor.RIGHT,
                                  padding=Padding(right=15),
-                                 font_size=30,
+                                 font_size=24,
                                  ),
                             ]
                         ),
