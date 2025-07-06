@@ -127,7 +127,7 @@ class CardMachineScreen(tkinter.Frame):
         response = PopGasApi.request('POST', '/vending-machine-orders', json={
             'vending_machine_id': vm_id,
             'payment_method_id': self.order_intent.paymentMethodId,
-            'product_price': self.order_intent.productPrice,
+            'product_price': self.order_intent.selectedPaymentMethodPrice,
             'product_selected': product_selected,
             # 'placed_container_photo': self.order_intent.get_placed_container_photo_as_base64(),
             # 'purchased_container_photo': self.order_intent.get_purchased_container_photo_as_base64(),

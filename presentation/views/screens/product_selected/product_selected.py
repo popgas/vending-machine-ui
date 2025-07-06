@@ -30,6 +30,7 @@ class ProductSelectionScreen(tk.Frame):
 
         self.gas_refill_price = float(self.data['gas_refill_price'])
         self.container_with_gas_price = self.gas_refill_price + float(self.data['container_price'])
+        self.prices_by_payment_method = self.data['prices_by_payment_method']
 
         StateProvider(
             parent=self,
@@ -74,6 +75,7 @@ class ProductSelectionScreen(tk.Frame):
         order_intent = NewOrderIntent(
             productSelected=OrderProductSelected.onlyGasRefill,
             productPrice=self.gas_refill_price,
+            pricesByPaymentMethod=self.prices_by_payment_method,
             stockCount=int(self.data['container_full_stock_count']),
         )
 
@@ -84,6 +86,7 @@ class ProductSelectionScreen(tk.Frame):
         order_intent = NewOrderIntent(
             productSelected=OrderProductSelected.gasWithContainer,
             productPrice=self.container_with_gas_price,
+            pricesByPaymentMethod=self.prices_by_payment_method,
             stockCount=int(self.data['container_full_stock_count']),
         )
 

@@ -8,13 +8,19 @@ import cv2
 
 from domains.enums.machine_doors import VendingMachinePins
 from domains.enums.order_product_selected import OrderProductSelected
+from typing import TypedDict, Dict
 
+class PriceInfo(TypedDict):
+    gas_price: float
+    container_price: int
 
 @dataclass(frozen=True)
 class NewOrderIntent:
     productSelected: OrderProductSelected
     productPrice: float
+    selectedPaymentMethodPrice: float
     stockCount: int
+    pricesByPaymentMethod: Optional[Dict[str, PriceInfo]] = None,
     paymentMethodId: Optional[int] = None
     correlationId: Optional[str] = None
     placedContainerPhoto: Optional[str] = None
@@ -23,6 +29,7 @@ class NewOrderIntent:
     def copy_with(
         self,
         paymentMethodId: Optional[int] = None,
+        selectedPaymentMethodPrice: Optional[float] = None,
         correlationId: Optional[str] = None,
         placedContainerPhoto: Optional[str] = None,
         purchasedContainerPhoto: Optional[str] = None,
@@ -34,7 +41,9 @@ class NewOrderIntent:
         return NewOrderIntent(
             productSelected=self.productSelected,
             productPrice=self.productPrice,
+            selectedPaymentMethodPrice=selectedPaymentMethodPrice if selectedPaymentMethodPrice is not None else self.selectedPaymentMethodPrice,
             stockCount=self.stockCount,
+            pricesByPaymentMethod=self.pricesByPaymentMethod,
             paymentMethodId=paymentMethodId if paymentMethodId is not None else self.paymentMethodId,
             correlationId=correlationId if correlationId is not None else self.correlationId,
             placedContainerPhoto=placedContainerPhoto if placedContainerPhoto is not None else self.placedContainerPhoto,

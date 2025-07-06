@@ -13,13 +13,14 @@ from presentation.views.components.layout.image import ImageFromAssets, Circular
 from presentation.views.components.layout.padding import Padding
 from presentation.views.components.layout.row import Row
 from presentation.views.components.layout.sized_box import SizedBox
-from presentation.views.components.layout.spacer import SpacerVertical
+from presentation.views.components.layout.spacer import SpacerVertical, SpacerHorizontal
 from presentation.views.components.layout.text import Text
 from presentation.views.components.scaffold.state_provider import StateProvider
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
 from application import Application
 from presentation.views.screens.payment_selection.payment_selection_state import PaymentSelectionState
 from utils.file import FileUtils
+from utils.formatter import Formatter
 
 
 class PaymentSelectionScreen(tk.Frame):
@@ -79,6 +80,14 @@ class PaymentSelectionScreen(tk.Frame):
             ]
         )
 
+    def get_price_for_payment_method(self, payment_method_id: int) -> float:
+        prices = self.order_intent.pricesByPaymentMethod[str(payment_method_id)]
+
+        if self.order_intent.productSelected == OrderProductSelected.gasWithContainer:
+            return float(prices['gas_price'] + prices['container_price'])
+        else:
+            return float(prices['gas_price'])
+
     def payment_buttons(self) -> BuildableWidget:
         return Column(
             expand=True,
@@ -97,6 +106,7 @@ class PaymentSelectionScreen(tk.Frame):
                                 height=57,
                             ),
                             title="Cartão de Débito",
+                            price=self.get_price_for_payment_method(2),
                             onclick=lambda: self.debit_card()
                         ),
                         self.payment_button(
@@ -106,6 +116,7 @@ class PaymentSelectionScreen(tk.Frame):
                                 height=57,
                             ),
                             title="Cartão de Crédito",
+                            price=self.get_price_for_payment_method(3),
                             onclick=lambda: self.credit_card()
                         ),
                         self.payment_button(
@@ -115,6 +126,7 @@ class PaymentSelectionScreen(tk.Frame):
                                 height=57,
                             ),
                             title="PIX",
+                            price=self.get_price_for_payment_method(9),
                             onclick=lambda: self.pix_machine()
                         ),
                         Row(
@@ -165,7 +177,7 @@ class PaymentSelectionScreen(tk.Frame):
             self.app.after(23 * 1000, lambda: GpioWorker.close_all_doors())
             self.app.after(30 * 1000, lambda: self.app.off_all("welcome"))
 
-    def payment_button(self, image, title, onclick) -> BuildableWidget:
+    def payment_button(self, image, title, onclick, price: float) -> BuildableWidget:
         return Row(
             expand=True,
             side=Side.TOP,
@@ -175,14 +187,36 @@ class PaymentSelectionScreen(tk.Frame):
                     width=int(self.app.container.winfo_width() * 0.8),
                     height=120,
                     children=[
-                        SizedBox(width=30),
-                        image,
-                        SizedBox(width=20),
-                        Text(title,
-                             font_size=24,
-                             side=Side.LEFT,
-                             anchor=Anchor.RIGHT,
-                             color="#fff"),
+                        Column(
+                            side=Side.LEFT,
+                            anchor=Anchor.CENTER,
+                            children=[
+                                SizedBox(width=30),
+                                image,
+                                SizedBox(width=20),
+                                Text(title,
+                                     font_size=24,
+                                     side=Side.LEFT,
+                                     anchor=Anchor.RIGHT,
+                                     color="#fff"
+                                     ),
+                            ]
+                        ),
+                        SpacerHorizontal(),
+                        Column(
+                            side=Side.TOP,
+                            anchor=Anchor.TOP,
+                            expand=True,
+                            children=[
+                                Text(Formatter.currency(price),
+                                 color="#fff",
+                                 side=Side.TOP,
+                                 anchor=Anchor.RIGHT,
+                                 padding=Padding(right=15),
+                                 font_size=30,
+                                 ),
+                            ]
+                        ),
                     ],
                     background_color=ColorPalette.blue3,
                     border_radius=8,
@@ -204,7 +238,8 @@ class PaymentSelectionScreen(tk.Frame):
 
         AudioWorker.stop()
         self.app.push('card_machine', self.order_intent.copy_with(
-            paymentMethodId=2
+            paymentMethodId=2,
+            selectedPaymentMethodPrice=self.get_price_for_payment_method(2)
         ))
 
     def credit_card(self):
@@ -215,7 +250,8 @@ class PaymentSelectionScreen(tk.Frame):
 
         AudioWorker.stop()
         self.app.push('card_machine', self.order_intent.copy_with(
-            paymentMethodId=3
+            paymentMethodId=3,
+            selectedPaymentMethodPrice=self.get_price_for_payment_method(3)
         ))
 
     def pix_machine(self):
@@ -226,5 +262,6 @@ class PaymentSelectionScreen(tk.Frame):
 
         AudioWorker.stop()
         self.app.push('card_machine', self.order_intent.copy_with(
-            paymentMethodId=5
+            paymentMethodId=5,
+            selectedPaymentMethodPrice=self.get_price_for_payment_method(5)
         ))

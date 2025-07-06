@@ -1,6 +1,7 @@
 import requests
 
 class PopGasApi:
+    # url_base = " http://127.0.0.1:8000"
     url_base = "https://api.popgas.com.br"
 
     @staticmethod
