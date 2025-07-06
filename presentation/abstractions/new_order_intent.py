@@ -18,13 +18,13 @@ class PriceInfo(TypedDict):
 class NewOrderIntent:
     productSelected: OrderProductSelected
     productPrice: float
-    selectedPaymentMethodPrice: float
     stockCount: int
     pricesByPaymentMethod: Optional[Dict[str, PriceInfo]] = None,
     paymentMethodId: Optional[int] = None
     correlationId: Optional[str] = None
     placedContainerPhoto: Optional[str] = None
     purchasedContainerPhoto: Optional[str] = None
+    selectedPaymentMethodPrice: Optional[float] = None
 
     def copy_with(
         self,
