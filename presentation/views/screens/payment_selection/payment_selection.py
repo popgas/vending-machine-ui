@@ -126,7 +126,7 @@ class PaymentSelectionScreen(tk.Frame):
                                 height=57,
                             ),
                             title="PIX",
-                            price=self.get_price_for_payment_method(9),
+                            price=self.get_price_for_payment_method(5),
                             onclick=lambda: self.pix_machine()
                         ),
                         Row(

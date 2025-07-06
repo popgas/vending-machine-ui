@@ -1,6 +1,5 @@
 import os
 import tkinter
-import uuid
 
 from application import Application
 from domains.enums.order_product_selected import OrderProductSelected
