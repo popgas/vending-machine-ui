@@ -11,7 +11,9 @@ class HealthChecker:
 
     @staticmethod
     def ping(app):
-        print("sending ping request")
-        vm_id = os.environ['VENDING_MACHINE_ID']
-        PopGasApi.request("PUT", f"/vending-machine-orders/{vm_id}/ping")
-        app.after(1000 * 60, lambda: HealthChecker.ping(app))
+        try:
+            print("sending ping request")
+            vm_id = os.environ['VENDING_MACHINE_ID']
+            PopGasApi.request("PUT", f"/vending-machine-orders/{vm_id}/ping")
+        finally:
+            app.after(1000 * 60, lambda: HealthChecker.ping(app))
