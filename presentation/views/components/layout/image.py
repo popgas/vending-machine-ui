@@ -1,4 +1,9 @@
+import base64
+import io
 import tkinter as tk
+
+import qrcode
+
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
 from presentation.views.components.layout.enums.alignment import Anchor, Side
 from presentation.views.components.layout.padding import Padding
@@ -39,6 +44,52 @@ class ImageFromAssets(BuildableWidget):
         )
 
         return label
+
+class QrCodeFromString(BuildableWidget):
+    def __init__(self, qrcode_string, width=80, height=80, side=Side.LEFT, anchor=Anchor.LEFT, padding: Padding = None):
+        self.qrcode_string = qrcode_string
+        self.width = width
+        self.height = height
+        self.anchor = anchor
+        self.side = side
+        self.img = None
+        self.padding = padding or Padding.zero()
+        self.qrcode = self.generate_qr(qrcode_string)
+
+    def build(self, parent=None):
+        resized_image = self.qrcode.resize((self.width, self.height))  # Width, Height
+
+        tk_img = ImageTk.PhotoImage(resized_image)
+
+        label = tk.Label(parent,
+                         width=self.width,
+                         height=self.height,
+                         image=tk_img,
+                         bg=parent['bg'])
+        label.image = tk_img
+        label.pack(
+            anchor=self.anchor,
+            side=self.side,
+            expand=False,
+            fill=tk.NONE,
+            padx=self.padding.padx,
+            pady=self.padding.pady,
+        )
+
+        return label
+
+    def generate_qr(self, data: str):
+        # Create QR code
+        qr = qrcode.QRCode(
+            version=1,  # controls size: 1 is smallest
+            error_correction=qrcode.constants.ERROR_CORRECT_H,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(data)
+        qr.make(fit=True)
+
+        return qr.make_image(fill_color="black", back_color="white")
 
 class CircularSpinner(BuildableWidget):
     def __init__(self, root, **kwargs):

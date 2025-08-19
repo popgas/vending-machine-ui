@@ -1,4 +1,6 @@
 import tkinter as tk
+
+from application import Application
 from presentation.config.color_palette import ColorPalette
 from presentation.views.components.layout.button import Button
 from presentation.views.components.layout.column import Column
@@ -8,7 +10,7 @@ from presentation.views.components.layout.spacer import SpacerVertical
 from presentation.views.components.layout.text import Text
 from presentation.views.components.scaffold.state_provider import StateProvider
 from presentation.views.components.scaffold.transparent_top_bar import TransparentTopBar
-from application import Application
+
 
 class WelcomeScreen(tk.Frame):
     def __init__(self, app: Application):

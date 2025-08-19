@@ -35,14 +35,9 @@ class CameraVerificationScreen(tk.Frame):
         self.order_intent = order_intent
         self.curr_dir = FileUtils.dir(__file__)
         self.state = CameraVerificationState()
-        self.countdown_timer = CountdownTimer(
-            app=app,
-            initial_value=10,
-            on_reached_zero=self.app.pop,
-            padding=Padding(top=25, bottom=10),
-            text_builder=lambda v: f"Aguarde {v} segundo(s)...",
-            autostart=False
-        )
+
+        self.countdown_timer = None
+        self.start_timer()
 
         StateProvider(
             parent=self,
@@ -64,7 +59,7 @@ class CameraVerificationScreen(tk.Frame):
         )
 
         AudioWorker.play(f"{self.curr_dir}/assets/audio.mp3")
-        app.after(4000, self.verify_placed_container)
+        app.after(4000, lambda: self.verify_placed_container(try_again=True))
 
     def get_screen_content(self):
         if self.state.failed_security_check:
@@ -103,17 +98,17 @@ class CameraVerificationScreen(tk.Frame):
             ],
         )
 
-    def verify_placed_container(self):
+    def verify_placed_container(self, try_again=True):
         try:
             CameraWorker.start(
                 camera_socket=self.order_intent.get_camera(),
-                on_completed=self.handle_camera_callback
+                on_completed=lambda r: self.handle_camera_callback(r, try_again)
             )
         except Exception as e:
-            self.handle_camera_callback(CameraResult(error=True))
+            self.handle_camera_callback(CameraResult(error=True), False)
 
 
-    def handle_camera_callback(self, result: CameraResult):
+    def handle_camera_callback(self, result: CameraResult, try_again: bool):
         if result.error:
             AudioWorker.play(f"{self.curr_dir}/assets/camera_not_working.mp3")
             GpioWorker.activate(self.order_intent.get_refill_open_door_pin())
@@ -144,7 +139,10 @@ class CameraVerificationScreen(tk.Frame):
                 placedContainerPhoto=result.taken_photo
             ))
         else:
-            self.security_check_failed()
+            if try_again:
+                self.verify_placed_container(False)
+            else:
+                self.security_check_failed()
 
     def security_check_failed(self):
         print("failed verification")
@@ -155,3 +153,13 @@ class CameraVerificationScreen(tk.Frame):
         AudioWorker.play(f"{self.curr_dir}/assets/security_check_failed.mp3")
         GpioWorker.activate(self.order_intent.get_refill_open_door_pin())
         self.countdown_timer.start()
+
+    def start_timer(self):
+        self.countdown_timer = CountdownTimer(
+            app=self.app,
+            initial_value=10,
+            on_reached_zero=self.app.pop,
+            padding=Padding(top=25, bottom=10),
+            text_builder=lambda v: f"Aguarde {v} segundo(s)...",
+            autostart=False
+        )

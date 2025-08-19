@@ -92,7 +92,6 @@ class GpioWorker:
                 time.sleep(2)
                 pin.on()
             else:
-                pass
                 GPIO.output(pin_num, GPIO.LOW)
                 time.sleep(2)
                 GPIO.output(pin_num, GPIO.HIGH)

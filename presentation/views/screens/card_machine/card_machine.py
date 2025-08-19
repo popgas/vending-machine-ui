@@ -12,7 +12,7 @@ from presentation.views.components.layout.column import Column
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
 from presentation.views.components.layout.enums.alignment import Side, Anchor
 from presentation.views.components.layout.icon import Icon
-from presentation.views.components.layout.image import ImageFromAssets, CircularSpinner
+from presentation.views.components.layout.image import ImageFromAssets, CircularSpinner, QrCodeFromString
 from presentation.views.components.layout.padding import Padding
 from presentation.views.components.layout.sized_box import SizedBox
 from presentation.views.components.layout.spacer import SpacerVertical
@@ -34,6 +34,7 @@ class CardMachineScreen(tkinter.Frame):
         self.state = CardMachineState()
         self.correlation_id = None
         self.idleTimer = None
+        self.pix_qr_code = None
 
         self.countdown_timer = CountdownTimer(
             app=app,
@@ -73,15 +74,23 @@ class CardMachineScreen(tkinter.Frame):
             AudioWorker.play(f"{self.curr_dir}/assets/audio.mp3")
 
     def get_payment_text(self) -> list[BuildableWidget]:
-        if self.order_intent.paymentMethodId == 5 or self.order_intent.paymentMethodId == 9:
-            return [
-                Text("Escaneie o QR code na tela da maquininha", font_size=22),
-                Text("de cartão para efetuar o pagamento", font_size=22),
-            ]
+        if self.is_pix():
+            if self.pix_qr_code is not None:
+                return [
+                    Text("Escaneie o QR code para fazer o pagamento", font_size=22),
+                ]
+            else:
+                return [
+                    Text("Escaneie o QR code na tela da maquininha", font_size=22),
+                    Text("de cartão para efetuar o pagamento", font_size=22),
+                ]
         else:
             return [
                 Text("Insira ou aproxime seu cartão na maquininha", font_size=22),
             ]
+
+    def is_pix(self):
+        return self.order_intent.paymentMethodId == 5 or self.order_intent.paymentMethodId == 9
 
     def get_content(self) -> list[BuildableWidget]:
         if self.state.rejected:
@@ -103,6 +112,25 @@ class CardMachineScreen(tkinter.Frame):
             SizedBox(height=20),
             *self.get_payment_text(),
             SizedBox(height=40),
+            *self.get_pix_qr_code_or_billing_machine(),
+            SpacerVertical(),
+        ]
+
+    def get_pix_qr_code_or_billing_machine(self) -> list[BuildableWidget]:
+        if self.pix_qr_code is not None:
+            return [
+                QrCodeFromString(
+                    qrcode_string=self.pix_qr_code,
+                    width=250,
+                    height=250,
+                    side=Side.TOP,
+                    anchor=Anchor.CENTER,
+                ),
+                SpacerVertical(),
+                CircularSpinner(root=self.app, side=Side.TOP, anchor=Anchor.CENTER),
+            ]
+
+        return [
             ImageFromAssets(
                 path=f"{self.curr_dir}/assets/billing-machine.png",
                 width=150,
@@ -112,7 +140,6 @@ class CardMachineScreen(tkinter.Frame):
             ),
             SpacerVertical(),
             CircularSpinner(root=self.app, side=Side.TOP, anchor=Anchor.CENTER),
-            SpacerVertical(),
         ]
 
     def create_order_request(self):
@@ -134,10 +161,12 @@ class CardMachineScreen(tkinter.Frame):
 
         print(f"creating order response {response}")
 
+        self.pix_qr_code = str(response['pix_qr_code']) if response['pix_qr_code'] is not None else None
         self.correlation_id = str(response['correlation_id'])
         self.check_order_payment_status()
 
         self.idleTimer = self.app.after(180 * 1000, lambda: self.handle_payment_rejected())
+        self.state.notify()
 
     def check_order_payment_status(self):
         print("Checking payment status")
