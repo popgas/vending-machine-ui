@@ -8,3 +8,4 @@ Rx~=3.2.0
 RPi.GPIO==0.7.1
 gpiozero~=2.0.1
 ably~=2.0.12
+qrcode==8.2
