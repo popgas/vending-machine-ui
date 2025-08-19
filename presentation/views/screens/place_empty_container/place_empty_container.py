@@ -30,7 +30,14 @@ class PlaceEmptyContainerScreen(tk.Frame):
         self.order_intent = order_intent
         self.curr_dir = FileUtils.dir(__file__)
         self.state = PlaceEmptyContainerState()
-        self.countdown_timer = None
+
+        self.countdown_timer = CountdownTimer(
+            app=app,
+            initial_value=120,
+            on_reached_zero=self.on_reached_zero_countdown,
+            padding=Padding(top=25, bottom=10),
+            text_builder=lambda v: f"A porta irá fechar automaticamente em {v} segundo(s)..."
+        )
 
         StateProvider(
             parent=self,
@@ -77,7 +84,6 @@ class PlaceEmptyContainerScreen(tk.Frame):
             ),
         )
 
-        self.start_timer()
         AudioWorker.play(f"{self.curr_dir}/assets/audio.mp3")
         GpioWorker.activate(self.order_intent.get_refill_open_door_pin())
 
@@ -181,7 +187,6 @@ class PlaceEmptyContainerScreen(tk.Frame):
     def on_route_popped(self):
         print("route_popped")
         self.countdown_timer.cancel()
-        self.app.after(3 * 1000, lambda: self.start_timer())
 
     def on_reached_zero_countdown(self):
         self.state.update(timer_reached_zero=True)
@@ -195,13 +200,3 @@ class PlaceEmptyContainerScreen(tk.Frame):
             return Column(children=[])
 
         return self.countdown_timer
-
-    def start_timer(self):
-        self.countdown_timer = CountdownTimer(
-            app=self.app,
-            initial_value=120,
-            on_reached_zero=self.on_reached_zero_countdown,
-            padding=Padding(top=25, bottom=10),
-            text_builder=lambda v: f"A porta irá fechar automaticamente em {v} segundo(s)..."
-        )
-        self.state.update(timer_reached_zero=False)
