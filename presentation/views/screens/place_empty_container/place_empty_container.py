@@ -31,7 +31,6 @@ class PlaceEmptyContainerScreen(tk.Frame):
         self.curr_dir = FileUtils.dir(__file__)
         self.state = PlaceEmptyContainerState()
         self.countdown_timer = None
-        self.start_timer()
 
         StateProvider(
             parent=self,
@@ -78,6 +77,7 @@ class PlaceEmptyContainerScreen(tk.Frame):
             ),
         )
 
+        self.start_timer()
         AudioWorker.play(f"{self.curr_dir}/assets/audio.mp3")
         GpioWorker.activate(self.order_intent.get_refill_open_door_pin())
 
