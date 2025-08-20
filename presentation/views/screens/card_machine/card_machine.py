@@ -10,10 +10,11 @@ from presentation.abstractions.new_order_intent import NewOrderIntent
 from presentation.config.color_palette import ColorPalette
 from presentation.views.components.layout.column import Column
 from presentation.views.components.layout.contracts.buildable_widget import BuildableWidget
-from presentation.views.components.layout.enums.alignment import Side, Anchor
+from presentation.views.components.layout.enums.alignment import Side, Anchor, Fill
 from presentation.views.components.layout.icon import Icon
 from presentation.views.components.layout.image import ImageFromAssets, CircularSpinner, QrCodeFromString
 from presentation.views.components.layout.padding import Padding
+from presentation.views.components.layout.row import Row
 from presentation.views.components.layout.sized_box import SizedBox
 from presentation.views.components.layout.spacer import SpacerVertical
 from presentation.views.components.layout.text import Text
@@ -115,8 +116,45 @@ class CardMachineScreen(tkinter.Frame):
             *self.get_payment_text(),
             SizedBox(height=40),
             *self.get_pix_qr_code_or_billing_machine(),
+            SizedBox(height=40),
+            Row(
+                expand=True,
+                side=Side.TOP,
+                fill=Fill.NONE,
+                children=[
+                    Row(
+                        width=400,
+                        height=100,
+                        children=[
+                            SizedBox(width=30),
+                            Icon("xmark-white",
+                                 side=Side.LEFT,
+                                 anchor=Anchor.RIGHT,
+                                 width=30,
+                                 height=40,
+                                 padding=Padding(0, 20, 15, 15)),
+                            SizedBox(width=20),
+                            Text("Cancelar Operação",
+                                 font_size=24,
+                                 side=Side.LEFT,
+                                 anchor=Anchor.RIGHT,
+                                 color="#fff"),
+                        ],
+                        background_color="#cd5c5c",
+                        border_radius=8,
+                        fill=Fill.X,
+                        border_color="#ccc",
+                        on_click=self.cancel_operation,
+                    ),
+                ],
+            ),
+            SizedBox(height=40),
             SpacerVertical(),
         ]
+
+    def cancel_operation(self):
+        self.cancel_idle_timer()
+        self.app.pop()
 
     def get_pix_qr_code_or_billing_machine(self) -> list[BuildableWidget]:
         if self.pix_qr_code is not None:
@@ -226,4 +264,3 @@ class CardMachineScreen(tkinter.Frame):
 
         self.app.after(5 * 1000, lambda: GpioWorker.activate(self.order_intent.get_refill_open_door_pin()))
         self.app.after(10 * 1000, lambda: self.app.off_all("welcome"))
-
