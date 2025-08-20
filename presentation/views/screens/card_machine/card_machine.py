@@ -124,7 +124,7 @@ class CardMachineScreen(tkinter.Frame):
                 fill=Fill.NONE,
                 children=[
                     Row(
-                        width=400,
+                        width=450,
                         height=100,
                         children=[
                             SizedBox(width=30),
