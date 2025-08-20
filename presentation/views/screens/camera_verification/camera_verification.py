@@ -152,7 +152,7 @@ class CameraVerificationScreen(tk.Frame):
     def validation_failed(self):
         AudioWorker.play(f"{self.curr_dir}/assets/security_check_failed.mp3")
         GpioWorker.activate(self.order_intent.get_refill_open_door_pin())
-        self.countdown_timer.start()
+        self.app.after(1000, self.countdown_timer.start)
 
     def start_timer(self):
         self.countdown_timer = CountdownTimer(

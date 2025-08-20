@@ -29,7 +29,6 @@ class CardMachineScreen(tkinter.Frame):
         super().__init__(app.container, bg="#FFFFFF")
         self.curr_dir = FileUtils.dir(__file__)
         self.order_intent = order_intent
-        self.play_initial_audio()
         self.app = app
         self.state = CardMachineState()
         self.correlation_id = None
@@ -69,7 +68,10 @@ class CardMachineScreen(tkinter.Frame):
 
     def play_initial_audio(self):
         if self.order_intent.paymentMethodId == 5 or self.order_intent.paymentMethodId == 9:
-            AudioWorker.play(f"{self.curr_dir}/assets/pay_with_qr_code.mp3")
+            if self.pix_qr_code is not None:
+                AudioWorker.play(f"{self.curr_dir}/assets/pay_with_qr_code_screen.mp3")
+            else:
+                AudioWorker.play(f"{self.curr_dir}/assets/pay_with_qr_code_machine.mp3")
         else:
             AudioWorker.play(f"{self.curr_dir}/assets/audio.mp3")
 
@@ -166,6 +168,7 @@ class CardMachineScreen(tkinter.Frame):
         self.check_order_payment_status()
 
         self.idleTimer = self.app.after(180 * 1000, lambda: self.handle_payment_rejected())
+        self.play_initial_audio()
         self.state.notify()
 
     def check_order_payment_status(self):
