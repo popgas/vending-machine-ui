@@ -6,5 +6,8 @@ class PopGasApi:
 
     @staticmethod
     def request(method, url, **kwargs):
-        modified_url = PopGasApi.url_base + url
-        return requests.request(method, modified_url, **kwargs)
+        try:
+            modified_url = PopGasApi.url_base + url
+            return requests.request(method, modified_url, **kwargs)
+        except Exception as e:
+            print(e)

@@ -33,6 +33,7 @@ class CardMachineScreen(tkinter.Frame):
         self.app = app
         self.state = CardMachineState()
         self.correlation_id = None
+        self.order_id = None
         self.idleTimer = None
         self.pix_qr_code = None
 
@@ -153,6 +154,8 @@ class CardMachineScreen(tkinter.Frame):
         ]
 
     def cancel_operation(self):
+        PopGasApi.request('DELETE', f'/vending-machine-orders/{self.order_id}')
+
         self.cancel_idle_timer()
         self.app.pop()
 
@@ -203,6 +206,7 @@ class CardMachineScreen(tkinter.Frame):
 
         self.pix_qr_code = str(response['pix_qr_code']) if response['pix_qr_code'] is not None else None
         self.correlation_id = str(response['correlation_id'])
+        self.order_id = str(response['id'])
         self.check_order_payment_status()
 
         self.idleTimer = self.app.after(180 * 1000, lambda: self.handle_payment_rejected())
