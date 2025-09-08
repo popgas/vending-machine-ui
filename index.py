@@ -2,6 +2,7 @@ import tkinter as tk
 
 from infrastructure.hardware.gpio import GpioWorker
 from infrastructure.hardware.health_checker import HealthChecker
+from infrastructure.hardware.internet_aware_retrier import InternetAwareRetryer
 from presentation.views.screens.camera_verification.camera_verification import CameraVerificationScreen
 from presentation.views.screens.card_machine.card_machine import CardMachineScreen
 from presentation.views.screens.emtpy_stock.empty_stock import EmptyStockScreen
@@ -45,6 +46,7 @@ if __name__ == '__main__':
     app.wm_iconphoto(False, photo)
 
     app.attributes("-fullscreen", True)
+    InternetAwareRetryer.root_app = app
     # app.push("card_machine", NewOrderIntent(
     #     productSelected=OrderProductSelected.onlyGasRefill,
     #     productPrice=100,

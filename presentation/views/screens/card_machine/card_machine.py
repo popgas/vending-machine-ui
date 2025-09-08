@@ -209,37 +209,40 @@ class CardMachineScreen(tkinter.Frame):
         self.order_id = str(response['id'])
         self.check_order_payment_status()
 
-        self.idleTimer = self.app.after(180 * 1000, lambda: self.handle_payment_rejected())
+        self.idleTimer = self.app.after(300 * 1000, lambda: self.handle_payment_rejected())
         self.play_initial_audio()
         self.state.notify()
 
     def check_order_payment_status(self):
-        print("Checking payment status")
-        response = PopGasApi.request('GET', f"/vending-machine-orders/{self.correlation_id}").json()
-        print(f"checking order response {response}")
+        try:
+            print("Checking payment status")
+            response = PopGasApi.request('GET', f"/vending-machine-orders/{self.correlation_id}").json()
+            print(f"checking order response {response}")
 
-        status = str(response['payment_status'])
-        flow_status = str(response['flow_status'])
+            status = str(response['payment_status'])
+            flow_status = str(response['flow_status'])
 
-        match status:
-            case 'APPROVED':
+            match status:
+                case 'APPROVED':
+                    self.cancel_idle_timer()
+                    self.state.update(awaiting_payment_approval=False)
+                    self.app.push('preparing_order', self.order_intent.copy_with(
+                        correlationId=self.correlation_id,
+                    ))
+                    return
+                case 'REJECTED' | 'UNAUTHORIZED' | 'ABORTED' | 'CANCELLED':
+                    self.cancel_idle_timer()
+                    self.handle_payment_rejected()
+                    return
+
+            if flow_status == 'ORDER_VALIDATION_FAILED':
                 self.cancel_idle_timer()
-                self.state.update(awaiting_payment_approval=False)
-                self.app.push('preparing_order', self.order_intent.copy_with(
-                    correlationId=self.correlation_id,
-                ))
-                return
-            case 'REJECTED' | 'UNAUTHORIZED' | 'ABORTED' | 'CANCELLED':
-                self.cancel_idle_timer()
-                self.handle_payment_rejected()
+                self.card_machine_unreachable()
                 return
 
-        if flow_status == 'ORDER_VALIDATION_FAILED':
-            self.cancel_idle_timer()
-            self.card_machine_unreachable()
-            return
-
-        if self.state.awaiting_payment_approval:
+            if self.state.awaiting_payment_approval:
+                self.app.after(3000, self.check_order_payment_status)
+        finally:
             self.app.after(3000, self.check_order_payment_status)
 
     def cancel_idle_timer(self):
@@ -251,7 +254,6 @@ class CardMachineScreen(tkinter.Frame):
             awaiting_payment_approval=False,
             rejected=True
         )
-        self.countdown_timer.start()
         AudioWorker.play(f"{self.curr_dir}/assets/payment_rejected.mp3")
 
     def card_machine_unreachable(self):

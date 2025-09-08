@@ -25,7 +25,14 @@ class ProductSelectionScreen(tk.Frame):
     def __init__(self, app: Application):
         super().__init__(app.container, bg="#FFFFFF")
         self.app = app
+        self.data = None
+        self.gas_refill_price = None
+        self.container_with_gas_price = None
+        self.prices_by_payment_method = None
 
+        self.init_process()
+
+    def init_process(self):
         self.data = self.get_data()
 
         self.gas_refill_price = float(self.data['gas_refill_price'])
@@ -37,7 +44,7 @@ class ProductSelectionScreen(tk.Frame):
             child=Column(
                 expand=True,
                 children=[
-                    TransparentTopBar(app, can_pop=True),
+                    TransparentTopBar(self.app, can_pop=True),
                     Column(
                         expand=True,
                         children=[
@@ -63,10 +70,10 @@ class ProductSelectionScreen(tk.Frame):
         )
 
         if int(self.data['container_full_stock_count']) == 0:
-            self.app.after(200, lambda: app.off_all('empty_stock'))
+            self.app.after(200, lambda: self.app.off_all('empty_stock'))
             return
         elif 'is_under_maintenance' in self.data and bool(self.data['is_under_maintenance']):
-            self.app.after(200, lambda: app.off_all('tech_support'))
+            self.app.after(200, lambda: self.app.off_all('tech_support'))
             return
         else:
             AudioWorker.play(f"{FileUtils.dir(__file__)}/assets/audio.mp3")
