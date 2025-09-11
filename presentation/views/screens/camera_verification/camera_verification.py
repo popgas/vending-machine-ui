@@ -140,6 +140,7 @@ class CameraVerificationScreen(tk.Frame):
             ))
         else:
             if try_again:
+                GpioWorker.close_all_doors()
                 self.verify_placed_container(False)
             else:
                 self.security_check_failed()
