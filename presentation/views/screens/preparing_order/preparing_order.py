@@ -53,17 +53,9 @@ class PreparingOrderScreen(tkinter.Frame):
         AudioWorker.play(f"{self.curr_dir}/assets/payment_received.mp3")
 
         self.app.after(150, lambda: GpioWorker.activate(VendingMachinePins.rotateCarrousel))
-        self.app.after(6 * 1000, self.take_security_photo)
+        self.app.after(6 * 1000, self.ready_to_pick)
 
-    def take_security_photo(self):
-        CameraWorker.start(
-            camera_socket=self.order_intent.get_camera(),
-            on_completed=self.ready_to_pick
-        )
-
-    def ready_to_pick(self, camera_result: CameraResult):
+    def ready_to_pick(self):
         AudioWorker.play(f"{self.curr_dir}/assets/ready_to_pickup.mp3")
         self.app.after(5 * 1000, lambda: GpioWorker.activate(self.order_intent.get_full_container_open_door_pin()))
-        self.app.after(10 * 1000, lambda: self.app.push('order_completed', self.order_intent.copy_with(
-            purchasedContainerPhoto=camera_result.taken_photo
-        )))
+        self.app.after(10 * 1000, lambda: self.app.push('order_completed', self.order_intent)

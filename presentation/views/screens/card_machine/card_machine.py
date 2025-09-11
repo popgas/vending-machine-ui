@@ -215,6 +215,9 @@ class CardMachineScreen(tkinter.Frame):
 
     def check_order_payment_status(self):
         try:
+            if not self.state.awaiting_payment_approval:
+                return
+
             print("Checking payment status")
             response = PopGasApi.request('GET', f"/vending-machine-orders/{self.correlation_id}").json()
             print(f"checking order response {response}")
@@ -242,7 +245,7 @@ class CardMachineScreen(tkinter.Frame):
 
             if self.state.awaiting_payment_approval:
                 self.app.after(3000, self.check_order_payment_status)
-        finally:
+        except Exception as e:
             self.app.after(3000, self.check_order_payment_status)
 
     def cancel_idle_timer(self):
