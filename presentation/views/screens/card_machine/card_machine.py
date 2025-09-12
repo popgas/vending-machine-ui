@@ -239,6 +239,7 @@ class CardMachineScreen(tkinter.Frame):
                     return
 
             if flow_status == 'ORDER_VALIDATION_FAILED':
+                self.state.update(awaiting_payment_approval=False)
                 self.cancel_idle_timer()
                 self.card_machine_unreachable()
                 return
@@ -258,6 +259,7 @@ class CardMachineScreen(tkinter.Frame):
             rejected=True
         )
         AudioWorker.play(f"{self.curr_dir}/assets/payment_rejected.mp3")
+        self.app.after(5 * 1000, lambda: self.app.pop())
 
     def card_machine_unreachable(self):
         AudioWorker.play(f"{self.curr_dir}/assets/card_machine_disconnected.mp3")
