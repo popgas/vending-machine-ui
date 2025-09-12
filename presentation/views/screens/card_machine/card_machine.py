@@ -118,6 +118,16 @@ class CardMachineScreen(tkinter.Frame):
             SizedBox(height=40),
             *self.get_pix_qr_code_or_billing_machine(),
             SizedBox(height=40),
+            *self.get_cancel_button(),
+            SizedBox(height=40),
+            SpacerVertical(),
+        ]
+
+    def get_cancel_button(self) -> list[BuildableWidget]:
+        if not self.is_pix():
+            return []
+
+        return [
             Row(
                 expand=True,
                 side=Side.TOP,
@@ -149,8 +159,6 @@ class CardMachineScreen(tkinter.Frame):
                     ),
                 ],
             ),
-            SizedBox(height=40),
-            SpacerVertical(),
         ]
 
     def cancel_operation(self):
