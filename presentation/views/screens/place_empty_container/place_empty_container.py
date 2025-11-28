@@ -87,12 +87,6 @@ class PlaceEmptyContainerScreen(tk.Frame):
         AudioWorker.play(f"{self.curr_dir}/assets/audio.mp3")
         GpioWorker.activate(self.order_intent.get_refill_open_door_pin())
 
-    def warm_up_camera(self):
-        CameraWorker.start(
-            camera_socket=self.order_intent.get_camera(),
-            on_completed=lambda e: self.go_to_camera_verification_part1()
-        )
-
     def go_to_camera_verification_part1(self):
         self.state.update(closing_door=True, timer_reached_zero=True)
         self.app.after(150, self.go_to_camera_verification_part2)
