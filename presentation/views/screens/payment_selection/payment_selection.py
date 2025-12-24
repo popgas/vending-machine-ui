@@ -31,6 +31,7 @@ class PaymentSelectionScreen(tk.Frame):
         self.curr_dir = FileUtils.dir(__file__)
         self.state = PaymentSelectionState()
         self.clicked = False
+        self.timer = None
 
         can_pop = order_intent.productSelected == OrderProductSelected.gasWithContainer
 
@@ -47,6 +48,7 @@ class PaymentSelectionScreen(tk.Frame):
         )
 
         AudioWorker.play(f"{self.curr_dir}/assets/audio.mp3")
+        self.timer = self.app.after(120 * 1000, self.cancel_operation)
 
     def body_content(self) -> BuildableWidget:
         if self.state.cancelling is False:
@@ -167,6 +169,8 @@ class PaymentSelectionScreen(tk.Frame):
         )
 
     def cancel_operation(self):
+        self.app.after_cancel(self.timer)
+
         if self.order_intent.productSelected == OrderProductSelected.gasWithContainer:
             self.app.off_all("welcome")
         elif self.order_intent.productSelected == OrderProductSelected.onlyGasRefill:
@@ -235,6 +239,7 @@ class PaymentSelectionScreen(tk.Frame):
             return
 
         self.clicked = True
+        self.app.after_cancel(self.timer)
 
         AudioWorker.stop()
         self.app.push('card_machine', self.order_intent.copy_with(
@@ -247,6 +252,7 @@ class PaymentSelectionScreen(tk.Frame):
             return
 
         self.clicked = True
+        self.app.after_cancel(self.timer)
 
         AudioWorker.stop()
         self.app.push('card_machine', self.order_intent.copy_with(
@@ -259,6 +265,7 @@ class PaymentSelectionScreen(tk.Frame):
             return
 
         self.clicked = True
+        self.app.after_cancel(self.timer)
 
         AudioWorker.stop()
         self.app.push('card_machine', self.order_intent.copy_with(
