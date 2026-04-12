@@ -217,7 +217,7 @@ class CardMachineScreen(tkinter.Frame):
         self.order_id = str(response['id'])
         self.check_order_payment_status()
 
-        self.idleTimer = self.app.after(300 * 1000, lambda: self.handle_payment_rejected())
+        self.idleTimer = self.app.after(600 * 1000, lambda: self.handle_payment_rejected())
         self.play_initial_audio()
         self.state.notify()
 
