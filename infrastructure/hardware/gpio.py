@@ -49,6 +49,7 @@ class GpioWorker:
 
     @staticmethod
     def config():
+        """Configura pinos de saída e entrada de acordo com o hardware detectado."""
         try:
             if use_gpiozero:
                 GpioWorker._config_gpiozero()
