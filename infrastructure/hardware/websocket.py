@@ -1,17 +1,19 @@
 import asyncio
-import os
 
 from ably import AblyRealtime
 from ably.types.message import Message
 
 from domains.enums.machine_doors import VendingMachinePins
+from infrastructure.environment import get_env
 from infrastructure.hardware.camera import CameraWorker
 from infrastructure.hardware.gpio import GpioWorker
+from infrastructure.observability.logger import Logger
 
 
 class Websocket:
     def __init__(self):
-        self.channel_name = f'vending_machine_{os.environ['VENDING_MACHINE_ID']}'
+        vm_id = get_env('VENDING_MACHINE_ID', 'dev-vm-01')
+        self.channel_name = f'vending_machine_{vm_id}'
         self.command_name = f'{self.channel_name}:commands'
         self.result_name = f'{self.channel_name}::results'
         print(self.command_name)
@@ -20,19 +22,26 @@ class Websocket:
 
     @staticmethod
     async def configure():
-        websocket = Websocket()
-        await websocket.connect()
-        await asyncio.Event().wait()
+        ably_key = get_env('ABLY_KEY')
+        if not ably_key:
+            Logger.get_logger().warning("ABLY_KEY ausente; websocket skipped")
+            return
 
-    async def connect(self):
-        ably = AblyRealtime(os.environ['ABLY_KEY'])
+        try:
+            websocket = Websocket()
+            await websocket.connect(ably_key)
+            await asyncio.Event().wait()
+        except Exception as e:
+            Logger.get_logger().warning(f"websocket configure skipped: {e}")
+
+    async def connect(self, ably_key: str):
+        ably = AblyRealtime(ably_key)
 
         await ably.connection.once_async('connected')
 
         print("connected")
 
         channel = ably.channels.get(self.command_name)
-        # self.channel_result_handler = ably.channels.get(self.result_name)
         await channel.subscribe(self.command_handler)
 
     async def command_handler(self, event: Message):
