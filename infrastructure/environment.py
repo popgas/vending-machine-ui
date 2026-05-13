@@ -16,9 +16,9 @@ def get_env(key: str, default=None):
     - Returns `default` (which may be None) if missing.
     - Logs a warning if missing AND not in dev mode (production should have all vars set).
     """
-    value = os.environ.get(key, default)
+    raw = os.environ.get(key)
 
-    if value is None and not is_dev_mode():
+    if raw is None and not is_dev_mode():
         Logger.get_logger().warning(f"env var ausente: {key}")
 
-    return value
+    return raw if raw is not None else default
