@@ -85,10 +85,11 @@ class CameraWorker(ObserverBase):
 
     @staticmethod
     def take_photo_from_all_cameras():
+        from infrastructure.environment import get_env
         cameras = [
-            os.environ['CAMERA_1'],
-            os.environ['CAMERA_2'],
-            os.environ['CAMERA_3']
+            get_env('CAMERA_1', '0'),
+            get_env('CAMERA_2', '0'),
+            get_env('CAMERA_3', '0'),
         ]
 
         i = 1
@@ -98,8 +99,9 @@ class CameraWorker(ObserverBase):
             cap = cv2.VideoCapture(camera)
 
             if not cap.isOpened():
-                print("Error: Could not open camera.")
-                exit()
+                Logger.get_logger().warning(f"camera {camera} could not open; skipping")
+                cap.release()
+                continue
 
             time.sleep(1)
 
