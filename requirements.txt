@@ -6,5 +6,6 @@ tk~=0.1.0
 pillow~=10.4.0
 reactivex>=4.0.0
 gpiozero~=2.0.1
+RPi.GPIO==0.7.1; sys_platform == "linux"
 ably~=2.0.12
 qrcode==8.2
