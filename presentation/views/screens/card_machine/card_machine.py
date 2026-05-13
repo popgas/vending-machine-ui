@@ -1,8 +1,8 @@
-import os
 import tkinter
 
 from application import Application
 from domains.enums.order_product_selected import OrderProductSelected
+from infrastructure.environment import get_env
 from infrastructure.hardware.audio import AudioWorker
 from infrastructure.hardware.gpio import GpioWorker
 from infrastructure.http.popgas_api import PopGasApi
@@ -199,7 +199,7 @@ class CardMachineScreen(tkinter.Frame):
         else:
             product_selected = 'GAS_WITH_CONTAINER'
 
-        vm_id = os.environ['VENDING_MACHINE_ID']
+        vm_id = get_env('VENDING_MACHINE_ID', 'dev-vm-01')
 
         response = PopGasApi.request('POST', '/vending-machine-orders', json={
             'vending_machine_id': vm_id,

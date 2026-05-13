@@ -1,7 +1,6 @@
-import os
-
 import tkinter as tk
 from domains.enums.order_product_selected import OrderProductSelected
+from infrastructure.environment import get_env
 from infrastructure.hardware.audio import AudioWorker
 from infrastructure.http.popgas_api import PopGasApi
 from presentation.abstractions.new_order_intent import NewOrderIntent
@@ -139,5 +138,5 @@ class ProductSelectionScreen(tk.Frame):
         )
 
     def get_data(self):
-        vm_id = os.environ['VENDING_MACHINE_ID']
+        vm_id = get_env('VENDING_MACHINE_ID', 'dev-vm-01')
         return PopGasApi.request("GET", f"/vending-machine-orders/{vm_id}/prices").json()

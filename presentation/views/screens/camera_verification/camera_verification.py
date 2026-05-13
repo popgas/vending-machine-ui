@@ -1,9 +1,9 @@
 import base64
-import os
 import tkinter as tk
 
 import cv2
 
+from infrastructure.environment import get_env
 from infrastructure.hardware.audio import AudioWorker
 from infrastructure.hardware.camera import CameraWorker, CameraResult
 from infrastructure.hardware.gpio import GpioWorker
@@ -127,7 +127,7 @@ class CameraVerificationScreen(tk.Frame):
         base64_image = f"data:image/jpeg;base64,{b64_str}"
 
         response = PopGasApi.request('POST', '/vending-machine-orders/verify-photo', json={
-            'vending_machine_id': os.environ['VENDING_MACHINE_ID'],
+            'vending_machine_id': get_env('VENDING_MACHINE_ID', 'dev-vm-01'),
             'base64_image': base64_image,
             'camera': self.order_intent.get_camera_describer(),
         }).json()

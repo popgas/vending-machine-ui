@@ -1,6 +1,6 @@
-import os
 import tkinter as tk
 
+from infrastructure.environment import get_env
 from infrastructure.http.popgas_api import PopGasApi
 from presentation.config.color_palette import ColorPalette
 from presentation.views.components.layout.column import Column
@@ -55,7 +55,7 @@ class TechSupportScreen(tk.Frame):
         self.timer = self.app.after(5 * 1000, self.check_tech_support)
 
     def check_tech_support(self):
-        vm_id = os.environ['VENDING_MACHINE_ID']
+        vm_id = get_env('VENDING_MACHINE_ID', 'dev-vm-01')
         response = PopGasApi.request("GET", f"/vending-machine-orders/{vm_id}/prices").json()
 
         if 'is_under_maintenance' not in response or not bool(response['is_under_maintenance']):
