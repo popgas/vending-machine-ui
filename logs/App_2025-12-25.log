@@ -1,0 +1,110 @@
+2025-12-25 01:23:41,607 - INFO - using camera 0
+2025-12-25 01:23:41,607 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2025-12-25 01:23:41,607 - INFO - using camera 0
+2025-12-25 01:23:43,616 - INFO - Acionar saída 23
+2025-12-25 01:23:45,624 - INFO - Acionar saída 24
+2025-12-25 01:23:47,630 - INFO - Acionar saída 8
+2025-12-25 01:23:49,630 - INFO - Acionar saída 1
+2025-12-25 01:35:14,663 - INFO - security check response {'passed_verification': True}
+2025-12-25 01:35:27,070 - INFO - security check response {'passed_verification': True}
+2025-12-25 01:35:55,291 - INFO - security check response {'passed_verification': True}
+2025-12-25 01:38:06,862 - INFO - using camera 0
+2025-12-25 01:38:06,862 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2025-12-25 01:38:06,862 - INFO - using camera 0
+2025-12-25 01:38:08,874 - INFO - Acionar saída 23
+2025-12-25 01:38:08,910 - INFO - security check response {'passed_verification': True}
+2025-12-25 01:38:10,879 - INFO - Acionar saída 24
+2025-12-25 01:38:12,880 - INFO - Acionar saída 8
+2025-12-25 01:38:14,886 - INFO - Acionar saída 1
+2025-12-25 01:39:57,328 - INFO - using camera 0
+2025-12-25 01:39:57,328 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2025-12-25 01:39:57,328 - INFO - using camera 0
+2025-12-25 01:39:59,339 - INFO - Acionar saída 23
+2025-12-25 01:39:59,371 - INFO - security check response {'passed_verification': True}
+2025-12-25 01:40:01,345 - INFO - Acionar saída 24
+2025-12-25 01:40:03,347 - INFO - Acionar saída 8
+2025-12-25 01:40:05,352 - INFO - Acionar saída 1
+2025-12-25 01:40:48,643 - INFO - using camera 0
+2025-12-25 01:40:48,643 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2025-12-25 01:40:48,643 - INFO - using camera 0
+2025-12-25 01:40:50,653 - INFO - Acionar saída 23
+2025-12-25 01:40:50,663 - INFO - security check response {'passed_verification': True}
+2025-12-25 01:40:52,659 - INFO - Acionar saída 24
+2025-12-25 01:40:54,664 - INFO - Acionar saída 8
+2025-12-25 01:40:56,670 - INFO - Acionar saída 1
+2025-12-25 01:41:29,629 - INFO - using camera 0
+2025-12-25 01:41:29,629 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2025-12-25 01:41:29,630 - INFO - using camera 0
+2025-12-25 01:41:31,643 - INFO - Acionar saída 23
+2025-12-25 01:41:31,655 - INFO - security check response {'passed_verification': True}
+2025-12-25 01:41:33,645 - INFO - Acionar saída 24
+2025-12-25 01:41:35,650 - INFO - Acionar saída 8
+2025-12-25 01:41:37,656 - INFO - Acionar saída 1
+2025-12-25 01:41:55,705 - INFO - using camera 0
+2025-12-25 01:41:55,706 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2025-12-25 01:41:55,706 - INFO - using camera 0
+2025-12-25 01:41:57,719 - INFO - Acionar saída 23
+2025-12-25 01:41:57,745 - INFO - security check response {'passed_verification': True}
+2025-12-25 01:41:59,726 - INFO - Acionar saída 24
+2025-12-25 01:42:01,726 - INFO - Acionar saída 8
+2025-12-25 01:42:03,731 - INFO - Acionar saída 1
+2025-12-25 01:42:08,018 - INFO - using camera 0
+2025-12-25 01:42:08,018 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2025-12-25 01:42:08,019 - INFO - using camera 0
+2025-12-25 01:42:10,030 - INFO - Acionar saída 23
+2025-12-25 01:42:10,053 - INFO - security check response {'passed_verification': True}
+2025-12-25 01:42:12,031 - INFO - Acionar saída 24
+2025-12-25 01:42:14,037 - INFO - Acionar saída 8
+2025-12-25 01:42:16,042 - INFO - Acionar saída 1
+2025-12-25 01:43:36,770 - INFO - Acionar saída 12
+2025-12-25 01:43:38,772 - INFO - Acionar saída 12
+2025-12-25 01:43:40,790 - INFO - security check response {'passed_verification': True}
+2025-12-25 01:43:55,633 - INFO - using camera 0
+2025-12-25 01:43:55,633 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2025-12-25 01:44:01,657 - INFO - using camera 0
+2025-12-25 01:44:03,662 - INFO - Acionar saída 12
+2025-12-25 01:44:05,663 - INFO - Acionar saída 12
+2025-12-25 01:44:07,688 - INFO - security check response {'passed_verification': True}
+2025-12-25 01:44:09,203 - INFO - using camera 0
+2025-12-25 01:44:09,203 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2025-12-25 01:44:15,222 - INFO - using camera 0
+2025-12-25 01:44:17,234 - INFO - Acionar saída 12
+2025-12-25 01:44:19,240 - INFO - Acionar saída 12
+2025-12-25 01:44:21,258 - INFO - security check response {'passed_verification': True}
+2025-12-25 01:44:49,693 - INFO - using camera 0
+2025-12-25 01:44:49,693 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2025-12-25 01:44:55,707 - INFO - using camera 0
+2025-12-25 01:44:57,714 - INFO - Acionar saída 12
+2025-12-25 01:44:59,719 - INFO - Acionar saída 12
+2025-12-25 01:45:01,743 - INFO - security check response {'passed_verification': True}
+2025-12-25 01:45:22,515 - INFO - using camera 0
+2025-12-25 01:45:22,516 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2025-12-25 01:45:30,544 - INFO - using camera 0
+2025-12-25 01:45:32,548 - INFO - Acionar saída 12
+2025-12-25 01:45:34,551 - INFO - Acionar saída 12
+2025-12-25 01:45:36,569 - INFO - security check response {'passed_verification': True}
+2025-12-25 01:46:24,751 - INFO - using camera 0
+2025-12-25 01:46:24,751 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2025-12-25 01:46:32,777 - INFO - using camera 0
+2025-12-25 01:46:55,937 - INFO - using camera 0
+2025-12-25 01:46:55,937 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2025-12-25 01:47:03,966 - INFO - using camera 0
+2025-12-25 01:47:05,973 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2025-12-25 01:47:05,975 - INFO - using camera 0
+2025-12-25 01:49:15,922 - INFO - using camera 0
+2025-12-25 01:49:15,922 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2025-12-25 01:49:23,950 - INFO - using camera 0
+2025-12-25 01:49:25,955 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2025-12-25 01:49:25,956 - INFO - using camera 0
+2025-12-25 01:49:27,895 - INFO - using camera 0
+2025-12-25 01:49:27,895 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2025-12-25 01:49:27,967 - INFO - Acionar saída 12
+2025-12-25 01:49:29,971 - INFO - Acionar saída 12
+2025-12-25 01:49:31,995 - INFO - security check response {'passed_verification': True}
+2025-12-25 01:49:35,918 - INFO - using camera 0
+2025-12-25 01:49:37,928 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2025-12-25 01:49:37,928 - INFO - using camera 0
+2025-12-25 01:49:39,939 - INFO - Acionar saída 12
+2025-12-25 01:49:41,946 - INFO - Acionar saída 12
+2025-12-25 01:49:43,970 - INFO - security check response {'passed_verification': True}
+2025-12-25 02:10:50,606 - INFO - Acionar saída 17

@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="Python 3.9 (vending_machine_python_tk)" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.13 (vending_machine_python)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.14 (vending-machine-ui)" project-jdk-type="Python SDK" />
 </project>

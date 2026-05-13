@@ -1,0 +1,309 @@
+2026-05-13 15:21:11,494 - INFO - Acionar saída 12
+2026-05-13 15:21:13,496 - INFO - Acionar saída 12
+2026-05-13 15:21:28,114 - INFO - Acionar saída 12
+2026-05-13 15:21:30,120 - INFO - Acionar saída 12
+2026-05-13 15:22:20,509 - INFO - Acionar saída 12
+2026-05-13 15:22:22,514 - INFO - Acionar saída 12
+2026-05-13 15:22:59,974 - INFO - Acionar saída 12
+2026-05-13 15:23:01,982 - INFO - Acionar saída 12
+2026-05-13 15:23:44,759 - INFO - Acionar saída 12
+2026-05-13 15:23:46,766 - INFO - Acionar saída 12
+2026-05-13 15:24:28,165 - INFO - Acionar saída 12
+2026-05-13 15:24:30,172 - INFO - Acionar saída 12
+2026-05-13 15:25:52,319 - INFO - Acionar saída 12
+2026-05-13 15:25:54,326 - INFO - Acionar saída 12
+2026-05-13 15:26:26,221 - INFO - Acionar saída 12
+2026-05-13 15:26:28,228 - INFO - Acionar saída 12
+2026-05-13 15:28:06,750 - INFO - Acionar saída 12
+2026-05-13 15:28:08,756 - INFO - Acionar saída 12
+2026-05-13 15:29:45,251 - INFO - using camera 0
+2026-05-13 15:29:45,251 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:29:51,274 - WARNING - camera 0 could not open; skipping
+2026-05-13 15:29:51,274 - WARNING - camera 1 could not open; skipping
+2026-05-13 15:29:51,274 - WARNING - camera 2 could not open; skipping
+2026-05-13 15:29:51,276 - INFO - using camera 0
+2026-05-13 15:29:53,285 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:29:53,287 - INFO - using camera 0
+2026-05-13 15:30:05,429 - INFO - using camera 0
+2026-05-13 15:30:05,430 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:30:11,460 - WARNING - camera 0 could not open; skipping
+2026-05-13 15:30:11,460 - WARNING - camera 1 could not open; skipping
+2026-05-13 15:30:11,460 - WARNING - camera 2 could not open; skipping
+2026-05-13 15:30:13,469 - INFO - using camera 0
+2026-05-13 15:30:15,475 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:30:15,476 - INFO - using camera 0
+2026-05-13 15:30:20,507 - INFO - Acionar saída 12
+2026-05-13 15:30:22,512 - INFO - Acionar saída 12
+2026-05-13 15:30:24,520 - INFO - using camera 0
+2026-05-13 15:30:24,520 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:30:30,539 - WARNING - camera 0 could not open; skipping
+2026-05-13 15:30:30,540 - WARNING - camera 1 could not open; skipping
+2026-05-13 15:30:30,540 - WARNING - camera 2 could not open; skipping
+2026-05-13 15:30:32,550 - INFO - using camera 0
+2026-05-13 15:30:34,552 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:30:34,554 - INFO - using camera 0
+2026-05-13 15:33:13,071 - INFO - using camera 0
+2026-05-13 15:33:13,072 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:33:19,096 - WARNING - camera 0 could not open; skipping
+2026-05-13 15:33:19,097 - WARNING - camera 1 could not open; skipping
+2026-05-13 15:33:19,097 - WARNING - camera 2 could not open; skipping
+2026-05-13 15:33:21,108 - INFO - using camera 0
+2026-05-13 15:33:23,110 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:33:23,114 - INFO - using camera 0
+2026-05-13 15:33:25,129 - INFO - Acionar saída 12
+2026-05-13 15:33:27,132 - INFO - Acionar saída 12
+2026-05-13 15:40:54,053 - INFO - using camera 0
+2026-05-13 15:40:54,053 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:41:00,081 - WARNING - camera 0 could not open; skipping
+2026-05-13 15:41:00,082 - WARNING - camera 1 could not open; skipping
+2026-05-13 15:41:00,082 - WARNING - camera 2 could not open; skipping
+2026-05-13 15:41:02,091 - INFO - using camera 0
+2026-05-13 15:41:04,097 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:41:04,100 - INFO - using camera 0
+2026-05-13 15:41:06,109 - INFO - Acionar saída 12
+2026-05-13 15:41:08,115 - INFO - Acionar saída 12
+2026-05-13 15:41:10,133 - INFO - security check response {'passed_verification': True}
+2026-05-13 15:41:45,678 - INFO - using camera 0
+2026-05-13 15:41:45,678 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:41:51,711 - WARNING - camera 0 could not open; skipping
+2026-05-13 15:41:51,712 - WARNING - camera 1 could not open; skipping
+2026-05-13 15:41:51,712 - WARNING - camera 2 could not open; skipping
+2026-05-13 15:41:53,733 - INFO - using camera 0
+2026-05-13 15:41:55,743 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:41:55,745 - INFO - using camera 0
+2026-05-13 15:41:57,774 - INFO - Acionar saída 12
+2026-05-13 15:41:59,784 - INFO - Acionar saída 12
+2026-05-13 15:42:01,832 - INFO - security check response {'passed_verification': True}
+2026-05-13 15:42:05,037 - INFO - using camera 0
+2026-05-13 15:42:05,038 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:42:11,080 - WARNING - camera 0 could not open; skipping
+2026-05-13 15:42:11,081 - WARNING - camera 1 could not open; skipping
+2026-05-13 15:42:11,081 - WARNING - camera 2 could not open; skipping
+2026-05-13 15:42:13,098 - INFO - using camera 0
+2026-05-13 15:42:15,112 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:42:15,115 - INFO - using camera 0
+2026-05-13 15:42:17,142 - INFO - Acionar saída 12
+2026-05-13 15:42:19,149 - INFO - Acionar saída 12
+2026-05-13 15:42:21,197 - INFO - security check response {'passed_verification': True}
+2026-05-13 15:42:25,971 - INFO - using camera 0
+2026-05-13 15:42:25,971 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:42:31,997 - WARNING - camera 0 could not open; skipping
+2026-05-13 15:42:31,998 - WARNING - camera 1 could not open; skipping
+2026-05-13 15:42:31,998 - WARNING - camera 2 could not open; skipping
+2026-05-13 15:42:34,007 - INFO - using camera 0
+2026-05-13 15:42:36,014 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:42:36,017 - INFO - using camera 0
+2026-05-13 15:42:38,043 - INFO - Acionar saída 12
+2026-05-13 15:42:40,049 - INFO - Acionar saída 12
+2026-05-13 15:42:42,085 - INFO - security check response {'passed_verification': True}
+2026-05-13 15:44:08,563 - INFO - using camera 0
+2026-05-13 15:44:08,563 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:44:14,606 - WARNING - camera 0 could not open; skipping
+2026-05-13 15:44:14,608 - WARNING - camera 1 could not open; skipping
+2026-05-13 15:44:14,608 - WARNING - camera 2 could not open; skipping
+2026-05-13 15:44:16,612 - INFO - using camera 0
+2026-05-13 15:44:18,627 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:44:18,628 - INFO - using camera 0
+2026-05-13 15:44:20,651 - INFO - Acionar saída 12
+2026-05-13 15:44:22,662 - INFO - Acionar saída 12
+2026-05-13 15:44:24,710 - INFO - security check response {'passed_verification': True}
+2026-05-13 15:44:27,665 - INFO - using camera 0
+2026-05-13 15:44:27,665 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:44:33,706 - WARNING - camera 0 could not open; skipping
+2026-05-13 15:44:33,706 - WARNING - camera 1 could not open; skipping
+2026-05-13 15:44:33,706 - WARNING - camera 2 could not open; skipping
+2026-05-13 15:44:35,720 - INFO - using camera 0
+2026-05-13 15:44:37,736 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:44:37,738 - INFO - using camera 0
+2026-05-13 15:44:39,759 - INFO - Acionar saída 12
+2026-05-13 15:44:41,764 - INFO - Acionar saída 12
+2026-05-13 15:44:43,817 - INFO - security check response {'passed_verification': True}
+2026-05-13 15:45:06,179 - INFO - using camera 0
+2026-05-13 15:45:06,179 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:45:12,221 - WARNING - camera 0 could not open; skipping
+2026-05-13 15:45:12,221 - WARNING - camera 1 could not open; skipping
+2026-05-13 15:45:12,221 - WARNING - camera 2 could not open; skipping
+2026-05-13 15:45:14,233 - INFO - using camera 0
+2026-05-13 15:45:16,252 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:45:16,254 - INFO - using camera 0
+2026-05-13 15:45:18,275 - INFO - Acionar saída 12
+2026-05-13 15:45:20,286 - INFO - Acionar saída 12
+2026-05-13 15:45:22,330 - INFO - security check response {'passed_verification': True}
+2026-05-13 15:45:25,163 - INFO - using camera 0
+2026-05-13 15:45:25,163 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:45:31,207 - WARNING - camera 0 could not open; skipping
+2026-05-13 15:45:31,207 - WARNING - camera 1 could not open; skipping
+2026-05-13 15:45:31,208 - WARNING - camera 2 could not open; skipping
+2026-05-13 15:45:33,217 - INFO - using camera 0
+2026-05-13 15:45:35,235 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:45:35,236 - INFO - using camera 0
+2026-05-13 15:45:37,250 - INFO - Acionar saída 12
+2026-05-13 15:45:39,262 - INFO - Acionar saída 12
+2026-05-13 15:45:41,286 - INFO - security check response {'passed_verification': True}
+2026-05-13 15:46:21,156 - INFO - Acionar saída 12
+2026-05-13 15:46:23,161 - INFO - Acionar saída 12
+2026-05-13 15:46:25,175 - INFO - using camera 0
+2026-05-13 15:46:25,175 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:46:31,211 - WARNING - camera 0 could not open; skipping
+2026-05-13 15:46:31,211 - WARNING - camera 1 could not open; skipping
+2026-05-13 15:46:31,211 - WARNING - camera 2 could not open; skipping
+2026-05-13 15:46:33,230 - INFO - using camera 0
+2026-05-13 15:46:35,244 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:46:35,246 - INFO - using camera 0
+2026-05-13 15:59:44,634 - INFO - using camera 0
+2026-05-13 15:59:44,635 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:59:50,650 - WARNING - camera 0 could not open; skipping
+2026-05-13 15:59:50,651 - WARNING - camera 1 could not open; skipping
+2026-05-13 15:59:50,652 - WARNING - camera 2 could not open; skipping
+2026-05-13 15:59:52,655 - INFO - using camera 0
+2026-05-13 15:59:54,657 - ERROR - Error in take_photo: Não foi possível abrir a câmera
+2026-05-13 15:59:54,660 - INFO - using camera 0
+2026-05-13 15:59:56,688 - INFO - Acionar saída 12
+2026-05-13 15:59:58,690 - INFO - Acionar saída 12
+2026-05-13 16:00:00,726 - INFO - security check response {'passed_verification': True}
+2026-05-13 16:41:40,344 - WARNING - VENDING_MACHINE_ID ausente; ping skipped
+2026-05-13 16:42:40,345 - WARNING - VENDING_MACHINE_ID ausente; ping skipped
+2026-05-13 16:44:19,588 - INFO - -> GET https://api.popgas.com.br/vending-machine-orders/vm-test-01/prices
+2026-05-13 16:44:19,588 - INFO - <- <MagicMock name='mock.request().status_code' id='4407389760'> https://api.popgas.com.br/vending-machine-orders/vm-test-01/prices body=<MagicMock name='mock.request().text.__getitem__()' id='4407389424'>
+2026-05-13 16:44:19,599 - INFO - -> POST https://api.popgas.com.br/vending-machine-orders/verify-photo body={'vending_machine_id': 'vm-test-01', 'base64_image': 'data:image/jpeg;base64,ZmFrZV9qcGdfYnl0ZXM=', 'camera': 'CAMERA_3'}
+2026-05-13 16:44:19,599 - INFO - <- <MagicMock name='mock.request().status_code' id='4407389760'> https://api.popgas.com.br/vending-machine-orders/verify-photo body=<MagicMock name='mock.request().text.__getitem__()' id='4407389424'>
+2026-05-13 16:44:19,599 - INFO - security check response {'passed_verification': True}
+2026-05-13 16:44:19,603 - INFO - -> POST https://api.popgas.com.br/vending-machine-orders body={'vending_machine_id': 'vm-test-01', 'payment_method_id': None, 'product_price': None, 'product_selected': 'GAS_WITH_CONTAINER'}
+2026-05-13 16:44:19,603 - INFO - <- <MagicMock name='mock.request().status_code' id='4407389760'> https://api.popgas.com.br/vending-machine-orders body=<MagicMock name='mock.request().text.__getitem__()' id='4407389424'>
+2026-05-13 16:44:19,603 - INFO - -> GET https://api.popgas.com.br/vending-machine-orders/corr_ABC
+2026-05-13 16:44:19,603 - INFO - <- <MagicMock name='mock.request().status_code' id='4407389760'> https://api.popgas.com.br/vending-machine-orders/corr_ABC body=<MagicMock name='mock.request().text.__getitem__()' id='4407389424'>
+2026-05-13 16:44:24,606 - INFO - -> GET https://api.popgas.com.br/vending-machine-orders/dev-vm-01/prices
+2026-05-13 16:44:24,610 - DEBUG - Starting new HTTPS connection (1): api.popgas.com.br:443
+2026-05-13 16:44:25,550 - DEBUG - https://api.popgas.com.br:443 "GET /vending-machine-orders/dev-vm-01/prices HTTP/1.1" 500 83
+2026-05-13 16:44:25,551 - INFO - <- 500 https://api.popgas.com.br/vending-machine-orders/dev-vm-01/prices body={"error":"internal_error","message":"Um erro inesperado ocorreu. Tente novamente!"}
+2026-05-13 16:44:32,624 - WARNING - VENDING_MACHINE_ID ausente; ping skipped
+2026-05-13 16:45:32,627 - WARNING - VENDING_MACHINE_ID ausente; ping skipped
+2026-05-13 16:46:32,631 - WARNING - VENDING_MACHINE_ID ausente; ping skipped
+2026-05-13 16:47:32,637 - WARNING - VENDING_MACHINE_ID ausente; ping skipped
+2026-05-13 16:47:55,002 - INFO - -> GET https://api.popgas.com.br/vending-machine-orders/dev-vm-01/prices
+2026-05-13 16:47:55,006 - DEBUG - Starting new HTTPS connection (1): api.popgas.com.br:443
+2026-05-13 16:47:56,058 - DEBUG - https://api.popgas.com.br:443 "GET /vending-machine-orders/dev-vm-01/prices HTTP/1.1" 500 83
+2026-05-13 16:47:56,058 - INFO - <- 500 https://api.popgas.com.br/vending-machine-orders/dev-vm-01/prices body={"error":"internal_error","message":"Um erro inesperado ocorreu. Tente novamente!"}
+2026-05-13 16:48:54,290 - WARNING - VENDING_MACHINE_ID ausente; ping skipped
+2026-05-13 16:49:54,295 - WARNING - VENDING_MACHINE_ID ausente; ping skipped
+2026-05-13 16:50:54,302 - WARNING - VENDING_MACHINE_ID ausente; ping skipped
+2026-05-13 16:51:50,337 - INFO - -> GET https://api.popgas.com.br/vending-machine-orders/39/prices
+2026-05-13 16:51:50,342 - DEBUG - Starting new HTTPS connection (1): api.popgas.com.br:443
+2026-05-13 16:51:51,195 - DEBUG - https://api.popgas.com.br:443 "GET /vending-machine-orders/39/prices HTTP/1.1" 200 276
+2026-05-13 16:51:51,196 - INFO - <- 200 https://api.popgas.com.br/vending-machine-orders/39/prices body={"gas_refill_price":94.9,"container_price":180,"prices_by_payment_method":{"2":{"gas_price":99.9,"container_price":180},"3":{"gas_price":99.9,"container_price":180},"5":{"gas_price":94.9,"container_price":180}},"container_full_stock_count":17,"container_empty_stock_count":39}
+2026-05-13 16:51:51,199 - DEBUG - STREAM b'IHDR' 16 13
+2026-05-13 16:51:51,200 - DEBUG - STREAM b'pHYs' 41 9
+2026-05-13 16:51:51,200 - DEBUG - STREAM b'sRGB' 62 1
+2026-05-13 16:51:51,200 - DEBUG - STREAM b'gAMA' 75 4
+2026-05-13 16:51:51,200 - DEBUG - STREAM b'IDAT' 91 307
+2026-05-13 16:51:51,201 - DEBUG - STREAM b'IHDR' 16 13
+2026-05-13 16:51:51,201 - DEBUG - STREAM b'pHYs' 41 9
+2026-05-13 16:51:51,201 - DEBUG - STREAM b'sRGB' 62 1
+2026-05-13 16:51:51,201 - DEBUG - STREAM b'gAMA' 75 4
+2026-05-13 16:51:51,201 - DEBUG - STREAM b'IDAT' 91 2264
+2026-05-13 16:51:51,202 - DEBUG - STREAM b'IHDR' 16 13
+2026-05-13 16:51:51,202 - DEBUG - STREAM b'pHYs' 41 9
+2026-05-13 16:51:51,202 - DEBUG - STREAM b'sRGB' 62 1
+2026-05-13 16:51:51,202 - DEBUG - STREAM b'gAMA' 75 4
+2026-05-13 16:51:51,202 - DEBUG - STREAM b'IDAT' 91 404
+2026-05-13 16:51:59,371 - DEBUG - STREAM b'IHDR' 16 13
+2026-05-13 16:51:59,371 - DEBUG - STREAM b'pHYs' 41 9
+2026-05-13 16:51:59,371 - DEBUG - STREAM b'sRGB' 62 1
+2026-05-13 16:51:59,372 - DEBUG - STREAM b'gAMA' 75 4
+2026-05-13 16:51:59,372 - DEBUG - STREAM b'IDAT' 91 307
+2026-05-13 16:51:59,373 - DEBUG - STREAM b'IHDR' 16 13
+2026-05-13 16:51:59,373 - DEBUG - STREAM b'pHYs' 41 9
+2026-05-13 16:51:59,373 - DEBUG - STREAM b'sRGB' 62 1
+2026-05-13 16:51:59,373 - DEBUG - STREAM b'gAMA' 75 4
+2026-05-13 16:51:59,373 - DEBUG - STREAM b'IDAT' 91 2264
+2026-05-13 16:51:59,374 - DEBUG - STREAM b'IHDR' 16 13
+2026-05-13 16:51:59,374 - DEBUG - STREAM b'pHYs' 41 9
+2026-05-13 16:51:59,374 - DEBUG - STREAM b'sRGB' 62 1
+2026-05-13 16:51:59,374 - DEBUG - STREAM b'gAMA' 75 4
+2026-05-13 16:51:59,374 - DEBUG - STREAM b'IDAT' 91 404
+2026-05-13 16:51:59,376 - DEBUG - STREAM b'IHDR' 16 13
+2026-05-13 16:51:59,376 - DEBUG - STREAM b'pHYs' 41 9
+2026-05-13 16:51:59,376 - DEBUG - STREAM b'sRGB' 62 1
+2026-05-13 16:51:59,376 - DEBUG - STREAM b'gAMA' 75 4
+2026-05-13 16:51:59,377 - DEBUG - STREAM b'IDAT' 91 536
+2026-05-13 16:51:59,378 - DEBUG - STREAM b'IHDR' 16 13
+2026-05-13 16:51:59,378 - DEBUG - STREAM b'pHYs' 41 9
+2026-05-13 16:51:59,378 - DEBUG - STREAM b'sRGB' 62 1
+2026-05-13 16:51:59,378 - DEBUG - STREAM b'gAMA' 75 4
+2026-05-13 16:51:59,378 - DEBUG - STREAM b'IDAT' 91 536
+2026-05-13 16:51:59,379 - DEBUG - STREAM b'IHDR' 16 13
+2026-05-13 16:51:59,379 - DEBUG - STREAM b'pHYs' 41 9
+2026-05-13 16:51:59,379 - DEBUG - STREAM b'sRGB' 62 1
+2026-05-13 16:51:59,379 - DEBUG - STREAM b'gAMA' 75 4
+2026-05-13 16:51:59,379 - DEBUG - STREAM b'IDAT' 91 1893
+2026-05-13 16:51:59,380 - DEBUG - STREAM b'IHDR' 16 13
+2026-05-13 16:51:59,380 - DEBUG - STREAM b'pHYs' 41 9
+2026-05-13 16:51:59,380 - DEBUG - STREAM b'sRGB' 62 1
+2026-05-13 16:51:59,380 - DEBUG - STREAM b'gAMA' 75 4
+2026-05-13 16:51:59,380 - DEBUG - STREAM b'IDAT' 91 232
+2026-05-13 16:52:00,673 - DEBUG - STREAM b'IHDR' 16 13
+2026-05-13 16:52:00,673 - DEBUG - STREAM b'pHYs' 41 9
+2026-05-13 16:52:00,673 - DEBUG - STREAM b'sRGB' 62 1
+2026-05-13 16:52:00,673 - DEBUG - STREAM b'gAMA' 75 4
+2026-05-13 16:52:00,673 - DEBUG - STREAM b'IDAT' 91 2264
+2026-05-13 16:52:00,674 - DEBUG - STREAM b'IHDR' 16 13
+2026-05-13 16:52:00,674 - DEBUG - STREAM b'pHYs' 41 9
+2026-05-13 16:52:00,674 - DEBUG - STREAM b'sRGB' 62 1
+2026-05-13 16:52:00,674 - DEBUG - STREAM b'gAMA' 75 4
+2026-05-13 16:52:00,674 - DEBUG - STREAM b'IDAT' 91 404
+2026-05-13 16:52:00,675 - DEBUG - STREAM b'IHDR' 16 13
+2026-05-13 16:52:00,675 - DEBUG - STREAM b'pHYs' 41 9
+2026-05-13 16:52:00,675 - DEBUG - STREAM b'tEXt' 62 25
+2026-05-13 16:52:00,675 - DEBUG - STREAM b'IDAT' 99 7804
+2026-05-13 16:52:00,677 - DEBUG - STREAM b'IHDR' 16 13
+2026-05-13 16:52:00,677 - DEBUG - STREAM b'pHYs' 41 9
+2026-05-13 16:52:00,677 - DEBUG - STREAM b'sRGB' 62 1
+2026-05-13 16:52:00,677 - DEBUG - STREAM b'gAMA' 75 4
+2026-05-13 16:52:00,677 - DEBUG - STREAM b'IDAT' 91 232
+2026-05-13 16:52:00,678 - DEBUG - STREAM b'IHDR' 16 13
+2026-05-13 16:52:00,678 - DEBUG - STREAM b'pHYs' 41 9
+2026-05-13 16:52:00,678 - DEBUG - STREAM b'sRGB' 62 1
+2026-05-13 16:52:00,678 - DEBUG - STREAM b'gAMA' 75 4
+2026-05-13 16:52:00,678 - DEBUG - STREAM b'IDAT' 91 282763
+2026-05-13 16:52:00,910 - INFO - -> POST https://api.popgas.com.br/vending-machine-orders body={'vending_machine_id': '39', 'payment_method_id': 5, 'product_price': 274.9, 'product_selected': 'GAS_WITH_CONTAINER'}
+2026-05-13 16:52:00,911 - DEBUG - Starting new HTTPS connection (1): api.popgas.com.br:443
+2026-05-13 16:52:02,660 - DEBUG - https://api.popgas.com.br:443 "POST /vending-machine-orders HTTP/1.1" 200 247
+2026-05-13 16:52:02,661 - INFO - <- 200 https://api.popgas.com.br/vending-machine-orders body={"correlation_id":"e3830f42-ae3a-441d-bd08-ff1406c17f59","pix_qr_code":"00020101021226830014BR.GOV.BCB.PIX2561qrcodespix.sejaefi.com.br\/v2\/11c660868af94190a5a13b118b06333f5204000053039865802BR5905EFISA6008SAOPAULO62070503***630462D0","id":20272}
+2026-05-13 16:52:02,662 - INFO - -> GET https://api.popgas.com.br/vending-machine-orders/e3830f42-ae3a-441d-bd08-ff1406c17f59
+2026-05-13 16:52:02,663 - DEBUG - Starting new HTTPS connection (1): api.popgas.com.br:443
+2026-05-13 16:52:03,778 - DEBUG - https://api.popgas.com.br:443 "GET /vending-machine-orders/e3830f42-ae3a-441d-bd08-ff1406c17f59 HTTP/1.1" 200 108
+2026-05-13 16:52:03,779 - INFO - <- 200 https://api.popgas.com.br/vending-machine-orders/e3830f42-ae3a-441d-bd08-ff1406c17f59 body={"correlation_id":"e3830f42-ae3a-441d-bd08-ff1406c17f59","flow_status":"PENDING","payment_status":"PENDING"}
+2026-05-13 16:52:03,803 - DEBUG - STREAM b'IHDR' 16 13
+2026-05-13 16:52:03,803 - DEBUG - STREAM b'pHYs' 41 9
+2026-05-13 16:52:03,803 - DEBUG - STREAM b'sRGB' 62 1
+2026-05-13 16:52:03,803 - DEBUG - STREAM b'gAMA' 75 4
+2026-05-13 16:52:03,803 - DEBUG - STREAM b'IDAT' 91 2264
+2026-05-13 16:52:03,804 - DEBUG - STREAM b'IHDR' 16 13
+2026-05-13 16:52:03,804 - DEBUG - STREAM b'pHYs' 41 9
+2026-05-13 16:52:03,804 - DEBUG - STREAM b'sRGB' 62 1
+2026-05-13 16:52:03,804 - DEBUG - STREAM b'gAMA' 75 4
+2026-05-13 16:52:03,804 - DEBUG - STREAM b'IDAT' 91 404
+2026-05-13 16:52:03,806 - DEBUG - STREAM b'IHDR' 16 13
+2026-05-13 16:52:03,806 - DEBUG - STREAM b'pHYs' 41 9
+2026-05-13 16:52:03,806 - DEBUG - STREAM b'sRGB' 62 1
+2026-05-13 16:52:03,806 - DEBUG - STREAM b'gAMA' 75 4
+2026-05-13 16:52:03,806 - DEBUG - STREAM b'IDAT' 91 232
+2026-05-13 16:52:03,806 - DEBUG - STREAM b'IHDR' 16 13
+2026-05-13 16:52:03,806 - DEBUG - STREAM b'pHYs' 41 9
+2026-05-13 16:52:03,806 - DEBUG - STREAM b'sRGB' 62 1
+2026-05-13 16:52:03,806 - DEBUG - STREAM b'gAMA' 75 4
+2026-05-13 16:52:03,816 - DEBUG - STREAM b'IDAT' 91 282763
+2026-05-13 16:52:06,792 - INFO - -> GET https://api.popgas.com.br/vending-machine-orders/e3830f42-ae3a-441d-bd08-ff1406c17f59
+2026-05-13 16:52:06,793 - DEBUG - Starting new HTTPS connection (1): api.popgas.com.br:443
+2026-05-13 16:52:08,203 - DEBUG - https://api.popgas.com.br:443 "GET /vending-machine-orders/e3830f42-ae3a-441d-bd08-ff1406c17f59 HTTP/1.1" 200 108
+2026-05-13 16:52:08,209 - INFO - <- 200 https://api.popgas.com.br/vending-machine-orders/e3830f42-ae3a-441d-bd08-ff1406c17f59 body={"correlation_id":"e3830f42-ae3a-441d-bd08-ff1406c17f59","flow_status":"PENDING","payment_status":"PENDING"}
+2026-05-13 16:52:11,213 - INFO - -> GET https://api.popgas.com.br/vending-machine-orders/e3830f42-ae3a-441d-bd08-ff1406c17f59
+2026-05-13 16:52:11,215 - DEBUG - Starting new HTTPS connection (1): api.popgas.com.br:443
+2026-05-13 16:52:12,062 - DEBUG - https://api.popgas.com.br:443 "GET /vending-machine-orders/e3830f42-ae3a-441d-bd08-ff1406c17f59 HTTP/1.1" 200 108
+2026-05-13 16:52:12,063 - INFO - <- 200 https://api.popgas.com.br/vending-machine-orders/e3830f42-ae3a-441d-bd08-ff1406c17f59 body={"correlation_id":"e3830f42-ae3a-441d-bd08-ff1406c17f59","flow_status":"PENDING","payment_status":"PENDING"}
+2026-05-13 16:52:15,065 - INFO - -> GET https://api.popgas.com.br/vending-machine-orders/e3830f42-ae3a-441d-bd08-ff1406c17f59
+2026-05-13 16:52:15,070 - DEBUG - Starting new HTTPS connection (1): api.popgas.com.br:443
+2026-05-13 16:52:16,429 - DEBUG - https://api.popgas.com.br:443 "GET /vending-machine-orders/e3830f42-ae3a-441d-bd08-ff1406c17f59 HTTP/1.1" 200 108
+2026-05-13 16:52:16,430 - INFO - <- 200 https://api.popgas.com.br/vending-machine-orders/e3830f42-ae3a-441d-bd08-ff1406c17f59 body={"correlation_id":"e3830f42-ae3a-441d-bd08-ff1406c17f59","flow_status":"PENDING","payment_status":"PENDING"}
+2026-05-13 16:52:19,447 - INFO - -> GET https://api.popgas.com.br/vending-machine-orders/e3830f42-ae3a-441d-bd08-ff1406c17f59
+2026-05-13 16:52:19,450 - DEBUG - Starting new HTTPS connection (1): api.popgas.com.br:443
