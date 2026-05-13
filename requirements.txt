@@ -4,8 +4,7 @@ numpy==2.2.4
 opencv-python==4.11.0.86
 tk~=0.1.0
 pillow~=10.4.0
-Rx~=3.2.0
-RPi.GPIO==0.7.1
+reactivex>=4.0.0
 gpiozero~=2.0.1
 ably~=2.0.12
 qrcode==8.2

@@ -179,8 +179,15 @@ class PlaceEmptyContainerScreen(tk.Frame):
         self.app.after(12 * 1000, lambda: self.app.off_all("welcome"))
 
     def on_route_popped(self):
-        print("route_popped")
         self.countdown_timer.cancel()
+        self.countdown_timer = CountdownTimer(
+            app=self.app,
+            initial_value=120,
+            on_reached_zero=self.on_reached_zero_countdown,
+            padding=Padding(top=25, bottom=10),
+            text_builder=lambda v: f"A porta irá fechar automaticamente em {v} segundo(s)..."
+        )
+        self.state.update(timer_reached_zero=False)
 
     def on_reached_zero_countdown(self):
         self.state.update(timer_reached_zero=True)

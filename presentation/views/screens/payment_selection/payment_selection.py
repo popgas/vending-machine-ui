@@ -233,6 +233,7 @@ class PaymentSelectionScreen(tk.Frame):
 
     def on_route_popped(self):
         self.clicked = False
+        self.timer = self.app.after(120 * 1000, self.cancel_operation)
 
     def debit_card(self):
         if self.clicked is True:

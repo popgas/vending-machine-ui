@@ -1,6 +1,6 @@
 import pygame
-import rx
-from rx.scheduler import ThreadPoolScheduler
+import reactivex as rx
+from reactivex.scheduler import ThreadPoolScheduler
 
 
 class AudioWorker:
@@ -8,7 +8,7 @@ class AudioWorker:
 
     @staticmethod
     def play(path):
-        rx.return_value(path).subscribe(
+        rx.just(path).subscribe(
             on_next=AudioWorker.__play_audio,
             on_completed= lambda: print("audio played"),
             on_error= lambda e: print(f"audio not played {e}"),
@@ -26,7 +26,7 @@ class AudioWorker:
 
     @staticmethod
     def stop():
-        rx.return_value(None).subscribe(
+        rx.just(None).subscribe(
             on_next=lambda e: pygame.mixer.music.stop(),
             on_completed= lambda: print("audio stopped"),
             on_error= lambda e: print(f"audio not stopped {e}"),

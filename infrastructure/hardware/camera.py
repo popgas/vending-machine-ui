@@ -4,9 +4,9 @@ import time
 from typing import Callable
 
 import cv2
-import rx
-from rx.core.typing import Observer, T_in
-from rx.scheduler import ThreadPoolScheduler
+import reactivex as rx
+from reactivex.abc import ObserverBase
+from reactivex.scheduler import ThreadPoolScheduler
 
 from infrastructure.observability.logger import Logger
 
@@ -15,7 +15,7 @@ class CameraResult:
         self.taken_photo = taken_photo
         self.error = error
 
-class CameraWorker(Observer):
+class CameraWorker(ObserverBase):
     pool_scheduler = ThreadPoolScheduler(1)
 
     def __init__(self, camera_socket, on_completed):
@@ -25,7 +25,7 @@ class CameraWorker(Observer):
         self.result = CameraResult()
         self.logger = Logger.get_logger()
 
-    def on_next(self, value: T_in) -> None:
+    def on_next(self, value) -> None:
         try:
             photo = self.take_photo()
 
@@ -124,3 +124,5 @@ class CameraWorker(Observer):
                 'photo': base64_image,
             })
             i += 1
+        
+        return photos

@@ -124,9 +124,6 @@ class CardMachineScreen(tkinter.Frame):
         ]
 
     def get_cancel_button(self) -> list[BuildableWidget]:
-        if not self.is_pix():
-            return []
-
         return [
             Row(
                 expand=True,
@@ -162,9 +159,12 @@ class CardMachineScreen(tkinter.Frame):
         ]
 
     def cancel_operation(self):
-        PopGasApi.request('DELETE', f'/vending-machine-orders/{self.order_id}')
+        if not self.state.awaiting_payment_approval or self.order_id is None:
+            return
 
+        self.state.update(awaiting_payment_approval=False)
         self.cancel_idle_timer()
+        PopGasApi.request('DELETE', f'/vending-machine-orders/{self.order_id}')
         self.app.pop()
 
     def get_pix_qr_code_or_billing_machine(self) -> list[BuildableWidget]:
