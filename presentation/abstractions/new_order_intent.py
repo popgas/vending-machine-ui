@@ -1,8 +1,6 @@
 import base64
-import os
 from dataclasses import dataclass, replace
 from typing import Optional
-import platform
 
 import cv2
 
@@ -85,15 +83,17 @@ class NewOrderIntent:
             return VendingMachinePins.closeDoor3
 
     def get_camera(self) -> int | str:
-        if platform.system() == 'Darwin':
+        from infrastructure.environment import is_dev_mode, get_env
+
+        if is_dev_mode():
             return 0
 
         if self.__use_first_door():
-            return os.environ['CAMERA_1']
+            return get_env('CAMERA_1', '0')
         elif self.__use_second_doors():
-            return os.environ['CAMERA_2']
+            return get_env('CAMERA_2', '0')
         else:
-            return os.environ['CAMERA_3']
+            return get_env('CAMERA_3', '0')
 
     def get_camera_describer(self) -> str:
         if self.__use_first_door():
