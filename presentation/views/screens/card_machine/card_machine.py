@@ -35,6 +35,7 @@ class CardMachineScreen(tkinter.Frame):
         self.correlation_id = None
         self.order_id = None
         self.idleTimer = None
+        self.reminderAudioTimer = None
         self.pix_qr_code = None
 
         self.countdown_timer = CountdownTimer(
@@ -76,6 +77,10 @@ class CardMachineScreen(tkinter.Frame):
                 AudioWorker.play(f"{self.curr_dir}/assets/pay_with_qr_code_machine.mp3")
         else:
             AudioWorker.play(f"{self.curr_dir}/assets/audio.mp3")
+            self.reminderAudioTimer = self.app.after(
+                25 * 1000,
+                lambda: AudioWorker.play(f"{self.curr_dir}/assets/audio_nao_esqueca_retirar.mp3")
+            )
 
     def get_payment_text(self) -> list[BuildableWidget]:
         if self.is_pix():
@@ -164,6 +169,7 @@ class CardMachineScreen(tkinter.Frame):
 
         self.state.update(awaiting_payment_approval=False)
         self.cancel_idle_timer()
+        self.cancel_reminder_audio_timer()
         PopGasApi.request('DELETE', f'/vending-machine-orders/{self.order_id}')
         self.app.pop()
 
@@ -236,6 +242,7 @@ class CardMachineScreen(tkinter.Frame):
             match status:
                 case 'APPROVED':
                     self.cancel_idle_timer()
+                    self.cancel_reminder_audio_timer()
                     self.state.update(awaiting_payment_approval=False)
                     self.app.push('preparing_order', self.order_intent.copy_with(
                         correlationId=self.correlation_id,
@@ -243,12 +250,14 @@ class CardMachineScreen(tkinter.Frame):
                     return
                 case 'REJECTED' | 'UNAUTHORIZED' | 'ABORTED' | 'CANCELLED':
                     self.cancel_idle_timer()
+                    self.cancel_reminder_audio_timer()
                     self.handle_payment_rejected()
                     return
 
             if flow_status == 'ORDER_VALIDATION_FAILED':
                 self.state.update(awaiting_payment_approval=False)
                 self.cancel_idle_timer()
+                self.cancel_reminder_audio_timer()
                 self.card_machine_unreachable()
                 return
 
@@ -261,7 +270,13 @@ class CardMachineScreen(tkinter.Frame):
         if self.idleTimer is not None:
             self.app.after_cancel(self.idleTimer)
 
+    def cancel_reminder_audio_timer(self):
+        if self.reminderAudioTimer is not None:
+            self.app.after_cancel(self.reminderAudioTimer)
+            self.reminderAudioTimer = None
+
     def handle_payment_rejected(self):
+        self.cancel_reminder_audio_timer()
         self.state.update(
             awaiting_payment_approval=False,
             rejected=True
