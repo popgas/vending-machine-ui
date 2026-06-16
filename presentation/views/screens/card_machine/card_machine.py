@@ -67,7 +67,7 @@ class CardMachineScreen(tkinter.Frame):
             ),
         )
 
-        self.app.after(200, self.create_order_request)
+        self.app.after(1000, self.create_order_request)
 
     def play_initial_audio(self):
         if self.order_intent.paymentMethodId == 5 or self.order_intent.paymentMethodId == 9:
@@ -77,9 +77,18 @@ class CardMachineScreen(tkinter.Frame):
                 AudioWorker.play(f"{self.curr_dir}/assets/pay_with_qr_code_machine.mp3")
         else:
             AudioWorker.play(f"{self.curr_dir}/assets/audio.mp3")
+            self.reminderAudioTimer = self.app.after(60 * 1000, self.play_reminder_audio)
+
+    def play_reminder_audio(self, repeat=True):
+        if not self.state.awaiting_payment_approval:
+            return
+
+        AudioWorker.play(f"{self.curr_dir}/assets/audio_nao_esqueca_retirar.mp3")
+
+        if repeat:
             self.reminderAudioTimer = self.app.after(
-                25 * 1000,
-                lambda: AudioWorker.play(f"{self.curr_dir}/assets/audio_nao_esqueca_retirar.mp3")
+                60 * 1000,
+                lambda: self.play_reminder_audio(repeat=False)
             )
 
     def get_payment_text(self) -> list[BuildableWidget]:
@@ -96,6 +105,7 @@ class CardMachineScreen(tkinter.Frame):
         else:
             return [
                 Text("Insira ou aproxime seu cartão na maquininha", font_size=22),
+                Text("Não esqueça de retirar seu cartão após pagamento", font_size=22),
             ]
 
     def is_pix(self):
@@ -129,6 +139,9 @@ class CardMachineScreen(tkinter.Frame):
         ]
 
     def get_cancel_button(self) -> list[BuildableWidget]:
+        if not self.is_pix():
+            return []
+
         return [
             Row(
                 expand=True,
