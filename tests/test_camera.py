@@ -6,8 +6,19 @@ import sys
 sys.modules['cv2'] = MagicMock()
 import os
 
-from infrastructure.hardware.camera import CameraWorker, CameraResult
+from infrastructure.hardware.camera import CameraWorker, CameraResult, warm_up_camera
 
+class TestWarmUpCamera(unittest.TestCase):
+    @patch('infrastructure.hardware.camera.time')
+    def test_reads_frames_until_warm_up_ends(self, mock_time):
+        mock_time.time.side_effect = [0, 1, 3, 5]
+        mock_cap = MagicMock()
+
+        warm_up_camera(mock_cap)
+
+        self.assertEqual(mock_cap.read.call_count, 2)
+
+@patch('infrastructure.hardware.camera.WARM_UP_SECONDS', 0)
 class TestCameraWorker(unittest.TestCase):
     def test_init(self):
         worker = CameraWorker(camera_socket=0, on_completed=lambda x: None)

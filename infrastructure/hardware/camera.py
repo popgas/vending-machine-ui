@@ -10,6 +10,16 @@ from reactivex.scheduler import ThreadPoolScheduler
 
 from infrastructure.observability.logger import Logger
 
+WARM_UP_SECONDS = 5
+
+
+def warm_up_camera(cap):
+    # Keep reading frames so auto exposure and white balance settle before the photo
+    end = time.time() + WARM_UP_SECONDS
+    while time.time() < end:
+        cap.read()
+
+
 class CameraResult:
     def __init__(self,  taken_photo=None, error=False):
         self.taken_photo = taken_photo
@@ -61,13 +71,7 @@ class CameraWorker(ObserverBase):
             if not cap.isOpened():
                 raise ValueError("Não foi possível abrir a câmera")
 
-            time.sleep(1)
-
-            # Clear buffer
-            for _ in range(5):
-                cap.read()
-
-            time.sleep(1)
+            warm_up_camera(cap)
 
             ret, frame = cap.read()
 
@@ -103,12 +107,7 @@ class CameraWorker(ObserverBase):
                 cap.release()
                 continue
 
-            time.sleep(1)
-
-            for _ in range(5):
-                cap.read()
-
-            time.sleep(1)
+            warm_up_camera(cap)
 
             ret, frame = cap.read()
             cap.release()
