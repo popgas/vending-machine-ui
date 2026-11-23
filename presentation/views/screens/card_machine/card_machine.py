@@ -25,6 +25,15 @@ from presentation.views.screens.card_machine.card_machine_state import CardMachi
 from utils.file import FileUtils
 
 
+# A máquina desiste do pagamento depois de 10 min e volta para a tela inicial.
+PAYMENT_TIMEOUT_MS = 600 * 1000
+
+# No cartão, a maquininha da Payer mostra "imprimir via?" logo após aprovar, e o pagamento só é
+# concluído quando o cliente responde ou retira o cartão. Muitos clientes não veem o "aprovado" e
+# deixam o cartão lá; aos 5 e 7 min a tela pede para retirar o cartão.
+REMOVE_CARD_PROMPTS_MS = (5 * 60 * 1000, 7 * 60 * 1000)
+
+
 class CardMachineScreen(tkinter.Frame):
     def __init__(self, app: Application, order_intent: NewOrderIntent):
         super().__init__(app.container, bg="#FFFFFF")
@@ -36,6 +45,7 @@ class CardMachineScreen(tkinter.Frame):
         self.order_id = None
         self.idleTimer = None
         self.reminderAudioTimer = None
+        self.removeCardTimers = []
         self.pix_qr_code = None
 
         self.countdown_timer = CountdownTimer(
@@ -113,15 +123,39 @@ class CardMachineScreen(tkinter.Frame):
 
     def get_content(self) -> list[BuildableWidget]:
         if self.state.rejected:
+            if self.state.timed_out:
+                title = "Tempo Esgotado"
+                message = "O pagamento não foi concluído a tempo."
+            else:
+                title = "Pagamento Recusado"
+                message = "O pagamento foi cancelado ou recusado."
+
             return [
                 SpacerVertical(),
                 Icon("circle-exclamation-red", width=70, height=70, side=Side.TOP, anchor=Anchor.CENTER),
                 SizedBox(height=20),
-                Text("Pagamento Recusado", font_size=35, color=ColorPalette.blue3),
+                Text(title, font_size=35, color=ColorPalette.blue3),
                 SizedBox(height=20),
-                Text("O pagamento foi cancelado ou recusado.", font_size=22),
+                Text(message, font_size=22),
                 SizedBox(height=50),
                 self.countdown_timer,
+                SpacerVertical(),
+            ]
+
+        if self.state.remove_card_prompt:
+            return [
+                SpacerVertical(),
+                Icon("circle-exclamation-red", width=70, height=70, side=Side.TOP, anchor=Anchor.CENTER),
+                SizedBox(height=20),
+                Text("Retire seu cartão da maquininha", font_size=35, color=ColorPalette.blue3),
+                SizedBox(height=20),
+                Text("Se o pagamento foi aprovado, retire o cartão", font_size=22),
+                Text("para liberarmos o seu botijão.", font_size=22),
+                SizedBox(height=20),
+                Text("Se ainda não pagou, insira ou aproxime o cartão agora.", font_size=22),
+                SizedBox(height=40),
+                *self.get_pix_qr_code_or_billing_machine(),
+                SizedBox(height=40),
                 SpacerVertical(),
             ]
 
@@ -183,6 +217,7 @@ class CardMachineScreen(tkinter.Frame):
         self.state.update(awaiting_payment_approval=False)
         self.cancel_idle_timer()
         self.cancel_reminder_audio_timer()
+        self.cancel_remove_card_timers()
         PopGasApi.request('DELETE', f'/vending-machine-orders/{self.order_id}')
         self.app.pop()
 
@@ -236,7 +271,13 @@ class CardMachineScreen(tkinter.Frame):
         self.order_id = str(response['id'])
         self.check_order_payment_status()
 
-        self.idleTimer = self.app.after(600 * 1000, lambda: self.handle_payment_rejected())
+        self.idleTimer = self.app.after(PAYMENT_TIMEOUT_MS, self.handle_payment_timeout)
+
+        if not self.is_pix():
+            self.removeCardTimers = [
+                self.app.after(delay, self.show_remove_card_prompt) for delay in REMOVE_CARD_PROMPTS_MS
+            ]
+
         self.play_initial_audio()
         self.state.notify()
 
@@ -256,14 +297,14 @@ class CardMachineScreen(tkinter.Frame):
                 case 'APPROVED':
                     self.cancel_idle_timer()
                     self.cancel_reminder_audio_timer()
+                    self.cancel_remove_card_timers()
                     self.state.update(awaiting_payment_approval=False)
-                    self.app.push('preparing_order', self.order_intent.copy_with(
-                        correlationId=self.correlation_id,
-                    ))
+                    self.go_to_preparing_order()
                     return
                 case 'REJECTED' | 'UNAUTHORIZED' | 'ABORTED' | 'CANCELLED':
                     self.cancel_idle_timer()
                     self.cancel_reminder_audio_timer()
+                    self.cancel_remove_card_timers()
                     self.handle_payment_rejected()
                     return
 
@@ -271,6 +312,7 @@ class CardMachineScreen(tkinter.Frame):
                 self.state.update(awaiting_payment_approval=False)
                 self.cancel_idle_timer()
                 self.cancel_reminder_audio_timer()
+                self.cancel_remove_card_timers()
                 self.card_machine_unreachable()
                 return
 
@@ -278,6 +320,51 @@ class CardMachineScreen(tkinter.Frame):
                 self.app.after(3000, self.check_order_payment_status)
         except Exception as e:
             self.app.after(3000, self.check_order_payment_status)
+
+    def go_to_preparing_order(self):
+        self.app.push('preparing_order', self.order_intent.copy_with(
+            correlationId=self.correlation_id,
+        ))
+
+    def show_remove_card_prompt(self):
+        if not self.state.awaiting_payment_approval:
+            return
+
+        self.state.update(remove_card_prompt=True)
+        AudioWorker.play(f"{self.curr_dir}/assets/audio_nao_esqueca_retirar.mp3")
+
+    def handle_payment_timeout(self):
+        """
+        Passaram 10 min sem resposta. Antes de voltar para a tela inicial, avisa a API que a máquina
+        desistiu: um "aprovado" que chegar depois não vira venda (a máquina não vai girar). Se o
+        pagamento foi aprovado bem nesse instante, a API responde APPROVED e o botijão é liberado.
+        """
+        if not self.state.awaiting_payment_approval:
+            return
+
+        self.state.update(awaiting_payment_approval=False)
+        self.cancel_reminder_audio_timer()
+        self.cancel_remove_card_timers()
+
+        status = None
+        if self.pix_qr_code is None:
+            try:
+                response = PopGasApi.request('POST', f"/vending-machine-orders/{self.correlation_id}/abandon", timeout=15).json()
+                status = str(response['payment_status'])
+            except Exception as e:
+                print(f"abandon request failed: {e}")
+
+        if status == 'APPROVED':
+            self.go_to_preparing_order()
+            return
+
+        self.state.update(timed_out=True)
+        self.handle_payment_rejected()
+
+    def cancel_remove_card_timers(self):
+        for timer in self.removeCardTimers:
+            self.app.after_cancel(timer)
+        self.removeCardTimers = []
 
     def cancel_idle_timer(self):
         if self.idleTimer is not None:
@@ -290,9 +377,11 @@ class CardMachineScreen(tkinter.Frame):
 
     def handle_payment_rejected(self):
         self.cancel_reminder_audio_timer()
+        self.cancel_remove_card_timers()
         self.state.update(
             awaiting_payment_approval=False,
-            rejected=True
+            rejected=True,
+            remove_card_prompt=False,
         )
         AudioWorker.play(f"{self.curr_dir}/assets/payment_rejected.mp3")
         self.app.after(5 * 1000, lambda: self.app.pop())
